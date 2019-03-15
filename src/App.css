@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+}
+
+#header {
+  top: 0;
+  left: 0;
+  width: 100%;
+  position: absolute;
+}
+
+.content {
+  margin-top: 100px;
+  width: 100%;
+  text-align: center;
+}
+
+h2 {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a:link {
+  color: black;
+}
+
+a:visited {
+  color: black;
+}
+
+a:active {
+  background-color: none;
+}
+
+.fade-enter {
+  transform: translateX(110vw);
+}
+
+.fade-enter.fade-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-out;
+}
+
+.fade-exit {
+  transform: translateX(0);
+}
+
+.fade-exit.fade-exit-active {
+  transform: translateX(110vw);
+  transition: transform 300ms ease-in-out;
+}

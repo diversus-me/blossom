@@ -1,0 +1,34 @@
+.container {
+    position: fixed;
+    width: 100%;
+    background: white;
+    top: 0;
+    height: 100vh;
+    box-shadow: -19px 0 38px rgba(0,0,0,0.10);
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+}
+
+.settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.subtitle {
+    margin-top: 0px;
+    font-size: 0.8em;
+}
