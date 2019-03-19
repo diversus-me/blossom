@@ -30,17 +30,18 @@ class App extends Component {
           </div>
           <TransitionGroup>
             <CSSTransition
-              key={location.key}
               classNames={'fade'}
               timeout={{ enter: 500, exit: 500 }}
+              key={location.pathname}
             >
               <Switch location={location}>
                 {flowers && flowers.map((flower) => 
                   <Route
-                    key={flower.title}
-                    path={`/${flower.title}/`}
+                    key={location.pathname}
+                    path={`/${flower.title}`}
                     render={() =>
                       <FlowerViewer
+                        key={location.pathname}
                         title={flower.title}
                         data={flower.data}
                       />
@@ -54,7 +55,7 @@ class App extends Component {
         )}>
         </Route>
       </Router>
-    );
+    )
   }
 }
 

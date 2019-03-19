@@ -25,16 +25,14 @@ class TreeFlower extends React.Component {
                                 .attr('d', d3.symbol().size(0.5 * MARKER_SIZE * MARKER_SIZE).type(d3.symbolTriangle))
                                 .attr('fill', 'white')
         this.rootSvg.append('circle')
-        this.initialRender = true
         this.rerender(this.props)
     }
 
-    shouldComponentUpdate(nextProps) {
-        if (this.initialRender) {
-            this.rerender(nextProps)
+    componentDidUpdate(prevProps) {
+        const { width, height, complex} = this.props
+        if (width !== prevProps.width || height !== prevProps.height || complex !== prevProps.complex) {
+            this.rerender(this.props)
         }
-        return true
-
     }
 
     tick() {
@@ -55,25 +53,30 @@ class TreeFlower extends React.Component {
             })
             .on('mouseover', (d, i) => {
                 if (i > 0) {
-                    const x = getCirclePosX(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle,this.center)
-                    const y = getCirclePosY(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle,this.center)
+                    const x = getCirclePosX(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerX)
+                    const y = getCirclePosY(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerY)
                     this.marker.attr('transform',
                     `translate(${x}, ${y}) rotate(${d.linkAngle})`) 
                 }
+            })
+            .on('click', (d) => {
+                this.props.selectPetal(d.id)
             })
 
         u.exit().remove()
     }
 
     rerender(nextProps) {
-        const {size, data, complex} = nextProps
-        this.center = size * 0.5
-        this.rootRadius = size * 0.28 * 0.5
+        const { width, height, data, complex} = nextProps
+        this.centerX = Math.floor(width * 0.5)
+        this.centerY = Math.floor(height * 0.5)
+        const max = (width < height) ? width : height
+        this.rootRadius = max * 0.28 * 0.5
 
 
-        this.rootNode = createRootNode(this.rootRadius, this.center)
+        this.rootNode = createRootNode(this.rootRadius, this.centerX, this.centerY)
         if (complex) {
-            const { petals, links } = createPetalTreeComplex(data, this.rootRadius, this.center)
+            const { petals, links } = createPetalTreeComplex(data, this.rootRadius, this.centerX, this.centerY)
             this.petals = petals
             this.links = links
             d3.forceSimulation(this.rootNode.concat(this.petals))
@@ -82,7 +85,7 @@ class TreeFlower extends React.Component {
             // .velocityDecay(0.5)
             .on('tick', this.tick)
         } else {
-            const { petals, links } = createPetalTree(data, this.rootRadius, this.center)
+            const { petals, links } = createPetalTree(data, this.rootRadius, this.centerX, this.centerY)
             this.petals = petals
             this.links = links
             d3.forceSimulation(this.rootNode.concat(this.petals))
@@ -93,7 +96,7 @@ class TreeFlower extends React.Component {
     }
 
     render() {
-        const { width, height, size } = this.props
+        const { width, height } = this.props
         return (
             <svg
                 width={width}
@@ -106,11 +109,11 @@ class TreeFlower extends React.Component {
 }
 
 TreeFlower.propTypes = {
-    size: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     data: PropTypes.array.isRequired,
     complex: PropTypes.bool.isRequired,
+    selectPetal: PropTypes.func.isRequired,
 }
 
 export default TreeFlower

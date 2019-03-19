@@ -1,7 +1,7 @@
 import { CHANGE_METHOD, METHODS } from '../actions/settings'
 
 const initialState = {
-    selected: METHODS[4],
+    selected: METHODS[0],
 }
 
 export default function(state = initialState, action){

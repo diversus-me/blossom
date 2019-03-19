@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from "react-router"
 import { FiX } from 'react-icons/fi'
 import { GoSettings } from 'react-icons/go'
 import { Link } from 'react-router-dom'
+import queryString from 'query-string'
 
-import Flower from './flower/Flower'
 import ForceFlower from './forceflower/ForceFlower'
 import TreeFlower from './treeflower/TreeFlower'
 import { METHODS } from '../actions/settings'
@@ -16,11 +17,16 @@ class FlowerViewer extends React.Component {
     constructor(props) {
         super(props)
         this.toggleSettings = this.toggleSettings.bind(this)
+        this.selectPetal = this.selectPetal.bind(this)
         this.resize = this.resize.bind(this)
+        const { history } = this.props
+        const parsedQuery = queryString.parse(history.location.search)
+
         this.state = {
             settingsVisibility: false,
             width: 0,
             height: 0,
+            selectedPetal: parseInt(parsedQuery.s),
         }
     }
 
@@ -43,9 +49,22 @@ class FlowerViewer extends React.Component {
         })
     }
 
+    selectPetal(id) {
+        const { history } = this.props
+        const parsed = queryString.parse(history.location.search)
+        if (parseInt(parsed.s) !== id ) {
+            history.push({search: `s=${id}`})
+            this.setState({
+                selectedPetal: id,
+            })
+        }
+        
+    }
+
     render(){
         const { settings, title, data } = this.props
-        const { width, height } = this.state
+        const { width, height, selectedPetal } = this.state
+
         return(
             <div className={style.container}>
                 <Link to="/">
@@ -66,31 +85,25 @@ class FlowerViewer extends React.Component {
                         toggle={this.toggleSettings}
                     />
                 }
-                {settings.selected === METHODS[0] &&
-                    <Flower
-                        size={(width < height) ? width : height}
-                        width={width}
-                        height={height}
-                        data={data}
-                    />
-                    }
-                    {(settings.selected === METHODS[1] ||  settings.selected === METHODS[2]) &&
-                    <ForceFlower
-                        size={(width < height) ? width : height}
-                        width={width}
-                        height={height}
-                        data={data}
-                        fixed={settings.selected === METHODS[2]}
-                    />
-                    }
-                    {(settings.selected === METHODS[3] || settings.selected === METHODS[4]) &&
-                    <TreeFlower
-                        size={(width < height) ? width : height}
-                        width={width}
-                        height={height}
-                        data={data}
-                        complex={settings.selected === METHODS[4]}
-                    />
+                {(settings.selected === METHODS[0] ||  settings.selected === METHODS[1]) &&
+                <ForceFlower
+                    width={width}
+                    height={height}
+                    data={data}
+                    fixed={settings.selected === METHODS[1]}
+                    selectPetal={this.selectPetal}
+                    selectedPetal={selectedPetal}
+                />
+                }
+                {(settings.selected === METHODS[2] || settings.selected === METHODS[3]) &&
+                <TreeFlower
+                    width={width}
+                    height={height}
+                    data={data}
+                    complex={settings.selected === METHODS[3]}
+                    selectPetal={this.selectPetal}
+                    selectedPetal={selectedPetal}
+                />
                 }
             </div>
         )
@@ -102,4 +115,4 @@ function mapStateToProps(state) {
     return { settings }
   }
 
-export default connect(mapStateToProps)(FlowerViewer)
+export default connect(mapStateToProps)(withRouter(FlowerViewer))

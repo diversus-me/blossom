@@ -13,6 +13,8 @@ class ForceFlower extends React.Component {
         super(props)
         this.tick = this.tick.bind(this)
         this.rerender = this.rerender.bind(this)
+        this.magnify = this.magnify.bind(this)
+        this.updated = false
     }
 
     componentDidMount() {
@@ -24,20 +26,75 @@ class ForceFlower extends React.Component {
                                 .attr('d', d3.symbol().size(0.5 * MARKER_SIZE * MARKER_SIZE).type(d3.symbolTriangle))
                                 .attr('fill', 'white')
         this.rootSvg.append('circle')
-        this.initialRender = true
         this.rerender(this.props)
     }
 
-    shouldComponentUpdate(nextProps) {
-        if (this.initialRender) {
-            this.rerender(nextProps)
+    componentDidUpdate(prevProps) {
+        const { width, height, fixed, selectedPetal } = this.props
+        if (width !== prevProps.width || height !== prevProps.height || fixed !== prevProps.fixed) {
+            this.rerender(this.props)
         }
-        return true
 
+        if (selectedPetal && selectedPetal !== prevProps.selectedPetal) {
+            this.magnify()
+        }
+    }
+
+    magnify() {
+        // const { selectedPetal } = this.props
+        // if (this.simulation) {
+        //     delete this.simulation
+        // }
+
+        // const u =this.neighbourPatels
+        //     .selectAll('circle')
+        //     .data(this.rootNode.concat(this.petals))
+        //     .transition()
+        //     .duration(350)
+        //     .attr('r', (d) => {
+        //         if (selectedPetal === d.id) {
+        //             return this.rootRadius
+        //         }
+        //         return d.radius
+        //     })
+
+        // u.enter()
+        //     .append('circle')
+        //     .merge(u)
+        //     .attr('r', (d) => {
+        //         if (selectedPetal === d.id) {
+        //             return this.rootRadius
+        //         }
+        //         return d.radius
+        //     })
+        //     .on('mouseover', (d, i) => {
+        //         if (i > 0) {
+        //             const x = getCirclePosX(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerX)
+        //             const y = getCirclePosY(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerY)
+        //             this.marker.attr('transform',
+        //             `translate(${x}, ${y}) rotate(${d.linkAngle})`) 
+        //         }
+        //     })
+        //     .on('click', (d) => {
+        //         this.props.selectPetal(d.id)
+        //     })
+
+        //     u.exit().remove()
+
+        // delete this.simulation
+        // this.simulation = d3.forceSimulation(this.rootNode.concat(this.petals))
+        //     .force('collision', d3.forceCollide().radius('r', (d) => {
+        //         if (selectedPetal === d.id) {
+        //             return this.rootRadius
+        //         }
+        //         return d.radius
+        //     }))
+        //     .force('forceX', d3.forceX((d, i) => getCirclePosX(this.rootRadius, d.linkAngle,this.centerX)).strength(0.05))
+        //     .on('tick', this.tick)
     }
 
     tick() {
-        const u =this.neighbourPatels
+        const u = this.neighbourPatels
             .selectAll('circle')
             .data(this.rootNode.concat(this.petals))
 
@@ -45,54 +102,67 @@ class ForceFlower extends React.Component {
             .append('circle')
             .merge(u)
             .attr('r', d => d.radius)
-            .attr('cx', function(d) {
-            return d.x
-            })
-            .attr('cy', function(d) {
-            return d.y
-            })
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
             .on('mouseover', (d, i) => {
                 if (i > 0) {
-                    const x = getCirclePosX(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle,this.center)
-                    const y = getCirclePosY(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle,this.center)
+                    const x = getCirclePosX(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerX)
+                    const y = getCirclePosY(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerY)
                     this.marker.attr('transform',
                     `translate(${x}, ${y}) rotate(${d.linkAngle})`) 
                 }
+            })
+            .on('click', (d) => {
+                this.props.selectPetal(d.id)
             })
 
         u.exit().remove()
     }
 
     rerender(nextProps) {
-        const {size, data, fixed} = nextProps
-        this.center = size * 0.5
-        this.rootRadius = size * 0.28 * 0.5
+        const { width, height, data, fixed } = nextProps
+        this.centerX = Math.floor(width * 0.5)
+        this.centerY = Math.floor(height * 0.5)
+        const max = (width < height) ? width : height
+        this.rootRadius = max * 0.28 * 0.5
 
-        this.rootNode = createRootNode(this.rootRadius, this.center)
+        this.rootNode = createRootNode(this.rootRadius, this.centerX, this.centerY)
 
         if (fixed) {
-            const { petals } = createPetalTree(data, this.rootRadius, this.center)
+            const { petals } = createPetalTree(data, this.rootRadius, this.centerX, this.centerY)
             this.petals = petals
         } else {
-            this.petals = createCircles(data, this.rootRadius, this.center)
+            this.petals = createCircles(data, this.rootRadius, this.centerX, this.centerY)
         }
 
-        this.spawned = this.neighbourPatels
-                            .selectAll('circle')
+        const { selectedPetal } = this.props
+        const u = this.neighbourPatels
+            .selectAll('circle')
+            .data(this.rootNode.concat(this.petals))
 
-        d3.forceSimulation(this.rootNode.concat(this.petals))
+        u.enter()
+            .append('circle')
+            .merge(u)
+            .attr('r', (d) => {
+                if (selectedPetal === d.id) {
+                    return this.rootRadius
+                }
+                return d.radius
+            })
+
+        this.simulation = d3.forceSimulation(this.rootNode.concat(this.petals))
             .force('collision', d3.forceCollide().radius(d => d.radius))
-            .force('forceX', d3.forceX((d, i) => getCirclePosX(this.rootRadius, d.linkAngle,this.center)).strength(0.05))
-            .force('forceY', d3.forceY((d, i) => getCirclePosY(this.rootRadius, d.linkAngle,this.center)).strength(0.05))
+            .force('forceX', d3.forceX((d, i) => getCirclePosX(this.rootRadius, d.linkAngle,this.centerX)).strength(0.05))
+            .force('forceY', d3.forceY((d, i) => getCirclePosY(this.rootRadius, d.linkAngle,this.centerY)).strength(0.05))
             .on('tick', this.tick)
     }
 
     render() {
-        const { width, height, size } = this.props
+        const { width, height } = this.props
         return (
             <svg
-                width={size}
-                height={size}
+                width={width}
+                height={height}
                 ref={(ref) => {this.svg = ref}}
             >
             </svg>
@@ -100,12 +170,17 @@ class ForceFlower extends React.Component {
     }
 }
 
+ForceFlower.defaultProps = {
+    selectedPetal: -1,
+}
+
 ForceFlower.propTypes = {
-    size: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     data: PropTypes.array.isRequired,
     fixed: PropTypes.bool.isRequired,
+    selectPetal: PropTypes.func.isRequired,
+    selectedPetal: PropTypes.number,
 }
 
 export default ForceFlower

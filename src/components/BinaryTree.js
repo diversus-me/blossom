@@ -154,7 +154,7 @@ function getRelevanceDistance(node) {
     return Math.min(1500, Math.pow((5050 / node.relevance + 50), 2) + 50);
   }
 
-export function createPetalTreeComplex(data, rootRadius, center) {
+export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
     const workingData = data.slice()
     let petals = []
     const roots = []
@@ -168,8 +168,8 @@ export function createPetalTreeComplex(data, rootRadius, center) {
   
       const nodeWithAngle = Object.assign({}, currentNode, {
         radius,
-        x: getCirclePosX(rootRadius + relevanceDistance, currentNode.linkAngle, center),
-        y: getCirclePosY(rootRadius + relevanceDistance, currentNode.linkAngle, center),
+        x: getCirclePosX(rootRadius + relevanceDistance, currentNode.linkAngle, centerX),
+        y: getCirclePosY(rootRadius + relevanceDistance, currentNode.linkAngle, centerY),
         maxAngle: currentNode.linkAngle + (alpha * 0.5),
         minAngle: currentNode.linkAngle - (alpha * 0.5),
         linkAngle: currentNode.linkAngle,
@@ -180,8 +180,8 @@ export function createPetalTreeComplex(data, rootRadius, center) {
       
       if (!found) {
         roots.push(nodeWithAngle)
-        const x = getCirclePosX(rootRadius + nodeWithAngle.radius, currentNode.linkAngle, center)
-        const y = getCirclePosY(rootRadius + nodeWithAngle.radius, currentNode.linkAngle, center)
+        const x = getCirclePosX(rootRadius + nodeWithAngle.radius, currentNode.linkAngle, centerX)
+        const y = getCirclePosY(rootRadius + nodeWithAngle.radius, currentNode.linkAngle, centerY)
         const node = new Node(nodeWithAngle.id, nodeWithAngle.linkAngle, nodeWithAngle.radius, nodeWithAngle.relevance, 0, x, y)
         trees.push(new BinaryTree(node, nodeWithAngle.minAngle, nodeWithAngle.maxAngle))
       } else {
