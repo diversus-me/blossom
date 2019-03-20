@@ -6,14 +6,14 @@ import { GoSettings } from 'react-icons/go'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 
-import ForceFlower from './forceflower/ForceFlower'
-import TreeFlower from './treeflower/TreeFlower'
+import ForceFlower from './FlowerTypes/forceflower/ForceFlower'
+import TreeFlower from './FlowerTypes/treeflower/TreeFlower'
 import { METHODS } from '../actions/settings'
 
-import Settings from './Settings'
-import style from './FlowerViewer.module.css'
+import Settings from './Settings/SettingsView'
+import style from './FlowerView.module.css'
 
-class FlowerViewer extends React.Component {
+class FlowerView extends React.Component {
     constructor(props) {
         super(props)
         this.toggleSettings = this.toggleSettings.bind(this)
@@ -62,7 +62,7 @@ class FlowerViewer extends React.Component {
     }
 
     render(){
-        const { settings, title, data } = this.props
+        const { settings, title, data, min, max } = this.props
         const { width, height, selectedPetal } = this.state
 
         return(
@@ -78,7 +78,7 @@ class FlowerViewer extends React.Component {
                 >
                     <GoSettings size="2em" color="#777"/>
                 </div>
-                <h2>{title}</h2>
+                <h2 className={style.title}>{title}</h2>
                 <p className={style.subtitle}>{data.length} Petals</p>
                 {this.state.settingsVisibility &&
                     <Settings
@@ -103,6 +103,8 @@ class FlowerViewer extends React.Component {
                     complex={settings.selected === METHODS[3]}
                     selectPetal={this.selectPetal}
                     selectedPetal={selectedPetal}
+                    min={min}
+                    max={max}
                 />
                 }
             </div>
@@ -115,4 +117,6 @@ function mapStateToProps(state) {
     return { settings }
   }
 
-export default connect(mapStateToProps)(withRouter(FlowerViewer))
+
+
+export default connect(mapStateToProps)(withRouter(FlowerView))

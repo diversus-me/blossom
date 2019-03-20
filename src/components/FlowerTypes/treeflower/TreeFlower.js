@@ -19,7 +19,7 @@ class TreeFlower extends React.Component {
     componentDidMount() {
         this.rootSvg = d3.select(this.svg)
         this.helperLines = this.rootSvg.append('g')
-        this.neighbourPatels = this.rootSvg.append('g')
+        this.neighbourPetals = this.rootSvg.append('g')
         this.marker = this.rootSvg.append('path')
                                 .attr('transform', `translate(100, 100)`)
                                 .attr('d', d3.symbol().size(0.5 * MARKER_SIZE * MARKER_SIZE).type(d3.symbolTriangle))
@@ -37,7 +37,7 @@ class TreeFlower extends React.Component {
 
     tick() {
         const data = this.rootNode.concat(this.petals)
-        const u = this.neighbourPatels
+        const u = this.neighbourPetals
             .selectAll('circle')
             .data(data)
 
@@ -67,20 +67,20 @@ class TreeFlower extends React.Component {
     }
 
     rerender(nextProps) {
-        const { width, height, data, complex} = nextProps
+        const { width, height, data, complex, min, max } = nextProps
         this.centerX = Math.floor(width * 0.5)
         this.centerY = Math.floor(height * 0.5)
-        const max = (width < height) ? width : height
-        this.rootRadius = max * 0.28 * 0.5
+        const maxLength = (width < height) ? width : height
+        this.rootRadius = maxLength * 0.28 * 0.5
 
 
         this.rootNode = createRootNode(this.rootRadius, this.centerX, this.centerY)
         if (complex) {
-            const { petals, links } = createPetalTreeComplex(data, this.rootRadius, this.centerX, this.centerY)
+            const { petals, links } = createPetalTreeComplex(data, this.rootRadius, this.centerX, this.centerY, min, max)
             this.petals = petals
             this.links = links
             d3.forceSimulation(this.rootNode.concat(this.petals))
-            .force("link", d3.forceLink().links(this.links).id(d => d.id).distance(30).strength(0.9))
+            .force("link", d3.forceLink().links(this.links).id(d => d.id).distance(30).strength(1))
             .force('collision', d3.forceCollide().radius(d => d.radius).iterations(2))
             // .velocityDecay(0.5)
             .on('tick', this.tick)
@@ -114,6 +114,8 @@ TreeFlower.propTypes = {
     data: PropTypes.array.isRequired,
     complex: PropTypes.bool.isRequired,
     selectPetal: PropTypes.func.isRequired,
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
 }
 
 export default TreeFlower

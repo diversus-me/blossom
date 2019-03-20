@@ -14,13 +14,14 @@ class ForceFlower extends React.Component {
         this.tick = this.tick.bind(this)
         this.rerender = this.rerender.bind(this)
         this.magnify = this.magnify.bind(this)
+        this.animateSize = this.animateSize.bind(this)
         this.updated = false
     }
 
     componentDidMount() {
         this.rootSvg = d3.select(this.svg)
         this.helperLines = this.rootSvg.append('g')
-        this.neighbourPatels = this.rootSvg.append('g')
+        this.neighbourPetals = this.rootSvg.append('g')
         this.marker = this.rootSvg.append('path')
                                 .attr('transform', `translate(100, 100)`)
                                 .attr('d', d3.symbol().size(0.5 * MARKER_SIZE * MARKER_SIZE).type(d3.symbolTriangle))
@@ -40,13 +41,25 @@ class ForceFlower extends React.Component {
         }
     }
 
+    animateSize(id, newSize) {
+        const max = 300
+        let current = 0
+
+        // while (max >= current) {
+        //     window.requestAnimationFrame(() => {
+        //         this.petals
+        //     })
+        // }
+    }
+    
+
     magnify() {
         // const { selectedPetal } = this.props
         // if (this.simulation) {
         //     delete this.simulation
         // }
 
-        // const u =this.neighbourPatels
+        // const u = this.neighbourPetals
         //     .selectAll('circle')
         //     .data(this.rootNode.concat(this.petals))
         //     .transition()
@@ -94,27 +107,12 @@ class ForceFlower extends React.Component {
     }
 
     tick() {
-        const u = this.neighbourPatels
+        const u = this.neighbourPetals
             .selectAll('circle')
             .data(this.rootNode.concat(this.petals))
-
-        u.enter()
-            .append('circle')
-            .merge(u)
             .attr('r', d => d.radius)
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
-            .on('mouseover', (d, i) => {
-                if (i > 0) {
-                    const x = getCirclePosX(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerX)
-                    const y = getCirclePosY(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerY)
-                    this.marker.attr('transform',
-                    `translate(${x}, ${y}) rotate(${d.linkAngle})`) 
-                }
-            })
-            .on('click', (d) => {
-                this.props.selectPetal(d.id)
-            })
 
         u.exit().remove()
     }
@@ -136,7 +134,7 @@ class ForceFlower extends React.Component {
         }
 
         const { selectedPetal } = this.props
-        const u = this.neighbourPatels
+        const u = this.neighbourPetals
             .selectAll('circle')
             .data(this.rootNode.concat(this.petals))
 
@@ -148,6 +146,19 @@ class ForceFlower extends React.Component {
                     return this.rootRadius
                 }
                 return d.radius
+            })
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+            .on('mouseover', (d, i) => {
+                if (i > 0) {
+                    const x = getCirclePosX(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerX)
+                    const y = getCirclePosY(this.rootRadius - (MARKER_SIZE * 0.5), d.linkAngle, this.centerY)
+                    this.marker.attr('transform',
+                    `translate(${x}, ${y}) rotate(${d.linkAngle})`) 
+                }
+            })
+            .on('click', (d) => {
+                this.props.selectPetal(d.id)
             })
 
         this.simulation = d3.forceSimulation(this.rootNode.concat(this.petals))

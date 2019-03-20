@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import style from './App.module.css'
+
 import './App.css'
-import FlowerItem from './components/FlowerItem/FlowerItem'
-import FlowerViewer from './components/FlowerViewer'
+
+import Navigation from './components/Navigation'
+import FlowerView from './components/FlowerView'
 
 class App extends Component {
   render() {
@@ -13,21 +14,8 @@ class App extends Component {
     return (
       <Router>
         <Route render={({ location }) => (
-          <div className="App">
-          <div id="header">
-            <h1>blossom</h1>
-          </div>
-          <div className="content">
-            {flowers && flowers.map((flower) => {
-              return(
-                <Link to={`/${flower.title}`} key={flower.title}>
-                  <FlowerItem
-                    title={flower.title}
-                  />
-                </Link>
-              )
-            })}
-          </div>
+          <div>
+          <Navigation />
           <TransitionGroup>
             <CSSTransition
               classNames={'fade'}
@@ -40,10 +28,12 @@ class App extends Component {
                     key={location.pathname}
                     path={`/${flower.title}`}
                     render={() =>
-                      <FlowerViewer
+                      <FlowerView
                         key={location.pathname}
                         title={flower.title}
                         data={flower.data}
+                        min={flower.min}
+                        max={flower.max}
                       />
                     }
                   />
@@ -60,8 +50,8 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { flowers, settings, dispatch } = state
-  return { flowers, settings, dispatch }
+  const { flowers } = state
+  return { flowers }
 }
 
 export default connect(mapStateToProps)(App)

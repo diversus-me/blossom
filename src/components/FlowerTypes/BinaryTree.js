@@ -150,11 +150,15 @@ export function deg2rad(degrees) {
   }
 
 
-function getRelevanceDistance(node) {
-    return Math.min(1500, Math.pow((5050 / node.relevance + 50), 2) + 50);
+function getRelevanceDistance(node, min, max) {
+    console.log(min, max)
+    const relDistance = Math.min(1500, Math.pow((5050 / node.relevance + 50), 2) + 50)
+    console.log(node.relevance, relDistance)
+    return Math.min(1500, Math.pow((5050 / node.relevance + 50), 2) + 50)
   }
 
-export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
+export function createPetalTreeComplex(data, rootRadius, centerX, centerY, min, max) {
+    console.log(data)
     const workingData = data.slice()
     let petals = []
     const roots = []
@@ -164,7 +168,7 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
       const currentNode = workingData.pop()
       const radius = Math.exp(translate(currentNode.relevance, 0, 1000, 1.8, 4))
       const alpha = rad2deg(getAlphaRadial(rootRadius, radius))
-      const relevanceDistance = getRelevanceDistance(currentNode)
+      const relevanceDistance = getRelevanceDistance(currentNode, min, max)
   
       const nodeWithAngle = Object.assign({}, currentNode, {
         radius,

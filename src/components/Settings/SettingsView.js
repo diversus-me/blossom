@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { changeMethod, METHODS } from '../actions/settings'
+import { changeMethod, METHODS } from '../../actions/settings'
 
 import styler from './Settings.module.css'
 
-class Settings extends React.Component {
+class SettingsView extends React.Component {
     constructor(props) {
         super(props)
         this.switchRendering = this.switchRendering.bind(this)
@@ -40,7 +40,7 @@ class Settings extends React.Component {
     }
 }
 
-Settings.propTypes = {
+SettingsView.propTypes = {
     toggle: PropTypes.func.isRequired,
 }
 
@@ -49,4 +49,4 @@ function mapStateToProps(state) {
     return { settings, dispatch }
   }
 
-export default connect(mapStateToProps)(Settings)
+export default connect(mapStateToProps)(SettingsView)
