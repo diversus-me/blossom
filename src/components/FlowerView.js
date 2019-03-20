@@ -67,24 +67,26 @@ class FlowerView extends React.Component {
 
         return(
             <div className={style.container}>
-                <Link to="/">
-                    <div className={style.close}>
-                        <FiX size="2em" color="#777"/>
+                <div className={style.navigation}>
+                    <Link to="/">
+                        <div className={style.close}>
+                            <FiX size="2em" color="#777"/>
+                        </div>
+                    </Link>
+                    <div
+                        className={style.settings}
+                        onClick={(e) => this.toggleSettings(e)}
+                    >
+                        <GoSettings size="2em" color="#777"/>
                     </div>
-                </Link>
-                <div
-                    className={style.settings}
-                    onClick={(e) => this.toggleSettings(e)}
-                >
-                    <GoSettings size="2em" color="#777"/>
+                    <h2 className={style.title}>{title}</h2>
+                    <p className={style.subtitle}>{data.length} Petals</p>
+                    {this.state.settingsVisibility &&
+                        <Settings
+                            toggle={this.toggleSettings}
+                        />
+                    }
                 </div>
-                <h2 className={style.title}>{title}</h2>
-                <p className={style.subtitle}>{data.length} Petals</p>
-                {this.state.settingsVisibility &&
-                    <Settings
-                        toggle={this.toggleSettings}
-                    />
-                }
                 {(settings.selected === METHODS[0] ||  settings.selected === METHODS[1]) &&
                 <ForceFlower
                     width={width}

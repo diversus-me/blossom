@@ -172,6 +172,7 @@ class ForceFlower extends React.Component {
         const { width, height } = this.props
         return (
             <svg
+            style={{position: 'absolute', top: 0}}
                 width={width}
                 height={height}
                 ref={(ref) => {this.svg = ref}}

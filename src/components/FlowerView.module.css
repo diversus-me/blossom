@@ -7,6 +7,13 @@
     box-shadow: -19px 0 38px rgba(0,0,0,0.10);
 }
 
+.navigation {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+}
+
 .close {
     position: absolute;
     top: 0;
