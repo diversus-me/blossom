@@ -6,9 +6,7 @@ import { GoSettings } from 'react-icons/go'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 
-import ForceFlower from './FlowerTypes/forceflower/ForceFlower'
-import TreeFlower from './FlowerTypes/treeflower/TreeFlower'
-import { METHODS } from '../actions/settings'
+import FlowerRenderer from './FlowerTypes/FlowerRenderer'
 
 import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
@@ -87,28 +85,16 @@ class FlowerView extends React.Component {
                         />
                     }
                 </div>
-                {(settings.selected === METHODS[0] ||  settings.selected === METHODS[1]) &&
-                <ForceFlower
+                <FlowerRenderer
                     width={width}
                     height={height}
                     data={data}
-                    fixed={settings.selected === METHODS[1]}
-                    selectPetal={this.selectPetal}
-                    selectedPetal={selectedPetal}
-                />
-                }
-                {(settings.selected === METHODS[2] || settings.selected === METHODS[3]) &&
-                <TreeFlower
-                    width={width}
-                    height={height}
-                    data={data}
-                    complex={settings.selected === METHODS[3]}
                     selectPetal={this.selectPetal}
                     selectedPetal={selectedPetal}
                     min={min}
                     max={max}
+                    settings={settings}
                 />
-                }
             </div>
         )
     }

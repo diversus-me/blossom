@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { changeMethod, METHODS } from '../../actions/settings'
+import { changePositioning, POSITIONING } from '../../state/actions/settings'
 
 import styler from './Settings.module.css'
 
@@ -11,9 +11,9 @@ class SettingsView extends React.Component {
         this.switchRendering = this.switchRendering.bind(this)
     }
 
-    switchRendering(method) {
+    switchRendering(positioning) {
         const { dispatch, toggle } = this.props
-        dispatch(changeMethod(method))
+        dispatch(changePositioning(positioning))
         toggle()
     }
     
@@ -24,14 +24,14 @@ class SettingsView extends React.Component {
                 className={styler.container}
             >
                     <h3>Rendering Method</h3>
-                    {METHODS.map((method) => 
+                    {POSITIONING.map((positioning) => 
                         <div
                             className={styler.option}
-                            key={method}
-                            onClick={() => this.switchRendering(method)}
+                            key={positioning}
+                            onClick={() => this.switchRendering(positioning)}
                         >
-                            <p className={(settings.selected === method) ? styler.active : ''}>
-                            {method}
+                            <p className={(settings.positioning === positioning) ? styler.active : ''}>
+                            {positioning}
                             </p>
                         </div>
                     )}

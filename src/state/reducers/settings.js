@@ -1,14 +1,14 @@
-import { CHANGE_METHOD, METHODS } from '../actions/settings'
+import { CHANGE_POSITIONING, POSITIONING } from '../actions/settings'
 
 const initialState = {
-    selected: METHODS[0],
+    positioning: POSITIONING[0],
 }
 
 export default function(state = initialState, action){
     switch (action.type) {
-        case CHANGE_METHOD:
+        case CHANGE_POSITIONING:
             return Object.assign({}, state, {
-                selected: action.method,
+                positioning: action.positioning,
             })
         default:
             return state

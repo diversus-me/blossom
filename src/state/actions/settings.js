@@ -1,15 +1,15 @@
-export const CHANGE_METHOD = 'CHANGE_METHOD'
+export const CHANGE_POSITIONING = 'CHANGE_POSITIONING'
 
-export const METHODS = [
+export const POSITIONING = [
     "NAIVE",
     "FIXED",
     "TREE",
     "TREE COMPLEX"
 ]
 
-export function changeMethod(method) {
+export function changePositioning(positioning) {
     return {
-        type: CHANGE_METHOD,
-        method,
+        type: CHANGE_POSITIONING,
+        positioning,
     }
 }
