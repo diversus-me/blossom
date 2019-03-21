@@ -29,11 +29,20 @@ function translate(value, leftMin, leftMax, rightMin, rightMax) {
   return rightMin + (valueScaled * rightSpan)
 }
 
+function getRelevanceDistance(node) {
+  return Math.min(500, Math.pow((5000 / node.relevance), 2) + 50);
+}
+
+export function getPetalSize(relevance, rootRadius, min, max) {
+  return translate(relevance, min, max, rootRadius * 0.1, Math.floor(rootRadius * 0.4))
+}
+
 export function createCircles(data, rootRadius, centerX, centerY) {
   return data.map((d) => {
     const relevanceDistance = getRelevanceDistance(d)
+    const radius = getPetalSize(d.relevance, rootRadius, 0, 1000)
     return Object.assign({}, d, {
-      radius: Math.exp(translate(d.relevance, 0, 1000, 1.8, 4)),
+      radius,
       x: getCirclePosX(rootRadius + relevanceDistance, d.linkAngle, centerX),
       y: getCirclePosY(rootRadius + relevanceDistance, d.linkAngle, centerY)
     })
@@ -63,10 +72,6 @@ function findMatch(roots, node) {
   return false
 }
 
-function getRelevanceDistance(node) {
-  return Math.min(500, Math.pow((5000 / node.relevance), 2) + 50);
-}
-
 export function createPetalTree(data, rootRadius, centerX, centerY) {
   const workingData = data.slice()
   const petals = []
@@ -74,8 +79,10 @@ export function createPetalTree(data, rootRadius, centerX, centerY) {
   const links = []
   while (workingData.length > 0) {
     const currentNode = workingData.pop()
-    const radius = Math.exp(translate(currentNode.relevance, 0, 1000, 1.8, 4))
+    const radius = getPetalSize(currentNode.relevance, rootRadius, 0, 1000)
     const alpha = rad2deg(getAlphaRadial(rootRadius, radius))
+
+    console.log(workingData.relevance, rootRadius, 0, 1000)
 
     const nodeWithAngle = Object.assign({}, currentNode, {
       radius,
@@ -116,7 +123,7 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
   const links = []
   while (workingData.length > 0) {
     const currentNode = workingData.pop()
-    const radius = Math.exp(translate(currentNode.relevance, 0, 1000, 1.8, 4))
+    const radius = getPetalSize(currentNode.relevance, rootRadius, 0, 1000)
     const alpha = rad2deg(getAlphaRadial(rootRadius, radius))
 
     const nodeWithAngle = Object.assign({}, currentNode, {

@@ -105,7 +105,7 @@ class FlowerRenderer extends React.Component {
             case POSITIONING[2]:
             case POSITIONING[3]: {
                 const simulation = d3.forceSimulation(this.nodes)
-                .force("link", d3.forceLink().links(this.links).id(d => d.id).distance(30).strength(0.1))
+                .force("link", d3.forceLink().links(this.links).id(d => d.id).distance(40).strength(0.05))
                 .force('collision', d3.forceCollide().radius(d => d.radius).iterations(1))
                 // .velocityDecay(0.5)
                 .on('tick', this.tick)
