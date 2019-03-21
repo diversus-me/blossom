@@ -14,61 +14,6 @@ export function getCirclePosY(radius, angle, center) {
   return (radius * -Math.cos(deg2rad(angle))) + center
 }
 
-export function getHighestRelevanceInRange(data, start, end) {
-  let element = { relevance: 0, initial: true }
-  let index = 0
-  data.forEach((d, i) => {
-    if (d.linkAngle > start &&
-      d.linkAngle < end &&
-      d.relevance > element.relevance) {
-      element = d
-      index = i
-    }
-  })
-
-  if (element.initial) {
-    return { element: {}, index: -1 }
-  }
-  return { element, index }
-}
-
-export function getNeighbours(data, alpha) {
-  const workingData = data.slice()
-  const elements = []
-
-  let lastNeighbor = { linkAngle: -alpha }
-  let remainingAngle = 360
-  let totalAngle = 360
-
-  while (remainingAngle >= alpha) {
-    const start = lastNeighbor.linkAngle + alpha
-    const end = start + (alpha * 0.5)
-
-    const { element, index } = getHighestRelevanceInRange(workingData, start, end)
-
-    if (index < 0) {
-      lastNeighbor = { linkAngle: end - alpha }
-      remainingAngle = 360 - alpha + lastNeighbor.linkAngle
-      continue
-    }
-
-    if (elements.length === 0) {
-      totalAngle = 360 + element.linkAngle - (alpha * 0.5)
-      console.log(totalAngle)
-    }
-
-    elements.push(element)
-    remainingAngle = totalAngle - (element.linkAngle + alpha)
-    lastNeighbor = element
-    workingData.splice(index, 1)
-  }
-  console.log(remainingAngle, alpha)
-  // if (remainingAngle > 27) {
-  //   elements.push({linkAngle: totalAngle - (alpha * 0.5)})
-  // }
-  return elements
-}
-
 export function getAlphaRadial(rootRadius, neighborRadius) {
   const adjacent = rootRadius + neighborRadius
   const opposite = neighborRadius
@@ -119,7 +64,7 @@ function findMatch(roots, node) {
 }
 
 function getRelevanceDistance(node) {
-  return Math.min(2000, Math.pow((5000 / node.relevance), 2) + 50);
+  return Math.min(500, Math.pow((5000 / node.relevance), 2) + 50);
 }
 
 export function createPetalTree(data, rootRadius, centerX, centerY) {
@@ -216,5 +161,6 @@ export function createRootNode(rootRadius, centerX, centerY) {
     fixed: true,
     relevance: 10000,
     linkAngle: 0,
+    id: 0,
   }]
 }

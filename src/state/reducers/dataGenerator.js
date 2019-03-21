@@ -7,7 +7,7 @@ export function getData(min, max) {
     const state = []
 
     const slope = 1.9
-    let index = 0
+    let index = 5
 
     for (let i = 0; i < numPetals; i++) {
         state.push({

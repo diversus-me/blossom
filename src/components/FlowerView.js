@@ -24,7 +24,7 @@ class FlowerView extends React.Component {
             settingsVisibility: false,
             width: 0,
             height: 0,
-            selectedPetal: parseInt(parsedQuery.s),
+            selectedPetalID: parseInt(parsedQuery.s),
         }
     }
 
@@ -53,7 +53,7 @@ class FlowerView extends React.Component {
         if (parseInt(parsed.s) !== id ) {
             history.push({search: `s=${id}`})
             this.setState({
-                selectedPetal: id,
+                selectedPetalID: id,
             })
         }
         
@@ -61,7 +61,7 @@ class FlowerView extends React.Component {
 
     render(){
         const { settings, title, data, min, max } = this.props
-        const { width, height, selectedPetal } = this.state
+        const { width, height, selectedPetalID } = this.state
 
         return(
             <div className={style.container}>
@@ -90,7 +90,7 @@ class FlowerView extends React.Component {
                     height={height}
                     data={data}
                     selectPetal={this.selectPetal}
-                    selectedPetal={selectedPetal}
+                    selectedPetalID={selectedPetalID}
                     min={min}
                     max={max}
                     settings={settings}
