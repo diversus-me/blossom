@@ -16,24 +16,27 @@ class FlowerRenderer extends React.Component {
         this.rebuild = this.rebuild.bind(this)
         this.tick = this.tick.bind(this)
         this.magnify = this.magnify.bind(this)
+        this.unmagnify = this.unmagnify.bind(this)
         this.createAndPosition = this.createAndPosition.bind(this)
         this.startSimulation = this.startSimulation.bind(this)
     }
 
     componentDidMount() {
         const svg = d3.select(this.svg)
-        this.petalGroup = svg.append('g')
-        this.magnifyMove = svg.append('g')
-        this.magnifyScale = svg.append('g')
-        this.magnifySim = svg.append('g')
-        this.lostPetals = svg.append('g')
-        this.markers = svg.append('g')
-        this.marker = svg.append('path')
+        this.group = svg.append('g')
+        this.petalGroup = this.group.append('g')
+        this.magnifyMove = this.group.append('g')
+        this.magnifyScale = this.group.append('g')
+        this.magnifySim = this.group.append('g')
+        this.lostPetals = this.group.append('g')
+        this.markers = this.group.append('g')
+        this.marker = this.magnifyScale.append('path')
                                 .attr('transform', `translate(100, 100)`)
                                 .attr('d', d3.symbol().size(0.5 * MARKER_SIZE * MARKER_SIZE).type(d3.symbolTriangle))
                                 .attr('fill', 'white')
 
         this.rebuild(this.props)
+        this.magnified = false
     }
 
     componentDidUpdate(prevProps) {
@@ -45,7 +48,12 @@ class FlowerRenderer extends React.Component {
         }
 
         if (selectedPetalID && selectedPetalID !== prevProps.selectedPetalID) {
-            this.magnify()
+            if (!this.magnified) {
+                this.magnify()
+            } else {
+                this.unmagnify()
+            }
+            
         }
     }
 
@@ -148,6 +156,8 @@ class FlowerRenderer extends React.Component {
         const lostPetalsID = []
         const lostPetals = []
 
+        this.simulation.stop()
+
         const p = new Victor(selectedPetal.x, selectedPetal.y)
         const u = new Victor(this.rootNode[0].x, this.rootNode[0].y).subtract(p).norm()
         const p1 = new Victor(u.x * selectedPetal.radius, u.y * selectedPetal.radius).add(p)
@@ -174,54 +184,54 @@ class FlowerRenderer extends React.Component {
             }
         })
 
-        this.petalGroup
-            .selectAll('circle')
-            .data(this.nodes)
-            .attr('fill', (d) => {
-                if (d.id === selectedPetalID) {
-                    return '#ff2b4d'
-                }
-                if (neighboursID.includes(d.id)) {
-                    return '#457ece'
-                }
-            })
-            .attr('stroke', (d) => {
-                if (onSideID.includes(d.id)) {
-                    return 'black'
-                }
-            })
+        // this.petalGroup
+        //     .selectAll('circle')
+        //     .data(this.nodes)
+        //     .attr('fill', (d) => {
+        //         if (d.id === selectedPetalID) {
+        //             return '#ff2b4d'
+        //         }
+        //         if (neighboursID.includes(d.id)) {
+        //             return '#457ece'
+        //         }
+        //     })
+        //     .attr('stroke', (d) => {
+        //         if (onSideID.includes(d.id)) {
+        //             return 'black'
+        //         }
+        //     })
 
 
-        this.markers
-            .append('line')
-            .style('stroke', 'black')
-            .attr('x1', p.x)
-            .attr('y1', p.y)
-            .attr('x2', this.rootNode[0].x)
-            .attr('y2', this.rootNode[0].y)
+        // this.markers
+        //     .append('line')
+        //     .style('stroke', 'black')
+        //     .attr('x1', p.x)
+        //     .attr('y1', p.y)
+        //     .attr('x2', this.rootNode[0].x)
+        //     .attr('y2', this.rootNode[0].y)
 
 
-            this.markers
-            .append('line')
-            .style('stroke', 'black')
-            .attr('x1', p1.x)
-            .attr('y1', p1.y)
-            .attr('x2', x.x)
-            .attr('y2', x.y)
+        //     this.markers
+        //     .append('line')
+        //     .style('stroke', 'black')
+        //     .attr('x1', p1.x)
+        //     .attr('y1', p1.y)
+        //     .attr('x2', x.x)
+        //     .attr('y2', x.y)
 
-            this.markers
-            .append('circle')
-            .attr('r', 2)
-            .attr('fill', 'black')
-            .attr('cx', p1.x)
-            .attr('cy', p1.y)
+        //     this.markers
+        //     .append('circle')
+        //     .attr('r', 2)
+        //     .attr('fill', 'black')
+        //     .attr('cx', p1.x)
+        //     .attr('cy', p1.y)
 
-            this.markers
-            .append('circle')
-            .attr('r', 2)
-            .attr('fill', 'black')
-            .attr('cx', x.x)
-            .attr('cy', x.y)
+        //     this.markers
+        //     .append('circle')
+        //     .attr('r', 2)
+        //     .attr('fill', 'black')
+        //     .attr('cx', x.x)
+        //     .attr('cy', x.y)
 
         this.magnifyMove
             .selectAll('circle')
@@ -232,14 +242,19 @@ class FlowerRenderer extends React.Component {
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
 
-        this.petalGroup.style('opacity', '0')
+        this.petalGroup.style('display', 'none')
 
 
         const t = new Victor(u.x * this.rootNode[0].radius, u.y * this.rootNode[0].radius).add(p)
         const trans = p1.clone().subtract(t)
 
+        const magnifyMoveRect = this.magnifyMove.node().getBoundingClientRect()
+        const originX = p1.x 
+        const originY = p1.y
+
         this.magnifyMove
-        .style('transform', `translate(${Math.floor(-trans.x)}px, ${Math.floor(-trans.y)}px)`)
+        .style('transform', `translate(${Math.floor(-trans.x)}px, ${Math.floor(-trans.y)}px) scale(0.5)`)
+        .style('transform-origin', `${originX}px ${originY}px`)
         .style('transition', 'transform 300ms ease')
 
         const transition = d3.transition()
@@ -282,6 +297,9 @@ class FlowerRenderer extends React.Component {
             })
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
+            .on('click', (d) => {
+                this.unmagnify()
+            })
             .transition(transition)
             .attr('r', (d) => {
                 if (d.id === selectedPetal.id) {
@@ -326,7 +344,6 @@ class FlowerRenderer extends React.Component {
             .transition(transition)
             .attr('cx', (d, i) => foundPetals[i].x)
             .attr('cy', (d, i) => foundPetals[i].y)
-        // .style('transform-origin', '50% 50%')
 
         const newSimulationData = foundPetals
         newNeighbours.forEach((node) => {
@@ -357,8 +374,58 @@ class FlowerRenderer extends React.Component {
         }, 500)
 
 
+        const xTrans = selectedPetal.x - this.center[0]
+        const yTrans = selectedPetal.y - this.center[0]
+
+        this.group
+            .style('transition', 'transform 800ms ease-in-out')
+            .style('transform', `translate(${-xTrans}px, ${-yTrans}px)`)
+
         
 
+        this.currentNodes = newSimulationData.concat(onSide)
+        this.currentNodes.sort((a, b) => {
+            return a.relevance - b.relevance
+        })
+        this.magnified = true
+    
+    }
+
+    unmagnify() {
+        console.log('unmagnified')
+
+        console.log(this.nodes, this.currentNodes)
+
+        const transition = d3.transition()
+        .duration(1000)
+        .ease(d3.easeCubicInOut)
+
+        this.petalGroup.style('display', 'initial')
+        // const petalGroup = this.petalGroup
+        //     .selectAll('circle')
+        //     .data(this.nodes)
+            // .attr('r', (d, i) => this.currentNodes[i].radius)
+            // .attr('cx',(d, i) => this.currentNodes[i].x)
+            // .attr('cy', (d, i) => this.currentNodes[i].y)
+            // .transition(transition)
+            // .attr('r', d => d.radius)
+            // .attr('cx', d => d.x)
+            // .attr('cy', d => d.y)
+
+        const petalGroup = this.petalGroup
+        .selectAll('circle')
+        .data(this.nodes)
+
+        petalGroup.enter()
+            .append('circle')
+            .merge(petalGroup)
+            .attr('r', (d, i) => this.currentNodes[i].radius)
+            .attr('cx',(d, i) => this.currentNodes[i].x)
+            .attr('cy', (d, i) => this.currentNodes[i].y)
+            .transition(transition)
+            .attr('r', d => d.radius)
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
     }
 
     tick() {

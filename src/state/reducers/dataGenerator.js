@@ -20,8 +20,8 @@ export function getData(min, max) {
         })
     }
 
-    state.sort(function(a, b) {
-        return a.relevance - b.relevance;
+    state.sort((a, b) => {
+        return a.relevance - b.relevance
     })
     return state
 }

@@ -29,8 +29,10 @@ function translate(value, leftMin, leftMax, rightMin, rightMax) {
   return rightMin + (valueScaled * rightSpan)
 }
 
-function getRelevanceDistance(node) {
-  return Math.min(500, Math.pow((5000 / node.relevance), 2) + 50);
+function getRelevanceDistance(node, rootRadius, min, max) {
+  // console.log(translate(node.relevance, min, max, 600, 0))
+  return translate(node.relevance, min, 700, 600, rootRadius)
+  return Math.min(600, Math.pow((5000 / node.relevance), 2) + 50);
 }
 
 export function getPetalSize(relevance, rootRadius, min, max) {
@@ -39,7 +41,7 @@ export function getPetalSize(relevance, rootRadius, min, max) {
 
 export function createCircles(data, rootRadius, centerX, centerY) {
   return data.map((d) => {
-    const relevanceDistance = getRelevanceDistance(d)
+    const relevanceDistance = getRelevanceDistance(d, rootRadius, 0, 1000)
     const radius = getPetalSize(d.relevance, rootRadius, 0, 1000)
     return Object.assign({}, d, {
       radius,
@@ -100,7 +102,7 @@ export function createPetalTree(data, rootRadius, centerX, centerY) {
         fy: nodeWithAngle.y,
       }))
     } else {
-      const relevanceDistance = getRelevanceDistance(nodeWithAngle)
+      const relevanceDistance = getRelevanceDistance(nodeWithAngle, rootRadius, 0, 1000)
       petals.push(Object.assign({}, nodeWithAngle, {
         x: getCirclePosX(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerX),
         y: getCirclePosY(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerY),
@@ -142,7 +144,7 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
         fy: nodeWithAngle.y,
       }))
     } else {
-      const relevanceDistance = getRelevanceDistance(nodeWithAngle)
+      const relevanceDistance = getRelevanceDistance(nodeWithAngle, rootRadius, 0, 1000)
       petals.push(Object.assign({}, nodeWithAngle, {
         x: getCirclePosX(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerX),
         y: getCirclePosY(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerY),
@@ -166,7 +168,7 @@ export function createRootNode(rootRadius, centerX, centerY) {
     fx: centerX,
     fy: centerY,
     fixed: true,
-    relevance: 10000,
+    relevance: -1,
     linkAngle: 0,
     id: 0,
   }]
