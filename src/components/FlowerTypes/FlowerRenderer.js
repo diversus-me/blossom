@@ -375,7 +375,7 @@ class FlowerRenderer extends React.Component {
 
 
         const xTrans = selectedPetal.x - this.center[0]
-        const yTrans = selectedPetal.y - this.center[0]
+        const yTrans = selectedPetal.y - this.center[1]
 
         this.group
             .style('transition', 'transform 800ms ease-in-out')
