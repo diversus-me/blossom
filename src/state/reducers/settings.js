@@ -1,7 +1,7 @@
 import { CHANGE_POSITIONING, POSITIONING } from '../actions/settings'
 
 const initialState = {
-    positioning: POSITIONING[0],
+    positioning: POSITIONING[3],
 }
 
 export default function(state = initialState, action){

@@ -35,6 +35,8 @@ class FlowerRenderer extends React.Component {
     componentDidMount() {
         const svg = d3.select(this.svg)
         this.group = svg.append('g')
+        this.lines = this.group.append('g')
+        this.sublines = this.group.append('g')
         this.petalGroup = this.group.append('g')
         this.magnifyMove = this.group.append('g')
         this.magnifyScale = this.group.append('g')
@@ -106,6 +108,39 @@ class FlowerRenderer extends React.Component {
         this.rootRadius = Math.floor(maxLength * 0.28 * 0.5)
 
         this.rootNode = createRootNode(this.rootRadius, this.center[0], this.center[1])
+
+        const lines = this.lines
+            .selectAll('line')
+            .data([0, 45, 90, 135, 180])
+
+        lines.enter()
+            .append('line')
+            .merge(lines)
+            .attr('x1', this.center[0])
+            .attr('y1', -2000)
+            .attr('x2', this.center[0])
+            .attr('y2', 2000)
+            .style("stroke", "rgb(200, 200, 200)")
+            .style("stroke-width", 1)
+            .style('transform', d =>`rotate(${d}deg)`)
+            .style('transform-origin', `${this.center[0]}px ${this.center[1]}px`)
+
+        console.log()
+        const sublines = this.sublines
+            .selectAll('line')
+            .data(Array(72).fill(0).map((d, i) => i * 5))
+        sublines.enter()
+            .append('line')
+            .merge(sublines)
+            .attr('x1', this.center[0])
+            .attr('y1', this.center[1] - (maxLength * 0.2))
+            .attr('x2', this.center[0])
+            .attr('y2', this.center[1] - (maxLength * 0.35))
+            .style("stroke", "rgb(200, 200, 200)")
+            .style("stroke-width", 1)
+            .style('transform', d =>`rotate(${d}deg)`)
+            .style('transform-origin', `${this.center[0]}px ${this.center[1]}px`)
+
 
         // Initial Positions
         const { petals, links } = this.createAndPosition(settings.positioning, data, min, max)
