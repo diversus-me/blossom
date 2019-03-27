@@ -97,13 +97,13 @@ export function createPetalTree(data, rootRadius, centerX, centerY) {
     const found = findMatch(roots, nodeWithAngle)
     if (!found) {
       roots.push(nodeWithAngle)
-      petals.push(Object.assign({}, nodeWithAngle, {
+      petals.unshift(Object.assign({}, nodeWithAngle, {
         fx: nodeWithAngle.x,
         fy: nodeWithAngle.y,
       }))
     } else {
       const relevanceDistance = getRelevanceDistance(nodeWithAngle, rootRadius, 0, 1000)
-      petals.push(Object.assign({}, nodeWithAngle, {
+      petals.unshift(Object.assign({}, nodeWithAngle, {
         x: getCirclePosX(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerX),
         y: getCirclePosY(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerY),
         target: found.id,
@@ -139,13 +139,13 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
     const found = findMatch(roots, nodeWithAngle)
     if (!found) {
       roots.push(nodeWithAngle)
-      petals.push(Object.assign({}, nodeWithAngle, {
+      petals.unshift(Object.assign({}, nodeWithAngle, {
         fx: nodeWithAngle.x,
         fy: nodeWithAngle.y,
       }))
     } else {
       const relevanceDistance = getRelevanceDistance(nodeWithAngle, rootRadius, 0, 1000)
-      petals.push(Object.assign({}, nodeWithAngle, {
+      petals.unshift(Object.assign({}, nodeWithAngle, {
         x: getCirclePosX(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerX),
         y: getCirclePosY(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerY),
         target: found.id,

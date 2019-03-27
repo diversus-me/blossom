@@ -50,18 +50,29 @@ class FlowerView extends React.Component {
     selectPetal(id) {
         const { history } = this.props
         const parsed = queryString.parse(history.location.search)
+
+
         if (parseInt(parsed.s) !== id ) {
-            history.push({search: `s=${id}`})
-            this.setState({
-                selectedPetalID: id,
-            })
+            if (id) {
+                history.push({search: `s=${id}`})
+                this.setState({
+                    selectedPetalID: id,
+                })
+            } else {
+                history.push({search: ''})
+                this.setState({
+                    selectedPetalID: id,
+                })
+            }
         }
         
     }
 
     render(){
-        const { settings, title, data, min, max } = this.props
-        const { width, height, selectedPetalID } = this.state
+        const { settings, title, data, min, max, history } = this.props
+        const { width, height } = this.state
+
+        const selectedPetalID = parseInt(queryString.parse(history.location.search).s)
 
         return(
             <div className={style.container}>

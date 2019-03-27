@@ -34,6 +34,7 @@ class App extends Component {
                         data={flower.data}
                         min={flower.min}
                         max={flower.max}
+                        search={location.search}
                       />
                     }
                   />

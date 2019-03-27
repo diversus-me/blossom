@@ -14,8 +14,6 @@ function minMax(data) {
         }
     })
 
-    console.log(min, max)
-
     return {min, max}
 }
 
