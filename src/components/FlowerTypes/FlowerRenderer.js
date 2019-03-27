@@ -44,7 +44,6 @@ class FlowerRenderer extends React.Component {
 
         this.lostPetals.style('display', 'none')
         this.magnifyScale.style('display', 'none')
-        this.magnifyMove.style('display', 'none')
 
         this.magnifyMove2 = this.group.append('g')
         this.magnifyScale2 = this.group.append('g')
@@ -858,7 +857,7 @@ class FlowerRenderer extends React.Component {
         this.magnifyScale.style('display', 'none')
         // this.magnifyMove.style('display', 'none')
 
-        this.magnifyMove.selectAll('*').remove()
+        this.magnifyMove.selectAll('circle').remove()
         this.magnifyScale.selectAll('*').remove()
         this.lostPetals.selectAll('*').remove()
 
