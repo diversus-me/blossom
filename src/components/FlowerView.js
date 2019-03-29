@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 
 import FlowerRenderer from './FlowerTypes/FlowerRenderer'
+import FlowerRenderer2 from './FlowerTypes/FlowerRenderer2'
 
 import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
@@ -96,7 +97,17 @@ class FlowerView extends React.Component {
                         />
                     }
                 </div>
-                <FlowerRenderer
+                {/* <FlowerRenderer
+                    width={width}
+                    height={height}
+                    data={data}
+                    selectPetal={this.selectPetal}
+                    selectedPetalID={selectedPetalID}
+                    min={min}
+                    max={max}
+                    settings={settings}
+                /> */}
+                <FlowerRenderer2
                     width={width}
                     height={height}
                     data={data}

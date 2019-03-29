@@ -1,0 +1,24 @@
+.petal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+}
+
+.petalContent {
+    transform: scale(1);
+    transition: transform 100ms ease-in-out;
+    border-radius: 50%;
+    /* border: solid black 2px; */
+    background: rgb(200, 200, 200);
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+}
+
+.petalContent:active {
+    transform: scale(0.9);
+    transition: transform 50ms ease-in-out;
+}

@@ -6,6 +6,8 @@ import Victor from 'victor'
 import { MARKER_SIZE, DOWN_SCALE_FACTOR, MAGNIFY_SPEED, UNMAGNIFY_SPEED } from '../Defaults'
 import { POSITIONING } from '../../state/actions/settings'
 
+import Petal from './Petal'
+
 
 import { createRootNode, createCircles, createPetalTree, createPetalTreeComplex,
     getCirclePosX, getCirclePosY, deg2rad } from './DefaultFunctions'
@@ -28,7 +30,8 @@ class FlowerRenderer extends React.Component {
         this.state = {
             id: '',
             radius: 0,
-            position: [0,0]
+            position: [0,0],
+            nodes: []
         }
     }
 
@@ -53,7 +56,7 @@ class FlowerRenderer extends React.Component {
 
         this.lostPetals2.style('display', 'none')
         this.magnifyScale2.style('display', 'none')
-        this.magnifyMove2.style('display', 'none')
+        // this.magnifyMove2.style('display', 'none')
 
         this.markers = this.group.append('g')
         this.marker = this.magnifyMove.append('path')
@@ -79,7 +82,7 @@ class FlowerRenderer extends React.Component {
             } else if (!selectedPetalID && this.magnified) {
                 this.unmagnify()
             } else if (selectedPetalID && this.magnified) {
-                // this.remagnify()
+                this.remagnify()
             }
             
         }
@@ -124,7 +127,6 @@ class FlowerRenderer extends React.Component {
             .style('transform', d =>`rotate(${d}deg)`)
             .style('transform-origin', `${this.center[0]}px ${this.center[1]}px`)
 
-        console.log()
         const sublines = this.sublines
             .selectAll('line')
             .data(Array(72).fill(0).map((d, i) => i * 5))
@@ -346,18 +348,16 @@ class FlowerRenderer extends React.Component {
 
         // OBACHT --------------------------->>
 
-        // this.petalGroup.style('display', 'none')
+        this.petalGroup.style('display', 'none')
         // this.lostPetals2.style('display', 'inline')
         // this.magnifyScale2.style('display', 'inline')
         this.magnifyMove2
-        .style('display', 'none')
+        .style('visibility', 'hidden')
         .style('transform', `translate(${Math.floor(-trans.x)}px, ${Math.floor(-trans.y)}px) scale(${DOWN_SCALE_FACTOR})`)
         .style('transform-origin', `${originX}px ${originY}px`)
         // .style('transition', `transform ${MAGNIFY_SPEED}ms ease-in-out`)
 
-        this.lostPetals.style('display', 'none')
-        this.magnifyScale.style('display', 'none')
-        this.magnifyMove.style('display', 'none')
+
 
         const transition = d3.transition()
                                 .duration(MAGNIFY_SPEED)
@@ -460,9 +460,9 @@ class FlowerRenderer extends React.Component {
             .data(lostPetals)
             .enter()
             .append('circle')
-            .attr('r', d => d.radius)
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y)
+            .attr('cx', (d, i) => foundPetals[i].x)
+            .attr('cy', (d, i) => foundPetals[i].y)
+            .attr('r', d => d.radius * DOWN_SCALE_FACTOR)
             .attr('fill', '#496f8e')
             .on('mouseover', (d, i) => {
                 if (i > 0) {
@@ -479,11 +479,7 @@ class FlowerRenderer extends React.Component {
                 d3.event.stopPropagation()
                 this.props.selectPetal(d.id)
             })
-            .transition(transition)
-            .attr('cx', (d, i) => foundPetals[i].x)
-            .attr('cy', (d, i) => foundPetals[i].y)
-            .attr('r', d => d.radius * DOWN_SCALE_FACTOR)
-        
+
         // setTimeout(() => {
         //     this.simulation = d3.forceSimulation(this.newSimulationData)
         //     .force('collision', d3.forceCollide().radius((d) => {
@@ -505,24 +501,29 @@ class FlowerRenderer extends React.Component {
 
         // }, 500)
 
-
+        const xTransOld = this.xTrans
+        const yTransOld = this.yTrans
         this.xTrans = selectedPetal.x - this.center[0]
         this.yTrans = selectedPetal.y - this.center[1]
         this.group
-            // .style('transition', `transform ${MAGNIFY_SPEED}ms ease-in-out`)
+            .style('transition', `transform ${MAGNIFY_SPEED}ms ease-in-out`)
             .style('transform', `translate(${-this.xTrans}px, ${-this.yTrans}px)`)
 
 
         this.magnified = true
 
+
+        this.lostPetals.style('display', 'none')
+        this.magnifyScale.style('display', 'none')
+        this.magnifyMove.style('display', 'none')
         const onSidePositions2 = this.magnifyMove2.selectAll('circle').nodes().map((d, i) => {
             const bounding = d.getBoundingClientRect()
             if (i === 1) {
                 console.log(bounding.x, this.xTrans)
             }
             return {
-                x: bounding.x + (this.onSide[i].radius * DOWN_SCALE_FACTOR) + this.xTrans,
-                y: bounding.y + (this.onSide[i].radius * DOWN_SCALE_FACTOR) + this.yTrans
+                x: bounding.x + (this.onSide[i].radius * DOWN_SCALE_FACTOR)  + xTransOld,
+                y: bounding.y + (this.onSide[i].radius * DOWN_SCALE_FACTOR) + yTransOld
             }
         })
 
@@ -544,7 +545,7 @@ class FlowerRenderer extends React.Component {
         })
 
         const transition2 = d3.transition()
-        .duration(3000)
+        .duration(MAGNIFY_SPEED)
         .ease(d3.easeCubicInOut)
 
         const transitionGroup = this.transitionGroup
@@ -661,6 +662,7 @@ class FlowerRenderer extends React.Component {
         .style('transform', `translate(${Math.floor(-trans.x)}px, ${Math.floor(-trans.y)}px) scale(${DOWN_SCALE_FACTOR})`)
         .style('transform-origin', `${originX}px ${originY}px`)
         .style('transition', `transform ${MAGNIFY_SPEED}ms ease-in-out`)
+        
 
         const transition = d3.transition()
                                 .duration(MAGNIFY_SPEED)
@@ -808,7 +810,6 @@ class FlowerRenderer extends React.Component {
 
         }, 500)
 
-
         this.xTrans = selectedPetal.x - this.center[0]
         this.yTrans = selectedPetal.y - this.center[1]
         this.group
@@ -893,6 +894,10 @@ class FlowerRenderer extends React.Component {
     tick() {
         // console.log(this.mainSimRunning)
         if (this.mainSimRunning) {
+            this.setState({
+                nodes: this.nodes
+            })
+
             this.petalGroup
             .selectAll('circle')
             .data(this.nodes)
@@ -903,7 +908,7 @@ class FlowerRenderer extends React.Component {
 
     render() {
         const { width, height } = this.props
-        const { id, radius, position } = this.state
+        const { id, radius, position, nodes } = this.state
         return [
             <svg
                 key={'mainSVG'}
@@ -920,6 +925,24 @@ class FlowerRenderer extends React.Component {
                 <p><span className={style.infoTitle}>ID</span><span>{id}</span></p>
                 <p><span className={style.infoTitle}>R</span><span>{Math.floor(radius)}</span></p>
                 <p><span className={style.infoTitle}>Pos</span><span>{Math.floor(position[0])},{Math.floor(position[1])}</span></p>
+            </div>,
+            // <div key={'petals'} style={{ position: 'absolute', top: 0, left: 0 }}>
+            //     {nodes.map(node => 
+            //         <Petal
+            //             key={node.linkAngle}
+            //             x={node.x}
+            //             y={node.y}
+            //             r={node.radius}
+            //             selectPetal={this.props.selectPetal}
+            //             id={node.id}
+            //         />
+            //     )}
+            // </div>,
+            <div key={'petal'}>
+
+            </div>,
+            <div key={'pet'}>
+
             </div>
         ]
     }
