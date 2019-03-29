@@ -170,8 +170,8 @@ class FlowerRenderer2 extends React.Component {
             case POSITIONING[1]: {
                 const simulation = d3.forceSimulation(this.nodes)
                 .force('collision', d3.forceCollide().radius(d => d.radius))
-                .force('forceX', d3.forceX(d => getCirclePosX(this.rootRadius, d.linkAngle, this.center[0])).strength(0.05))
-                .force('forceY', d3.forceY(d => getCirclePosY(this.rootRadius, d.linkAngle, this.center[1])).strength(0.05))
+                .force('forceX', d3.forceX(d => getCirclePosX(this.rootRadius, d.linkAngle, this.center[0])).strength(0.03))
+                .force('forceY', d3.forceY(d => getCirclePosY(this.rootRadius, d.linkAngle, this.center[1])).strength(0.03))
                 .on('tick', () => {
                     if (this.mainSimRunning) {
                         this.nodes.forEach((node, i) => {
