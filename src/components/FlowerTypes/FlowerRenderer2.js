@@ -346,13 +346,13 @@ class FlowerRenderer2 extends React.Component {
             // TweenMax.to(this.ref[i], 0.5, {
             //     transform: `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`,
             // })
-            this.ref[i].style.transition = `transform ${MAGNIFY_SPEED}ms ease-in-out`
+            this.ref[i].style.transition = `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
             this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`
         })
 
         this.xTrans = selectedPetal.x - this.center[0]
         this.yTrans = selectedPetal.y - this.center[1]
-        this.refs.petals.style.transition = `transform ${MAGNIFY_SPEED}ms ease-in-out`
+        this.refs.petals.style.transition = `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
         this.refs.petals.style.transform = `translate(${-this.xTrans}px, ${-this.yTrans}px)`
 
         setTimeout(() => {
@@ -371,7 +371,7 @@ class FlowerRenderer2 extends React.Component {
                 })
             })
 
-        }, 500)
+        }, MAGNIFY_SPEED)
 
         // this.setState({ nodes: this.nodes})
         this.magnified = true
@@ -389,11 +389,11 @@ class FlowerRenderer2 extends React.Component {
             // TweenMax.to(this.ref[i], 0.5, {
             //     transform: `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`,
             // })
-            this.ref[i].style.transition = `transform ${UNMAGNIFY_SPEED}ms ease-in-out`
+            this.ref[i].style.transition = `transform ${UNMAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
             this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`
         })
 
-        this.refs.petals.style.transition = `transform ${UNMAGNIFY_SPEED}ms ease-in-out`
+        this.refs.petals.style.transition = `transform ${UNMAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
         this.refs.petals.style.transform = `translate(0px, 0px)`
         this.nodes = this.originalNodes
         this.magnified = false
