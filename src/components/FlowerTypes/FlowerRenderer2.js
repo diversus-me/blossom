@@ -9,6 +9,9 @@ import { POSITIONING } from '../../state/actions/settings'
 
 import Petal from './Petal'
 
+import d3Worker from '../WebWorker/d3Worker'
+import WebWorker from '../WebWorker/WebWorker'
+
 
 import { createRootNode, createCircles, createPetalTree, createPetalTreeComplex,
     getCirclePosX, getCirclePosY, deg2rad } from './DefaultFunctions'
@@ -24,6 +27,7 @@ class FlowerRenderer2 extends React.Component {
         this.magnify = this.magnify.bind(this)
         this.unmagnify = this.unmagnify.bind(this)
         this.remagnify = this.remagnify.bind(this)
+        this.newPositionsReceived = this.newPositionsReceived.bind(this)
         this.createAndPosition = this.createAndPosition.bind(this)
         this.startSimulation = this.startSimulation.bind(this)
         this.hover = this.hover.bind(this)
@@ -33,7 +37,7 @@ class FlowerRenderer2 extends React.Component {
             id: '',
             radius: 0,
             position: [0,0],
-            nodes: []
+            divNodes: []
         }
     }
 
@@ -156,15 +160,27 @@ class FlowerRenderer2 extends React.Component {
             .style('transform-origin', `${this.center[0]}px ${this.center[1]}px`)
 
         this.ref = Array(this.nodes.length)
-        this.setState({nodes: this.nodes})
+        this.setState({divNodes: this.nodes})
 
         // Simulations
         this.simulation = this.startSimulation(settings.positioning)
 
     }
 
+    newPositionsReceived(e) {
+        console.log('[MAIN] MSG FROM WORKER: ', e.data)
+    }
+
     startSimulation(positioning) {
         this.mainSimRunning = true
+
+        this.workerInstance = new WebWorker(d3Worker) 
+
+
+        // Listening for messages from worker
+        this.workerInstance.addEventListener("message", this.newPositionsReceived, false)
+
+
         switch (positioning) {
             case POSITIONING[0]:
             case POSITIONING[1]: {
@@ -179,6 +195,9 @@ class FlowerRenderer2 extends React.Component {
                         })
                     }
                 })
+                // .stop()
+
+                // this.workerInstance.postMessage(this.nodes)
 
                 return simulation
             }
@@ -373,7 +392,12 @@ class FlowerRenderer2 extends React.Component {
 
         }, MAGNIFY_SPEED)
 
-        // this.setState({ nodes: this.nodes})
+        const { divNodes } = this.state        
+        this.setState({ divNodes: this.nodes.map((node, i) => 
+            Object.assign({}, divNodes[i], {
+                zoom: node.zoom
+            })
+        )})
         this.magnified = true
     }
 
@@ -397,14 +421,20 @@ class FlowerRenderer2 extends React.Component {
         this.refs.petals.style.transform = `translate(0px, 0px)`
         this.nodes = this.originalNodes
         this.magnified = false
+        this.setState({ divNodes: this.nodes.map((node, i) => 
+            Object.assign({}, this.state.divNodes[i], {
+                zoom: 1
+            })
+        )})
     }
 
     tick() {
     }
 
     render() {
-        const { width, height } = this.props
-        const { id, radius, position, nodes } = this.state
+        const { width, height, selectedPetalID } = this.props
+        const { id, radius, position, divNodes } = this.state
+
         return [
             <div
                 key={'infoField'}
@@ -423,7 +453,7 @@ class FlowerRenderer2 extends React.Component {
                 ref={(ref) => {this.svg = ref}}
                 onClick={() => { this.props.selectPetal() }}
                 />,
-                {nodes.map((node, i) =>
+                {divNodes.map((node, i) =>
                 <div
                     key={node.linkAngle}
                     ref={(ref) => {this.ref[i] = ref}}
@@ -433,6 +463,11 @@ class FlowerRenderer2 extends React.Component {
                         r={node.radius}
                         selectPetal={this.props.selectPetal}
                         id={node.id}
+                        isSelectedPetal={(node.id === selectedPetalID)
+                            || (!selectedPetalID && node.id === 0 )}
+                        zoom={node.zoom}
+                        type={node.type}
+                        color={node.color}
                     />
                 </div>
                 )}

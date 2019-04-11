@@ -8,6 +8,7 @@ import queryString from 'query-string'
 
 import FlowerRenderer from './FlowerTypes/FlowerRenderer'
 import FlowerRenderer2 from './FlowerTypes/FlowerRenderer2'
+import FlowerRenderer3 from './FlowerTypes/FlowerRenderer3'
 
 import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
@@ -117,6 +118,16 @@ class FlowerView extends React.Component {
                     max={max}
                     settings={settings}
                 />
+                {/* <FlowerRenderer3
+                    width={width}
+                    height={height}
+                    data={data}
+                    selectPetal={this.selectPetal}
+                    selectedPetalID={selectedPetalID}
+                    min={min}
+                    max={max}
+                    settings={settings}
+                /> */}
             </div>
         )
     }
