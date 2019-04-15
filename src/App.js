@@ -32,6 +32,7 @@ class App extends Component {
                         key={location.pathname}
                         title={flower.title}
                         data={flower.data}
+                        sorted={flower.sorted}
                         min={flower.min}
                         max={flower.max}
                         search={location.search}

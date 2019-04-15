@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import Victor from 'victor'
+import TweenMax from 'gsap/TweenMax'
 
 import { MARKER_SIZE, DOWN_SCALE_FACTOR, MAGNIFY_SPEED, UNMAGNIFY_SPEED } from '../Defaults'
 import { POSITIONING } from '../../state/actions/settings'
@@ -30,10 +31,7 @@ class FlowerRenderer2 extends React.Component {
         this.createAndPosition = this.createAndPosition.bind(this)
         this.startSimulation = this.startSimulation.bind(this)
         this.hover = this.hover.bind(this)
-        this.receiveProgress = this.receiveProgress.bind(this)
         this.mainSimRunning = false
-
-        this.currentProgressIndex = 0
 
         this.state = {
             id: '',
@@ -119,8 +117,6 @@ class FlowerRenderer2 extends React.Component {
         const { width, height, data, settings, min, max } = newProps
         this.center = [Math.floor(width * 0.5), Math.floor(height * 0.5)]
 
-        console.log(this.props.sorted)
-
         const maxLength = (width < height) ? width : height
         this.rootRadius = Math.floor(maxLength * 0.28 * 0.5)
         
@@ -172,17 +168,31 @@ class FlowerRenderer2 extends React.Component {
     }
 
     newPositionsReceived(e) {
-        console.log('[MAIN] MSG FROM WORKER: ', e.data)
+        window.requestAnimationFrame(() => {
+            e.data.nodes.forEach((node, i) => {
+                this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px)`
+            })
+        })
+        this.nodes = e.data.nodes
     }
 
     startSimulation(positioning) {
         this.mainSimRunning = true
 
-        this.workerInstance = new WebWorker(d3Worker) 
+        // this.workerInstance = new WebWorker(d3Worker) 
 
 
         // Listening for messages from worker
-        this.workerInstance.addEventListener("message", this.newPositionsReceived, false)
+        // this.workerInstance.addEventListener("message", this.newPositionsReceived, false)
+
+        const simulation = d3.forceSimulation()
+
+        const worker = new Worker('/d3Worker.js')
+
+        worker.onmessage = this.newPositionsReceived
+        worker.postMessage({positioning, nodes: this.nodes, rootRadius: this.rootRadius, center: this.center, links: this.links})
+
+        return simulation
 
 
         switch (positioning) {
@@ -195,7 +205,7 @@ class FlowerRenderer2 extends React.Component {
                 .on('tick', () => {
                     if (this.mainSimRunning) {
                         this.nodes.forEach((node, i) => {
-                            this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px) scale(${node.radius / this.rootRadius})`
+                            this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px)`
                         })
                     }
                 })
@@ -214,7 +224,7 @@ class FlowerRenderer2 extends React.Component {
                 .on('tick', () => {
                     if (this.mainSimRunning) {
                         this.nodes.forEach((node, i) => {
-                            this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px)  scale(${node.radius / this.rootRadius})`
+                            this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px)`
                         })
                     }
                 })
@@ -278,6 +288,7 @@ class FlowerRenderer2 extends React.Component {
             const radia = node.radius + selectedPetal.radius
 
             const d = (node.x - p1.x) * (x.y - p1.y)-(node.y - p1.y) * (x.x - p1.x)
+        
             if (d > 0) {
                 onSideID.push(node.id)
                 onSide.push(node)
@@ -365,14 +376,11 @@ class FlowerRenderer2 extends React.Component {
         // this.refs.petals.style.transition = `transform ${MAGNIFY_SPEED}ms ease-in-out`
         this.nodes.forEach((node, i) => {
             const zoom = (node.zoom) ? node.zoom : 1
-            if (node.id === 0) {
-                console.log(node)
-            }
             // TweenMax.to(this.ref[i], 0.5, {
             //     transform: `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`,
             // })
             this.ref[i].style.transition = `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
-            this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px) scale(${zoom * node.radiusScale})`
+            this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`
         })
 
         this.xTrans = selectedPetal.x - this.center[0]
@@ -392,7 +400,7 @@ class FlowerRenderer2 extends React.Component {
                     //     transform: `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`,
                     // })
                     this.ref[i].style.transition = ``
-                    this.ref[i].style.transform = `translate(${node.x  - this.rootRadius}px, ${node.y  - this.rootRadius}px) scale(${zoom * node.radiusScale})`
+                    this.ref[i].style.transform = `translate(${node.x  - node.radius}px, ${node.y  - node.radius}px) scale(${zoom})`
                 })
             })
 
@@ -420,7 +428,7 @@ class FlowerRenderer2 extends React.Component {
             //     transform: `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`,
             // })
             this.ref[i].style.transition = `transform ${UNMAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
-            this.ref[i].style.transform = `translate(${node.x  - this.rootRadius}px, ${node.y  - this.rootRadius}px) scale(${zoom * node.radiusScale})`
+            this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`
         })
 
         this.refs.petals.style.transition = `transform ${UNMAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
@@ -435,21 +443,6 @@ class FlowerRenderer2 extends React.Component {
     }
 
     tick() {
-    }
-
-    receiveProgress(progress) {
-        const { sorted, data } = this.props
-        const angle = progress * 360
-
-        while (sorted[this.currentProgressIndex].linkAngle < angle) {
-            const index = this.nodes.findIndex((element) => sorted[this.currentProgressIndex].id === element.id)
-            this.ref[index].childNodes[0].classList.add(style2.now)
-            this.currentProgressIndex++
-            if (this.currentProgressIndex === sorted.length) {
-                this.currentProgressIndex = 0
-            }
-        }
-
     }
 
     render() {
@@ -481,15 +474,14 @@ class FlowerRenderer2 extends React.Component {
                     className={style2.petal}
                 > 
                     <Petal
-                        r={this.rootRadius}
+                        r={node.radius}
                         selectPetal={this.props.selectPetal}
                         id={node.id}
-                        isSelectedPetal={(node.id === selectedPetalID) || (!selectedPetalID && node.id === 0)}
-                        isRootNode={node.id === 0}
+                        isSelectedPetal={(node.id === selectedPetalID)
+                            || (!selectedPetalID && node.id === 0 )}
                         zoom={node.zoom}
                         type={node.type}
                         color={node.color}
-                        sendProgress={this.receiveProgress}
                     />
                 </div>
                 )}

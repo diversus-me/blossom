@@ -168,25 +168,35 @@ class FlowerRenderer3 extends React.Component {
         switch (positioning) {
             case POSITIONING[0]:
             case POSITIONING[1]: {
-                const simulation = d3.forceSimulation(this.nodes)
-                .force('collision', d3.forceCollide().radius(d => d.radius))
-                .force('forceX', d3.forceX(d => getCirclePosX(this.rootRadius, d.linkAngle, this.center[0])).strength(0.03))
-                .force('forceY', d3.forceY(d => getCirclePosY(this.rootRadius, d.linkAngle, this.center[1])).strength(0.03))
-                .on('tick', () => {
-                    if (this.mainSimRunning) {
-                        this.nodes.forEach((node, i) => {
-                            this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px)`
-                        })
-                    }
-                })
+                // const simulation = d3.forceSimulation(this.nodes)
+                // .force('collision', d3.forceCollide().radius(d => d.radius))
+                // .force('forceX', d3.forceX(d => getCirclePosX(this.rootRadius, d.linkAngle, this.center[0])).strength(0.03))
+                // .force('forceY', d3.forceY(d => getCirclePosY(this.rootRadius, d.linkAngle, this.center[1])).strength(0.03))
+                // .on('tick', () => {
+                //     if (this.mainSimRunning) {
+                //         this.nodes.forEach((node, i) => {
+                //             this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px)`
+                //         })
+                //     }
+                // }).stop()
+
+                const simulation = d3.forceSimulation()
 
                 const worker = new Worker('/d3Worker.js')
 
+                console.log(worker)
+
                 worker.onmessage = (m) => {
-                    console.log("msg from worker: ", m.data)
+                    window.requestAnimationFrame(() => {
+                        m.data.nodes.forEach((node, i) => {
+                            this.ref[i].style.transform = `translate(${node.x - node.radius}px, ${node.y - node.radius}px)`
+                        })
+                    })
+
+                    this.nodes = m.data.nodes
                 }
 
-                worker.postMessage('im from main')
+                worker.postMessage({nodes: this.nodes, rootRadius: this.rootRadius, center: this.center})
 
                 return simulation
             }
@@ -436,6 +446,7 @@ class FlowerRenderer3 extends React.Component {
                     key={node.linkAngle}
                     ref={(ref) => {this.ref[i] = ref}}
                     className={style2.petal}
+                    style={{ willChange: 'transform'}}
                 > 
                     <Petal
                         r={node.radius}

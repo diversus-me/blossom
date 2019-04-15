@@ -2,7 +2,29 @@
     position: absolute;
     top: 0;
     left: 0;
-    transform-origin: 0 0;
+    transform-origin: 50% 50%;
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: rotated(-1deg);
+    }
+    
+    20%, 80% {
+      transform: rotate(2deg);
+    }
+  
+    30%, 50%, 70% {
+      transform: rotate(-4deg);
+    }
+  
+    40%, 60% {
+      transform: rotate(4deg);
+    }
+  }
+
+.now {
+    animation: shake 1.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 .petalContent {
@@ -34,12 +56,14 @@
 .image {
     height: 100%;
     position: absolute;
+    pointer-events: none;
 }
 
 .video {
     position: absolute;
     height: 100%;
     bottom: -50%;
+    pointer-events: none;
 }
 
 .play {

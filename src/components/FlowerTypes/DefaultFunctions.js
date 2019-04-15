@@ -45,6 +45,7 @@ export function createCircles(data, rootRadius, centerX, centerY) {
     const radius = getPetalSize(d.relevance, rootRadius, 0, 1000)
     return Object.assign({}, d, {
       radius,
+      radiusScale: radius / rootRadius,
       x: getCirclePosX(rootRadius + relevanceDistance, d.linkAngle, centerX),
       y: getCirclePosY(rootRadius + relevanceDistance, d.linkAngle, centerY)
     })
@@ -88,6 +89,7 @@ export function createPetalTree(data, rootRadius, centerX, centerY) {
 
     const nodeWithAngle = Object.assign({}, currentNode, {
       radius,
+      radiusScale: radius / rootRadius,
       x: getCirclePosX(rootRadius + radius, currentNode.linkAngle, centerX),
       y: getCirclePosY(rootRadius + radius, currentNode.linkAngle, centerY),
       maxAngle: currentNode.linkAngle + (alpha * 0.5),
@@ -130,6 +132,7 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
 
     const nodeWithAngle = Object.assign({}, currentNode, {
       radius,
+      radiusScale: radius / rootRadius,
       x: getCirclePosX(rootRadius + radius, currentNode.linkAngle, centerX),
       y: getCirclePosY(rootRadius + radius, currentNode.linkAngle, centerY),
       maxAngle: currentNode.linkAngle + (alpha * 0.5),
@@ -163,6 +166,7 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
 export function createRootNode(rootRadius, centerX, centerY) {
   return [{
     radius: rootRadius,
+    radiusScale: 1,
     x: centerX,
     y: centerY,
     fx: centerX,

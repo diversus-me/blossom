@@ -9,6 +9,7 @@ import queryString from 'query-string'
 import FlowerRenderer from './FlowerTypes/FlowerRenderer'
 import FlowerRenderer2 from './FlowerTypes/FlowerRenderer2'
 import FlowerRenderer3 from './FlowerTypes/FlowerRenderer3'
+import FlowerRenderer4 from './FlowerTypes/FlowerRenderer4'
 
 import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
@@ -71,7 +72,7 @@ class FlowerView extends React.Component {
     }
 
     render(){
-        const { settings, title, data, min, max, history } = this.props
+        const { settings, title, data, min, max, history, sorted } = this.props
         const { width, height } = this.state
 
         const selectedPetalID = parseInt(queryString.parse(history.location.search).s)
@@ -117,8 +118,19 @@ class FlowerView extends React.Component {
                     min={min}
                     max={max}
                     settings={settings}
+                    sorted={sorted}
                 />
                 {/* <FlowerRenderer3
+                    width={width}
+                    height={height}
+                    data={data}
+                    selectPetal={this.selectPetal}
+                    selectedPetalID={selectedPetalID}
+                    min={min}
+                    max={max}
+                    settings={settings}
+                /> */}
+                {/* <FlowerRenderer4
                     width={width}
                     height={height}
                     data={data}
