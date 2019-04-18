@@ -1,0 +1,13 @@
+.content {
+    margin-top: 100px;
+    width: 100%;
+    text-align: center;
+}
+
+.header {
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+}   

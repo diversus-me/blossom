@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    max-width: 600px;
+    margin: auto;
+}
+
+.block {
+    display: inline-block;
+    padding: 15px;
+}
+
+.left {
+    width: 75%;
+}
+
+.right {
+    width: 25%;
+    margin-left: 20px;
+}
+
+.image {
+    width: 80px;
+    height: 80px;
+    background: #DDD;
+    margin: auto;
+    border-radius: 80px;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.text {
+    width: 80%;
+    height: 20px;
+    background-color: #DDD;
+    border-radius: 5px;
+    margin: 5px 15px 25px 15px;
+}
