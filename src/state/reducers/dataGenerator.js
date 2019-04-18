@@ -33,3 +33,10 @@ export function getData(min, max) {
     })
     return state
 }
+
+// const sampleData = {
+//     title: "This is a title",
+//     description: "This is a description",
+
+
+// }

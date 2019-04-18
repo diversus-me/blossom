@@ -119,8 +119,6 @@ class FlowerRenderer2 extends React.Component {
         const { width, height, data, settings, min, max } = newProps
         this.center = [Math.floor(width * 0.5), Math.floor(height * 0.5)]
 
-        console.log(this.props.sorted)
-
         const maxLength = (width < height) ? width : height
         this.rootRadius = Math.floor(maxLength * 0.28 * 0.5)
         
@@ -190,8 +188,8 @@ class FlowerRenderer2 extends React.Component {
             case POSITIONING[1]: {
                 const simulation = d3.forceSimulation(this.nodes)
                 .force('collision', d3.forceCollide().radius(d => d.radius))
-                .force('forceX', d3.forceX(d => getCirclePosX(this.rootRadius, d.linkAngle, this.center[0])).strength(0.03))
-                .force('forceY', d3.forceY(d => getCirclePosY(this.rootRadius, d.linkAngle, this.center[1])).strength(0.03))
+                .force('forceX', d3.forceX(d => getCirclePosX(this.rootRadius, d.linkAngle, this.center[0])).strength(0.06))
+                .force('forceY', d3.forceY(d => getCirclePosY(this.rootRadius, d.linkAngle, this.center[1])).strength(0.06))
                 .on('tick', () => {
                     if (this.mainSimRunning) {
                         this.nodes.forEach((node, i) => {
@@ -490,6 +488,7 @@ class FlowerRenderer2 extends React.Component {
                         type={node.type}
                         color={node.color}
                         sendProgress={this.receiveProgress}
+                        isNativeVide
                     />
                 </div>
                 )}
