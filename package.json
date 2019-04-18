@@ -5,6 +5,8 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "d3": "^5.9.1",
+    "giphy-random": "^2.0.8",
+    "gsap": "^2.1.2",
     "history": "^4.9.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.4.0",
@@ -15,7 +17,9 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.8",
     "react-transition-group": "^2.6.1",
-    "redux": "^4.0.1"
+    "react-youtube": "^7.9.0",
+    "redux": "^4.0.1",
+    "victor": "^1.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
