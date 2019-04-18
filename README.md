@@ -1,3 +1,5 @@
+For more information on this project, please visit [diversus.me](https://www.diversus.me/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
