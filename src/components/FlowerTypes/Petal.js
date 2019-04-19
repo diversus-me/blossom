@@ -132,7 +132,9 @@ class Petal extends React.Component {
             progress = this.circumference * progressPercent
         }
 
-        this.timeline.style.strokeDashoffset = this.circumference - progress
+        if (this.timeline) {
+            this.timeline.style.strokeDashoffset = this.circumference - progress
+        }
 
         if (isRootNode) {
             sendProgress(progressPercent)
@@ -269,7 +271,7 @@ class Petal extends React.Component {
                     <svg className={style.svg}>
                         <circle
                             className={style.timeline}
-                            style={{ strokeWidth: `${2}px`, stroke: color}}
+                            style={{ strokeWidth: `${2}px`, stroke: color, }}
                             r={Math.max(0, r - 2)}
                             cx={r-(1)}
                             cy={r-(1)}

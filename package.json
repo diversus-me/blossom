@@ -5,6 +5,7 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "d3": "^5.9.1",
+    "express": "^4.16.4",
     "giphy-random": "^2.0.8",
     "gsap": "^2.1.2",
     "history": "^4.9.0",
@@ -38,5 +39,6 @@
   ],
   "devDependencies": {
     "redux-devtools": "^3.5.0"
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
