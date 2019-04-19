@@ -1,0 +1,44 @@
+{
+  "name": "blossom",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "d3": "^5.9.1",
+    "express": "^4.16.4",
+    "giphy-random": "^2.0.8",
+    "gsap": "^2.1.2",
+    "history": "^4.9.0",
+    "prop-types": "^15.7.2",
+    "query-string": "^6.4.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-icons": "^3.5.0",
+    "react-redux": "^6.0.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.8",
+    "react-transition-group": "^2.6.1",
+    "react-youtube": "^7.9.0",
+    "redux": "^4.0.1",
+    "victor": "^1.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "node ./src/server/server.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "redux-devtools": "^3.5.0"
+  }
+}
