@@ -9,6 +9,6 @@ version: 0.1
   #     - echo Build started on `date`
   #     - npm run build
 
-# artifacts:
-#   files:
-#     - '**/*'
+artifacts:
+  files:
+    - '**/*'
