@@ -38,7 +38,7 @@ function* getLoginLink(action) {
     try {
         yield fetchAsync(
             () => fetch(
-                `${process.env.EACT_APP_SERVER_URL}/api/requestLoginLink`, 
+                `${process.env.REACT_APP_SERVER_URL}/api/requestLoginLink`, 
                 {
                     credentials: 'include',
                     method: "POST",
