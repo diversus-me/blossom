@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "REACT_APP_SERVER_URL=http://localhost:8081 react-scripts start",
-    "build": "REACT_APP_SERVER_URL=http://blossom-dev.eu-central-1.elasticbeanstalk.com react-scripts build",
+    "build": "REACT_APP_SERVER_URL=https://api.diversus.me react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
