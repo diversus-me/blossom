@@ -4,22 +4,32 @@ import { Link } from 'react-router-dom'
 
 import style from './Navigation.module.css'
 
+import { listFlowers } from '../state/actions/flowerList'
+
 import FlowerItem from './NavElements/FlowerItem'
 
 class Navigation extends React.Component {
+    componentDidMount() {
+        const { loading, finished} = this.props.flowerList
+        if (!loading && !finished) {
+            this.props.listFlowers()
+        }
+    }
+
     render() {
-        const { flowers } = this.props
+        const { flowerList } = this.props
         return(
             <div>
                 <div className={style.header}>
                     <h1>blossom</h1>
                 </div>
                 <div className={style.content}>
-                {flowers && flowers.map((flower) => {
+                {flowerList.finished && !flowerList.error && flowerList.list.map((flower) => {
                     return(
-                        <Link to={`/${flower.title}`} key={flower.title}>
+                        <Link to={`/flower/${flower.node.id}`} key={flower.node.id}>
                             <FlowerItem
                                 title={flower.title}
+                                videoId={flower.node.video.url}
                             />
                         </Link>
                     )
@@ -31,8 +41,12 @@ class Navigation extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { flowers, settings, dispatch } = state
-    return { flowers, settings, dispatch }
-  }
+    const { flowerList, settings, dispatch } = state
+    return { flowerList, settings, dispatch }
+}
+
+const mapDispatchToProps = {
+    listFlowers
+}
   
-  export default connect(mapStateToProps)(Navigation)
+  export default connect(mapStateToProps, mapDispatchToProps)(Navigation)

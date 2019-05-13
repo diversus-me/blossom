@@ -25,6 +25,9 @@
     margin: auto;
     border-radius: 80px;
     margin-bottom: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 
 .title {

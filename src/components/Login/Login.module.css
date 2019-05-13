@@ -1,0 +1,46 @@
+.circle {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    background: blue;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.container {
+    position: absolute;
+    width: 100%;
+    top: 30%;
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+}
+
+.form {
+    display: inline-block;
+    width: 100%;
+}
+
+.input {
+    display: block;
+    margin: 10px auto;
+    padding: 5px;
+    font-size: 18px;
+    width: 80%;
+    max-width: 250px;
+    /* font-weight: bold; */
+}
+
+.submit {
+    display: block;
+    margin: 30px auto;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 50px;
+    height: 100px;
+    width: 100px;
+}

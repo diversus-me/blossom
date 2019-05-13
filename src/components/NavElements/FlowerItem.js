@@ -4,12 +4,18 @@ import classnames from 'classnames'
 import style from './FlowerItem.module.css'
 
 class FlowerItem extends React.Component {
+
     render() {
-        const { title } = this.props
+        const { title, videoId } = this.props
         return(
             <div className={style.container}>
                 <div className={classnames(style.block, style.right)}>
-                    <div className={style.image} />
+                    <div
+                        style={{ backgroundImage: `url(https://img.youtube.com/vi/${videoId}/sddefault.jpg)`}}
+                        className={style.image}
+                    ></div>
+                        {/* <img src='https://img.youtube.com/vi/R7Q-HXbbI_E/sddefault.jpg' ></img>
+                    </div> */}
                     <div className={style.title}>{title}</div>
                 </div>
                 <div className={classnames(style.block, style.left)}>
@@ -24,6 +30,7 @@ class FlowerItem extends React.Component {
 
 FlowerItem.propTypes = {
     title: propTypes.string.isRequired,
+    videoId: propTypes.string.isRequired,
 }
 
 export default FlowerItem

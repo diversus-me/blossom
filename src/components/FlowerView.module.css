@@ -1,5 +1,6 @@
 .container {
-    position: fixed;
+    position: absolute;
+    z-index: 1;
     width: 100%;
     background: white;
     top: 0;

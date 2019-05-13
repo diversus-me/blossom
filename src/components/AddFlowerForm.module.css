@@ -1,0 +1,23 @@
+.container {
+    text-align: center;
+    /* justify-content: center;
+    align-items: center; */
+}
+
+.input {
+    display: block;
+    width: 250px;
+    margin: auto;
+}
+
+.select {
+    display: block;
+    width: 100px;
+    margin: auto;
+}
+
+.textArea {
+    display: block;
+    width: 250px;
+    margin: auto;
+}

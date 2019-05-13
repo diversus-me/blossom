@@ -363,9 +363,9 @@ class FlowerRenderer2 extends React.Component {
         // this.refs.petals.style.transition = `transform ${MAGNIFY_SPEED}ms ease-in-out`
         this.nodes.forEach((node, i) => {
             const zoom = (node.zoom) ? node.zoom : 1
-            if (node.id === 0) {
-                console.log(node)
-            }
+            // if (node.id === 0) {
+            //     console.log(node)
+            // }
             // TweenMax.to(this.ref[i], 0.5, {
             //     transform: `translate(${node.x - node.radius}px, ${node.y - node.radius}px) scale(${zoom})`,
             // })
@@ -439,19 +439,20 @@ class FlowerRenderer2 extends React.Component {
         const { sorted, data } = this.props
         const angle = progress * 360
 
-        while (sorted[this.currentProgressIndex].linkAngle < angle) {
-            const index = this.nodes.findIndex((element) => sorted[this.currentProgressIndex].id === element.id)
-            this.ref[index].childNodes[0].classList.add(style2.now)
-            this.currentProgressIndex++
-            if (this.currentProgressIndex === sorted.length) {
-                this.currentProgressIndex = 0
+        if (sorted.length > 0) {
+            while (sorted[this.currentProgressIndex].linkAngle < angle) {
+                const index = this.nodes.findIndex((element) => sorted[this.currentProgressIndex].id === element.id)
+                this.ref[index].childNodes[0].classList.add(style2.now)
+                this.currentProgressIndex++
+                if (this.currentProgressIndex === sorted.length) {
+                    this.currentProgressIndex = 0
+                }
             }
         }
-
     }
 
     render() {
-        const { width, height, selectedPetalID } = this.props
+        const { width, height, selectedPetalID, data, url } = this.props
         const { id, radius, position, divNodes } = this.state
 
         return [
@@ -474,7 +475,7 @@ class FlowerRenderer2 extends React.Component {
                 />,
                 {divNodes.map((node, i) =>
                 <div
-                    key={node.linkAngle}
+                    key={node.id}
                     ref={(ref) => {this.ref[i] = ref}}
                     className={style2.petal}
                 > 
@@ -488,6 +489,7 @@ class FlowerRenderer2 extends React.Component {
                         type={node.type}
                         color={node.color}
                         sendProgress={this.receiveProgress}
+                        videoId={(node.targetNode) ? node.targetNode.video.url : url}
                         isNativeVide
                     />
                 </div>

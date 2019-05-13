@@ -101,7 +101,9 @@ class Petal extends React.Component {
         if (initialPlay) {
             this.circumference = Math.PI * this.props.r * 2
             this.currentTime = 0
-            this.timeline.style.strokeDasharray = this.circumference
+            if (this.timeline) {
+                this.timeline.style.strokeDasharray = this.circumference
+            }
         }
 
         if (videoPlaying) {
@@ -132,7 +134,9 @@ class Petal extends React.Component {
             progress = this.circumference * progressPercent
         }
 
-        this.timeline.style.strokeDashoffset = this.circumference - progress
+        if (this.timeline) {
+            this.timeline.style.strokeDashoffset = this.circumference - progress
+        }
 
         if (isRootNode) {
             sendProgress(progressPercent)
@@ -187,7 +191,7 @@ class Petal extends React.Component {
     }
 
     render() {
-        const { r, selectPetal, id, isSelectedPetal, zoom, color, isRootNode, isNativeVideo } = this.props
+        const { r, selectPetal, id, isSelectedPetal, zoom, color, isRootNode, isNativeVideo, videoId } = this.props
         const { videoPlaying, aspect, wasSelected, initialPlay, videoReady } = this.state
         const videoStyle = {
             marginLeft: `-${Math.floor((r * aspect) - r)}px`,
@@ -217,7 +221,7 @@ class Petal extends React.Component {
                     <div className={style.youtube} style={{ marginLeft: r}}>
                         <YouTube
                             style={{ position: 'absolute'}}
-                            videoId="tzNbPgbrSr0"
+                            videoId={videoId}
                             opts={{
                                 height: r * 2,
                                 playerVars: {
@@ -236,10 +240,14 @@ class Petal extends React.Component {
                         />
                     </div>
                     }   
-                    <img
+                    <div
                         className={style.image}
-                        style={{ opacity: (videoPlaying || !initialPlay) ? 0 : 1}}
-                        src={`https://randomuser.me/api/portraits/${this.gender}/${this.num}.jpg`}
+                        style={{
+                            opacity: (videoPlaying || !initialPlay) ? 0 : 1,
+                            backgroundImage: `url(https://img.youtube.com/vi/${videoId}/sddefault.jpg)`
+                        }}
+                        // src={`https://randomuser.me/api/portraits/${this.gender}/${this.num}.jpg`}
+                        // src={`https://img.youtube.com/vi/${videoId}/sddefault.jpg`}
                         ref={(ref) => {this.thumbnail = ref}}
                     />
                     {((isSelectedPetal || isRootNode) && isNativeVideo) &&
@@ -309,6 +317,7 @@ Petal.propTypes = {
     color: PropTypes.string,
     sendProgress: PropTypes.func.isRequired,
     isNativeVideo: PropTypes.bool,
+    videoId: PropTypes.string.isRequired
 }
 
 export default Petal
