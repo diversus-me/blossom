@@ -104,9 +104,11 @@ class App extends Component {
               </Switch>
             </CSSTransition>
           </TransitionGroup>
-          <FloatingButton
-            onClickCallback={this.toggleAddFlowerOverlay}
-          />
+          {session.authenticated &&
+            <FloatingButton
+              onClickCallback={this.toggleAddFlowerOverlay}
+            />
+          }
           <Overlay
             visibility={flowerOverlayVisible}
             onOuterClick={this.toggleAddFlowerOverlay}
