@@ -4,22 +4,19 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
-    "d3": "^5.9.1",
-    "giphy-random": "^2.0.8",
+    "d3": "^5.9.2",
     "gsap": "^2.1.2",
-    "history": "^4.9.0",
     "prop-types": "^15.7.2",
-    "query-string": "^6.4.0",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "react-floating-action-button": "^1.0.5",
-    "react-icons": "^3.5.0",
-    "react-redux": "^6.0.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.8",
-    "react-tiny-fab": "^2.0.0",
+    "query-string": "^6.5.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-icons": "^3.7.0",
+    "react-redux": "^7.0.3",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "^3.0.1",
     "react-toastify": "^5.1.0",
-    "react-transition-group": "^2.6.1",
+    "react-transition-group": "^4.0.1",
     "react-youtube": "^7.9.0",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.2",
@@ -33,9 +30,9 @@
   },
   "standard": {
     "env": [
-       "jest",
-       "es6",
-       "browser"
+      "jest",
+      "es6",
+      "browser"
     ]
   },
   "browserslist": [
