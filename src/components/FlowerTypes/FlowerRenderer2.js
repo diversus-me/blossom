@@ -77,10 +77,11 @@ class FlowerRenderer2 extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { width, height, selectedPetalID, settings: { positioning } } = this.props
+    const { width, height, selectedPetalID, settings: { positioning }, data } = this.props
     if (width !== prevProps.width ||
-            height !== prevProps.height ||
-            positioning !== prevProps.settings.positioning) {
+        height !== prevProps.height ||
+        positioning !== prevProps.settings.positioning ||
+        data.length !== prevProps.data.length) {
       this.rebuild(this.props)
     }
 

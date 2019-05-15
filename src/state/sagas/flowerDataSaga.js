@@ -41,7 +41,8 @@ function * addNode (action) {
       ))
     yield all([
       put({ type: ADD_NODE_SUCCESS, data: response.data, id: action.id }),
-      put(getFlowerData(action.id))])
+      put(getFlowerData(action.id))
+    ])
   } catch (e) {
     yield put({ type: ADD_NODE_ERROR, error: e.message, id: action.id })
   }
