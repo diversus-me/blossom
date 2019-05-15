@@ -65,7 +65,7 @@ class App extends Component {
   }
 
   render () {
-    const { flowerList, session } = this.props
+    const { session } = this.props
     const { flowerOverlayVisible } = this.state
 
     return (
@@ -76,7 +76,7 @@ class App extends Component {
           } */}
           <Switch location={location}>
             {session.authenticated &&
-              <Route path='/' component={Navigation} />
+              <Route path='/' exact component={Navigation} />
             }
             <Route path='/login' exact render={() =>
               <Login />
@@ -89,18 +89,14 @@ class App extends Component {
               key={location.pathname}
             >
               <Switch location={location}>
-                {flowerList.list && flowerList.list.map((flower) =>
-                  <Route
-                    key={flower.node.id}
-                    path={`/flower/${flower.node.id}`}
-                    render={() =>
-                      <FlowerView
-                        key={flower.node.id}
-                        id={flower.node.id}
-                      />
-                    }
-                  />
-                )}
+                <Route
+                  path={`/flower`}
+                  render={() =>
+                    <FlowerView
+                      id={location.pathname.slice(8)}
+                    />
+                  }
+                />
               </Switch>
             </CSSTransition>
           </TransitionGroup>
@@ -122,8 +118,8 @@ class App extends Component {
 }
 
 function mapStateToProps (state) {
-  const { flowerList, session } = state
-  return { flowerList, session }
+  const { session } = state
+  return { session }
 }
 
 const mapDispatchToProps = {
