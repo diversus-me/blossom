@@ -7,7 +7,7 @@ class Overlay extends React.Component {
   render () {
     const { visibility, onOuterClick } = this.props
     const containerStyle = {
-      opacity: (visibility) ? 1 : 0, pointerEvents: (visibility) ? 'all' : 'none'
+      display: (visibility) ? 'initial' : 'none', pointerEvents: (visibility) ? 'all' : 'none'
     }
     return [
       <div
