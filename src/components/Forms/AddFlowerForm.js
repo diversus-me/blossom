@@ -51,10 +51,10 @@ class AddFlowerForm extends React.Component {
         <h1>Create new Flower</h1>
         <form onSubmit={this.handleSubmit} className={style.form}>
           <input className={style.input} type='text' placeholder='Add a title' value={titleValue} onChange={e => { this.handleChange(e, 'title') }} />
-                <input className={style.input} type='text' placeholder='Add a description' value={descriptionValue} onChange={e => { this.handleChange(e, 'desc') }} />
+          <input className={style.input} type='text' placeholder='Add a description' value={descriptionValue} onChange={e => { this.handleChange(e, 'desc') }} />
           <input className={style.input} type='text' placeholder='Provide Youtube Link' value={youtubeLinkValue} onChange={e => { this.handleChange(e, 'link') }} />
-                <input className={style.submit} type='submit' value='Submit' />
-              </form>
+          <input className={style.submit} type='submit' value='Submit' />
+        </form>
       </div>
     )
   }

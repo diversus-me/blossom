@@ -15,7 +15,6 @@ import { createRootNode, createCircles, createPetalTree, createPetalTreeComplex,
   getCirclePosX, getCirclePosY, deg2rad } from './DefaultFunctions'
 
 import style from './FlowerRenderer.module.css'
-import style2 from './Petal.module.css'
 
 class FlowerRenderer2 extends React.Component {
   constructor (props) {
@@ -28,7 +27,6 @@ class FlowerRenderer2 extends React.Component {
     this.newPositionsReceived = this.newPositionsReceived.bind(this)
     this.createAndPosition = this.createAndPosition.bind(this)
     this.startSimulation = this.startSimulation.bind(this)
-    this.hover = this.hover.bind(this)
     this.receiveProgress = this.receiveProgress.bind(this)
     this.mainSimRunning = false
     this.fullscreenVideo = false
@@ -36,9 +34,6 @@ class FlowerRenderer2 extends React.Component {
     this.currentProgressIndex = 0
 
     this.state = {
-      id: '',
-      radius: 0,
-      position: [0, 0],
       divNodes: []
     }
   }
@@ -99,20 +94,6 @@ class FlowerRenderer2 extends React.Component {
   componentWillUnmount () {
     this.mainSimRunning = false
     this.simulation.stop()
-  }
-
-  hover (mouseEnter, id, radius, position) {
-    if (mouseEnter) {
-      this.setState({
-        id, radius, position
-      })
-    } else {
-      this.setState({
-        id: '',
-        radius: 0,
-        position: [0, 0]
-      })
-    }
   }
 
   rebuild (newProps) {
@@ -436,7 +417,7 @@ class FlowerRenderer2 extends React.Component {
     if (sorted.length > 0) {
       while (sorted[this.currentProgressIndex].linkAngle < angle) {
         const index = this.nodes.findIndex((element) => sorted[this.currentProgressIndex].id === element.id)
-        this.ref[index].childNodes[0].classList.add(style2.now)
+        this.ref[index].childNodes[0].classList.add(style.now)
         this.currentProgressIndex++
         if (this.currentProgressIndex === sorted.length) {
           this.currentProgressIndex = 0
@@ -446,18 +427,10 @@ class FlowerRenderer2 extends React.Component {
   }
 
   render () {
-    const { width, height, selectedPetalID, url } = this.props
-    const { id, radius, position, divNodes } = this.state
+    const { width, height, selectedPetalID, url, duration } = this.props
+    const { divNodes } = this.state
 
     return [
-      <div
-        key={'infoField'}
-        style={{ position: 'absolute', bottom: '10px', left: '20px' }}
-      >
-        <p><span className={style.infoTitle}>ID</span><span>{id}</span></p>
-        <p><span className={style.infoTitle}>R</span><span>{Math.floor(radius)}</span></p>
-        <p><span className={style.infoTitle}>Pos</span><span>{Math.floor(position[0])},{Math.floor(position[1])}</span></p>
-      </div>,
       <div key={'petals'} style={{ position: 'absolute', top: 0, left: 0 }} ref={'petals'}>
         <svg
           key={'mainSVG'}
@@ -471,7 +444,7 @@ class FlowerRenderer2 extends React.Component {
           <div
             key={node.id}
             ref={(ref) => { this.ref[i] = ref }}
-            className={style2.petal}
+            className={style.petal}
           >
             <Petal
               r={this.rootRadius}
@@ -484,6 +457,8 @@ class FlowerRenderer2 extends React.Component {
               color={node.color}
               sendProgress={this.receiveProgress}
               videoId={(node.targetNode) ? node.targetNode.video.url : url}
+              duration={(node.targetNode) ? node.targetNode.video.duration : duration}
+              center={this.center}
               isNativeVide
             />
           </div>

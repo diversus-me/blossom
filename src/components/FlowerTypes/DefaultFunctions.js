@@ -1,27 +1,32 @@
-export function deg2rad(degrees) {
+export function deg2rad (degrees) {
   return degrees * Math.PI / 180
 }
 
-export function rad2deg(radians) {
+export function rad2deg (radians) {
   return radians * 180 / Math.PI
 }
 
-export function getCirclePosX(radius, angle, center) {
+export function getCirclePosX (radius, angle, center) {
   return (radius * Math.sin(deg2rad(angle))) + center
 }
 
-export function getCirclePosY(radius, angle, center) {
+export function getCirclePosY (radius, angle, center) {
   return (radius * -Math.cos(deg2rad(angle))) + center
 }
 
-export function getAlphaRadial(rootRadius, neighborRadius) {
+export function getAngle (x, y, cx, cy) {
+  const angle = rad2deg(Math.atan2(y - cy, x - cx)) + 90
+  return (angle < 0) ? 360 + angle : angle
+}
+
+export function getAlphaRadial (rootRadius, neighborRadius) {
   const adjacent = rootRadius + neighborRadius
   const opposite = neighborRadius
 
   return 2 * Math.tan(opposite / adjacent)
 }
 
-function translate(value, leftMin, leftMax, rightMin, rightMax) {
+function translate (value, leftMin, leftMax, rightMin, rightMax) {
   const leftSpan = leftMax - leftMin
   const rightSpan = rightMax - rightMin
 
@@ -29,17 +34,17 @@ function translate(value, leftMin, leftMax, rightMin, rightMax) {
   return rightMin + (valueScaled * rightSpan)
 }
 
-function getRelevanceDistance(node, rootRadius, min, max) {
+function getRelevanceDistance (node, rootRadius, min, max) {
   // console.log(translate(node.relevance, min, max, 600, 0))
   return translate(node.relevance, min, 700, 600, rootRadius)
-  return Math.min(600, Math.pow((5000 / node.relevance), 2) + 50);
+  // return Math.min(600, Math.pow((5000 / node.relevance), 2) + 50)
 }
 
-export function getPetalSize(relevance, rootRadius, min, max) {
+export function getPetalSize (relevance, rootRadius, min, max) {
   return translate(relevance, min, max, rootRadius * 0.14, Math.floor(rootRadius * 0.4))
 }
 
-export function createCircles(data, rootRadius, centerX, centerY) {
+export function createCircles (data, rootRadius, centerX, centerY) {
   return data.map((d) => {
     const relevanceDistance = getRelevanceDistance(d, rootRadius, 0, 1000)
     const radius = getPetalSize(d.relevance, rootRadius, 0, 1000)
@@ -52,7 +57,7 @@ export function createCircles(data, rootRadius, centerX, centerY) {
   })
 }
 
-function findMatch(roots, node) {
+function findMatch (roots, node) {
   const maxOver360 = (node.maxAngle >= 360)
   for (let i = 0; i < roots.length; i++) {
     const minUnder0 = (roots[i].minAngle < 0)
@@ -75,7 +80,7 @@ function findMatch(roots, node) {
   return false
 }
 
-export function createPetalTree(data, rootRadius, centerX, centerY) {
+export function createPetalTree (data, rootRadius, centerX, centerY) {
   const workingData = data.slice()
   const petals = []
   const roots = []
@@ -93,7 +98,7 @@ export function createPetalTree(data, rootRadius, centerX, centerY) {
       x: getCirclePosX(rootRadius + radius, currentNode.linkAngle, centerX),
       y: getCirclePosY(rootRadius + radius, currentNode.linkAngle, centerY),
       maxAngle: currentNode.linkAngle + (alpha * 0.5),
-      minAngle: currentNode.linkAngle - (alpha * 0.5),
+      minAngle: currentNode.linkAngle - (alpha * 0.5)
     })
 
     const found = findMatch(roots, nodeWithAngle)
@@ -101,18 +106,18 @@ export function createPetalTree(data, rootRadius, centerX, centerY) {
       roots.push(nodeWithAngle)
       petals.unshift(Object.assign({}, nodeWithAngle, {
         fx: nodeWithAngle.x,
-        fy: nodeWithAngle.y,
+        fy: nodeWithAngle.y
       }))
     } else {
       const relevanceDistance = getRelevanceDistance(nodeWithAngle, rootRadius, 0, 1000)
       petals.unshift(Object.assign({}, nodeWithAngle, {
         x: getCirclePosX(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerX),
         y: getCirclePosY(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerY),
-        target: found.id,
+        target: found.id
       }))
       links.push({
         source: nodeWithAngle.id,
-        target: found.id,
+        target: found.id
       })
     }
   }
@@ -120,7 +125,7 @@ export function createPetalTree(data, rootRadius, centerX, centerY) {
   return { petals, links }
 }
 
-export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
+export function createPetalTreeComplex (data, rootRadius, centerX, centerY) {
   const workingData = data.slice()
   const petals = []
   const roots = []
@@ -136,7 +141,7 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
       x: getCirclePosX(rootRadius + radius, currentNode.linkAngle, centerX),
       y: getCirclePosY(rootRadius + radius, currentNode.linkAngle, centerY),
       maxAngle: currentNode.linkAngle + (alpha * 0.5),
-      minAngle: currentNode.linkAngle - (alpha * 0.5),
+      minAngle: currentNode.linkAngle - (alpha * 0.5)
     })
 
     const found = findMatch(roots, nodeWithAngle)
@@ -144,18 +149,18 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
       roots.push(nodeWithAngle)
       petals.unshift(Object.assign({}, nodeWithAngle, {
         fx: nodeWithAngle.x,
-        fy: nodeWithAngle.y,
+        fy: nodeWithAngle.y
       }))
     } else {
       const relevanceDistance = getRelevanceDistance(nodeWithAngle, rootRadius, 0, 1000)
       petals.unshift(Object.assign({}, nodeWithAngle, {
         x: getCirclePosX(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerX),
         y: getCirclePosY(rootRadius + relevanceDistance, nodeWithAngle.linkAngle, centerY),
-        target: found.id,
+        target: found.id
       }))
       links.push({
         source: nodeWithAngle.id,
-        target: found.id,
+        target: found.id
       })
     }
   }
@@ -163,7 +168,7 @@ export function createPetalTreeComplex(data, rootRadius, centerX, centerY) {
   return { petals, links }
 }
 
-export function createRootNode(rootRadius, centerX, centerY) {
+export function createRootNode (rootRadius, centerX, centerY) {
   return [{
     radius: rootRadius,
     radiusScale: 1,
@@ -174,6 +179,6 @@ export function createRootNode(rootRadius, centerX, centerY) {
     fixed: true,
     relevance: -1,
     linkAngle: 0,
-    id: 0,
+    id: 0
   }]
 }

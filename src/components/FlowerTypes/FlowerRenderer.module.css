@@ -1,4 +1,28 @@
-.infoTitle {
-    font-weight: bold;
-    margin-right: 5px;
+.petal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 50% 50%;
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: rotated(-1deg);
+    }
+    
+    20%, 80% {
+      transform: rotate(3deg);
+    }
+  
+    30%, 50%, 70% {
+      transform: rotate(-6deg);
+    }
+  
+    40%, 60% {
+      transform: rotate(6deg);
+    }
+  }
+
+.now {
+    animation: shake 2s cubic-bezier(.36,.07,.19,.97) both;
 }

@@ -37,7 +37,7 @@ function parseData (data, connections) {
       user: connection.user,
       x: 0,
       y: 0,
-      linkAngle: ((connection.sourceIn + (connection.sourceOut - connection.sourceIn)) / connection.sourceLength) * 360
+      linkAngle: ((connection.sourceIn + (connection.sourceOut - connection.sourceIn)) / data.video.duration) * 360
     }
   })
 

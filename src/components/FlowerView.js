@@ -126,14 +126,17 @@ class FlowerView extends React.Component {
           <FloatingButton
             onClickCallback={this.toggleAddNodeOverlay}
           />
+          {data && data.data && data.data.connections &&
           <Overlay
             visibility={overlayVisible}
             onOuterClick={this.toggleAddNodeOverlay}
           >
             <AddNodeForm
               id={id}
+              rootDuration={data.data.video.duration}
             />
           </Overlay>
+          }
         </div>
         {/* <FlowerRenderer
                     width={width}
@@ -156,6 +159,7 @@ class FlowerView extends React.Component {
           max={data.data.max}
           settings={settings}
           url={data.data.video.url}
+          duration={data.data.video.duration}
           sorted={data.data.sorted}
         />
         }
