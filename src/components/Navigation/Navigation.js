@@ -30,6 +30,9 @@ class Navigation extends React.Component {
                 <FlowerItem
                   title={flower.title}
                   videoId={flower.node.video.url}
+                  description={flower.description || undefined}
+                  created={new Date(flower.created)}
+                  user={flower.user}
                 />
               </Link>
             )

@@ -3,25 +3,16 @@
 }
 
 .petalContent {
-    /* position: absolute; */
+    position: relative;
     transform: scale(1);
     transition: transform 100ms ease-in-out;
     border-radius: 50%;
     width: 100%;
-    /* border: solid black 10px; */
-    /* border: solid rgba(0,0,0,0) 2px; */
     background: rgb(200, 200, 200);
     overflow: hidden;
     backface-visibility: hidden;
-    /* -webkit-backface-visibility: hidden; */
-    /* -moz-backface-visibility: hidden; */
+    -webkit-backface-visibility: hidden;
     transform: translate3d(0, 0, 0);
-    /* -moz-transform: translate3d(0, 0, 0) */
-    /* box-shadow: inset 0 0 0 5px black; */
-    /* box-sizing: border-box; */
-    /* box-shadow: inset 0px 0px 0px 10px rgba(0,255,0,0.5); */
-
-    /* outline: solid black 2px; */
 }
 
 .petalContent:active {
@@ -52,6 +43,14 @@
 .youtube {
     position: absolute;
     transform: translateX(-50%);
+    width: 9000px
+}
+
+.youtubeIframe {
+    /* position: absolute; */
+    height: 100%;
+    width: 100%;
+    /* width: 99999px; */
 }
 
 .play {
@@ -138,7 +137,7 @@
     bottom: 10px;
     width: 100%;
     color: white;
-    text-shadow: 0 0 2px black;
+    text-shadow: 1px 1px 2px black;
     font-size: 0.8em;
     text-align: center;
     pointer-events: none;

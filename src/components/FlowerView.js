@@ -10,9 +10,6 @@ import queryString from 'query-string'
 import { getFlowerData } from '../state/actions/flowerData'
 
 import FlowerRenderer from './FlowerTypes/FlowerRenderer'
-import FlowerRenderer2 from './FlowerTypes/FlowerRenderer2'
-import FlowerRenderer3 from './FlowerTypes/FlowerRenderer3'
-import FlowerRenderer4 from './FlowerTypes/FlowerRenderer4'
 
 import Overlay from './UI/Overlay'
 import AddNodeForm from './Forms/AddNodeForm'
@@ -26,15 +23,12 @@ class FlowerView extends React.Component {
     super(props)
     this.toggleSettings = this.toggleSettings.bind(this)
     this.selectPetal = this.selectPetal.bind(this)
-    this.resize = this.resize.bind(this)
     this.toggleAddNodeOverlay = this.toggleAddNodeOverlay.bind(this)
     const { history } = this.props
     const parsedQuery = queryString.parse(history.location.search)
 
     this.state = {
       settingsVisibility: false,
-      width: 0,
-      height: 0,
       selectedPetalID: parseInt(parsedQuery.s),
       overlayVisible: false
     }
@@ -43,22 +37,11 @@ class FlowerView extends React.Component {
   componentDidMount () {
     const { id, flowerData: { data } } = this.props
 
-    window.addEventListener('resize', this.resize)
-    this.resize()
-
     if (!data[id]) {
       this.props.getFlowerData(id)
     }
   }
 
-  resize () {
-    const width = window.innerWidth
-    const height = window.innerHeight
-
-    this.setState({
-      width, height
-    })
-  }
   toggleSettings () {
     this.setState({
       settingsVisibility: !this.state.settingsVisibility
@@ -94,7 +77,7 @@ class FlowerView extends React.Component {
     const { settings, history, id, flowerData } = this.props
     const data = flowerData.data[id]
 
-    const { width, height, overlayVisible } = this.state
+    const { overlayVisible } = this.state
 
     const selectedPetalID = parseInt(queryString.parse(history.location.search).s)
 
@@ -138,20 +121,8 @@ class FlowerView extends React.Component {
           </Overlay>
           }
         </div>
-        {/* <FlowerRenderer
-                    width={width}
-                    height={height}
-                    data={data}
-                    selectPetal={this.selectPetal}
-                    selectedPetalID={selectedPetalID}
-                    min={min}
-                    max={max}
-                    settings={settings}
-                /> */}
         {data && data.data && data.data.connections &&
-        <FlowerRenderer2
-          width={width}
-          height={height}
+        <FlowerRenderer
           data={data.data.connections}
           selectPetal={this.selectPetal}
           selectedPetalID={selectedPetalID}
@@ -161,35 +132,16 @@ class FlowerView extends React.Component {
           url={data.data.video.url}
           duration={data.data.video.duration}
           sorted={data.data.sorted}
+          useWebWorker
         />
         }
-        {/* <FlowerRenderer3
-                    width={width}
-                    height={height}
-                    data={data}
-                    selectPetal={this.selectPetal}
-                    selectedPetalID={selectedPetalID}
-                    min={min}
-                    max={max}
-                    settings={settings}
-                /> */}
-        {/* <FlowerRenderer4
-                    width={width}
-                    height={height}
-                    data={data}
-                    selectPetal={this.selectPetal}
-                    selectedPetalID={selectedPetalID}
-                    min={min}
-                    max={max}
-                    settings={settings}
-                /> */}
       </div>
     )
   }
 }
 
 FlowerView.propTypes = {
-  id: PropTypes.number.isRequired
+  id: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {

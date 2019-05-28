@@ -34,6 +34,7 @@ class Petal extends React.Component {
     this.onScrub = this.onScrub.bind(this)
     this.endScrub = this.endScrub.bind(this)
     this.timelineSelect = this.timelineSelect.bind(this)
+    this.stopVideo = this.stopVideo.bind(this)
 
     this.state = {
       videoWidth: 0,
@@ -52,16 +53,9 @@ class Petal extends React.Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    if (this.props.isSelectedPetal !== nextProps.isSelectedPetal && this.state.videoPlaying) {
-      if (this.state.videoPlaying) {
-        if (nextProps.isNativeVideo) {
-          this.video.pause()
-        } else {
-          this.video.pauseVideo()
-        }
-        this.setState({
-          videoPlaying: false
-        })
+    if (this.props.isSelectedPetal !== nextProps.isSelectedPetal) {
+      if (!nextProps.isSelectedPetal && this.state.videoPlaying) {
+        // this.stopVideo()
       }
       return true
     }
@@ -90,6 +84,17 @@ class Petal extends React.Component {
   }
 
   componentWillUnmount () {
+    this.setState({
+      videoPlaying: false
+    })
+  }
+
+  stopVideo () {
+    if (this.props.isNativeVideo) {
+      this.video.pause()
+    } else {
+      this.video.pauseVideo()
+    }
     this.setState({
       videoPlaying: false
     })
@@ -151,13 +156,6 @@ class Petal extends React.Component {
 
   clickPlay () {
     const { videoPlaying } = this.state
-    // if (initialPlay) {
-    //   this.circumference = Math.PI * (this.props.r - 15) * 2
-    //   this.currentTime = 0
-    //   if (this.timeline) {
-    //     this.timeline.style.strokeDasharray = this.circumference
-    //   }
-    // }
 
     if (videoPlaying) {
       this.video.pause()
@@ -168,7 +166,11 @@ class Petal extends React.Component {
 
   updateTimeline () {
     const { videoPlaying, isScrubbing } = this.state
-    const { isNativeVideo, isRootNode, sendProgress } = this.props
+    const { isNativeVideo, isSelectedPetal } = this.props
+
+    if (!isSelectedPetal && videoPlaying) {
+      return this.stopVideo()
+    }
 
     let progressPercent = 0
     let progress = 0
@@ -221,6 +223,7 @@ class Petal extends React.Component {
   }
 
   onYoutubeStateChange (e) {
+    this.video = e.target
     switch (e.data) {
       case 1:
         this.setState({
@@ -269,12 +272,15 @@ class Petal extends React.Component {
           <source src='/Vfe_html5.mp4' />
         </video>}
         {!isNativeVideo && wasSelected &&
-        <div className={style.youtube} style={{ marginLeft: r }}>
+        <div className={style.youtube} style={{ marginLeft: r, height: `${r * 2}px` }}>
           <YouTube
-            style={{ position: 'absolute' }}
+            // style={{ position: 'absolute' }}
+            // className={style.youtubeIframe}
+            containerClassName={style.youtubeIframe}
             videoId={videoId}
             opts={{
-              height: r * 2,
+              height: '100%',
+              width: '100%',
               playerVars: {
                 autoplay: 1,
                 controls: 0,
@@ -284,7 +290,9 @@ class Petal extends React.Component {
                 modestbranding: 1,
                 rel: 0,
                 showinfo: 0,
-                playsinline: 1
+                playsinline: 1,
+                allowfullscreen: 1,
+                frameborder: 0
               }
             }}
             onReady={this.onYoutubeReady}

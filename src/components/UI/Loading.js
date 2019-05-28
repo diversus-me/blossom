@@ -2,7 +2,7 @@ import React from 'react'
 
 import style from './Login.module.css'
 
-class LoginLoader extends React.Component {
+class Loading extends React.Component {
   render () {
     return (
       <div className={style.circle} />
@@ -10,4 +10,4 @@ class LoginLoader extends React.Component {
   }
 }
 
-export default LoginLoader
+export default Loading

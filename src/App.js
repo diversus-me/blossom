@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { toast } from 'react-toastify'
 import queryString from 'query-string'
 
@@ -17,7 +16,6 @@ import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
 import FlowerView from './components/FlowerView'
-// import LoginLoader from './components/Login/LoginLoader'
 
 class App extends Component {
   constructor (props) {
@@ -71,35 +69,22 @@ class App extends Component {
     return (
       <Route render={({ location }) => (
         <div>
-          {/* {session.loading &&
-          <LoginLoader />
-          } */}
           <Switch location={location}>
             {session.authenticated &&
               <Route path='/' exact component={Navigation} />
             }
-            <Route path='/login' exact render={() =>
-              <Login />
-            } />
+            <Route
+              path='/login'
+              exact
+              render={() =>
+                <Login />
+              } />
           </Switch>
-          <TransitionGroup>
-            <CSSTransition
-              classNames={'fade'}
-              timeout={{ enter: 500, exit: 500 }}
-              key={location.pathname}
-            >
-              <Switch location={location}>
-                <Route
-                  path={`/flower`}
-                  render={() =>
-                    <FlowerView
-                      id={location.pathname.slice(8)}
-                    />
-                  }
-                />
-              </Switch>
-            </CSSTransition>
-          </TransitionGroup>
+          {location.pathname.slice(8) &&
+          <FlowerView
+            id={location.pathname.slice(8)}
+          />
+          }
           {session.authenticated &&
             <FloatingButton
               onClickCallback={this.toggleAddFlowerOverlay}
