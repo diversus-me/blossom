@@ -13,6 +13,7 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     transform: translate3d(0, 0, 0);
+    z-index: 1;
 }
 
 .petalContent:active {
@@ -41,15 +42,20 @@
 }
 
 .youtube {
-    position: absolute;
+    position: relative;
     transform: translateX(-50%);
-    width: 9000px
+    width: 9000px; /* Workaround for height-priority youtube video */
+    /* z-index: 1; */
+    /* overflow: hidden; */
 }
 
 .youtubeIframe {
-    /* position: absolute; */
+    position: relative;
     height: 100%;
     width: 100%;
+    /* z-index: 1; */
+    /* overflow: hidden; */
+    /* border-radius: 1000000px; */
     /* width: 99999px; */
 }
 
@@ -154,4 +160,5 @@
     transition: opacity 600ms ease;
     width: 100%;
     height: 100%;
+    z-index: 2;
 }
