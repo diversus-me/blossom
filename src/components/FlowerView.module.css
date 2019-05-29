@@ -1,15 +1,16 @@
 .container {
-    position: fixed;
+    position: relative;
+    z-index: 1;
     width: 100%;
     background: white;
     top: 0;
     height: 100vh;
+    overflow: hidden;
     box-shadow: -19px 0 38px rgba(0,0,0,0.10);
 }
 
 .navigation {
     position: fixed;
-    top: 0;
     z-index: 1;
     width: 100%;
 }

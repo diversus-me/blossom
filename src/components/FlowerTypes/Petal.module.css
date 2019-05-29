@@ -1,46 +1,19 @@
-.petal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform-origin: 50% 50%;
-}
-
-@keyframes shake {
-    10%, 90% {
-      transform: rotated(-1deg);
-    }
-    
-    20%, 80% {
-      transform: rotate(3deg);
-    }
-  
-    30%, 50%, 70% {
-      transform: rotate(-6deg);
-    }
-  
-    40%, 60% {
-      transform: rotate(6deg);
-    }
-  }
-
-.now {
-    animation: shake 2s cubic-bezier(.36,.07,.19,.97) both;
+.petal:hover > .svg > .timeline {
+    stroke-width: 10px;
 }
 
 .petalContent {
-    /* position: absolute; */
+    position: relative;
     transform: scale(1);
     transition: transform 100ms ease-in-out;
     border-radius: 50%;
     width: 100%;
-    /* border: solid black 2px; */
-    /* border: solid rgba(0,0,0,0) 2px; */
     background: rgb(200, 200, 200);
     overflow: hidden;
-    /* box-shadow: inset 0 0 0 5px black; */
-    /* box-sizing: border-box; */
-
-    /* outline: solid black 2px; */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    z-index: 1;
 }
 
 .petalContent:active {
@@ -55,8 +28,10 @@
 
 .image {
     height: 100%;
-    position: absolute;
     pointer-events: none;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 
 .video {
@@ -67,8 +42,21 @@
 }
 
 .youtube {
-    position: absolute;
+    position: relative;
     transform: translateX(-50%);
+    width: 9000px; /* Workaround for height-priority youtube video */
+    /* z-index: 1; */
+    /* overflow: hidden; */
+}
+
+.youtubeIframe {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    /* z-index: 1; */
+    /* overflow: hidden; */
+    /* border-radius: 1000000px; */
+    /* width: 99999px; */
 }
 
 .play {
@@ -76,7 +64,6 @@
     top: 50%;
     left: 50%;
     transform: scale(1);
-    /* opacity: 0.8; */
     transition: transform 200ms ease-out,
                 opacity 400ms ease-out;
 }
@@ -103,7 +90,6 @@
     bottom: 5%;
     left: 50%;
     transform: scale(1);
-    /* opacity: 0.8; */
     transition: transform 200ms ease-out,
                 opacity 400ms ease-out;
 }
@@ -122,18 +108,57 @@
     width: 100%;
     height: 100%;
     position: absolute;
+    top: 0;
     pointer-events: none;
 }
 
 .timeline {
     stroke-dasharray: 0 1px;
     fill: none;
-    box-shadow: inset 0 3px 6px rgba(0,0,0,0.16);
+    stroke-width: 3px;
+}
+
+.petalContent:hover > .svg > .timelineTouchArea > .timeline {
+    stroke-width: 15px;
+}
+
+.petalContent:hover > .svg > .timelineTouchArea > .timelineBackground {
+    stroke-width: 15px;
+}
+
+.timelineBackground {
+    fill: none;
+    stroke-width: 0px;
+    pointer-events: auto;
+    stroke: black;
+    opacity: 0.5;
+}
+
+.timelineTouchArea {
+    /* pointer-events: none; */
+}
+
+.time {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    font-size: 0.8em;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.petalContent:hover > .time {
+    opacity: 1;
 }
 
 .overlay {
+    position: absolute;
+    top: 0;
     transition: opacity 600ms ease;
     width: 100%;
     height: 100%;
-    position: absolute;
+    z-index: 2;
 }

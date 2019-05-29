@@ -1,0 +1,17 @@
+.container {
+    position: fixed;
+    width: 80%;
+    height: 80%;
+    background: white;
+    top: 10%;
+    left: 10%;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+
+.outerContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

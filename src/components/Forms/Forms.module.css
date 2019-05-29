@@ -1,0 +1,25 @@
+.container {
+    text-align: center;
+}
+
+.input {
+    display: block;
+    width: 250px;
+    margin: auto;
+}
+
+.select {
+    display: block;
+    width: 100px;
+    margin: auto;
+}
+
+.textArea {
+    display: block;
+    width: 250px;
+    margin: auto;
+}
+
+.text {
+    font-size: 0.8em;
+}
