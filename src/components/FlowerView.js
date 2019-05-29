@@ -42,6 +42,14 @@ class FlowerView extends React.Component {
     }
   }
 
+  componentDidUpdate () {
+    const { id, flowerData: { data } } = this.props
+
+    if (!data[id]) {
+      this.props.getFlowerData(id)
+    }
+  }
+
   toggleSettings () {
     this.setState({
       settingsVisibility: !this.state.settingsVisibility
@@ -124,6 +132,7 @@ class FlowerView extends React.Component {
         {data && data.data && data.data.connections &&
         <FlowerRenderer
           data={data.data.connections}
+          rootNode={data.data.id}
           selectPetal={this.selectPetal}
           selectedPetalID={selectedPetalID}
           min={data.data.min}

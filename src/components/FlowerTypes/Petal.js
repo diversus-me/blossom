@@ -5,6 +5,7 @@ import { MdPlayArrow, MdFullscreen } from 'react-icons/md'
 import YouTube from 'react-youtube'
 import ZingTouch from 'zingtouch'
 import moment from 'moment'
+import { withRouter } from 'react-router'
 
 import style from './Petal.module.css'
 
@@ -35,6 +36,7 @@ class Petal extends React.Component {
     this.endScrub = this.endScrub.bind(this)
     this.timelineSelect = this.timelineSelect.bind(this)
     this.stopVideo = this.stopVideo.bind(this)
+    this.handleClick = this.handleClick.bind(this)
 
     this.state = {
       videoWidth: 0,
@@ -98,6 +100,15 @@ class Petal extends React.Component {
     this.setState({
       videoPlaying: false
     })
+  }
+
+  handleClick (event) {
+    const { id, selectPetal, isRootNode } = this.props
+    if (event.altKey && !isRootNode) {
+      this.props.history.push(`/flower/${id}`)
+    } else {
+      selectPetal((isRootNode) ? undefined : id)
+    }
   }
 
   timelineSelect (e) {
@@ -245,18 +256,19 @@ class Petal extends React.Component {
   }
 
   render () {
-    const { r, selectPetal, id, isSelectedPetal, zoom, color, isRootNode, isNativeVideo, videoId, duration } = this.props
-    const { videoPlaying, aspect, wasSelected, initialPlay, isScrubbing, currentTime } = this.state
+    const { r, isSelectedPetal, zoom, color, isRootNode, isNativeVideo, videoId, duration } = this.props
+    const { videoPlaying, aspect, wasSelected, initialPlay, currentTime } = this.state
     const videoStyle = {
       marginLeft: `-${Math.floor((r * aspect) - r)}px`,
       height: `${r * 2}px`
     }
+
     return (
       <div
         style={{ width: `${(r * 2) - 2}px`, height: `${(r * 2) - 2}px`, opacity: (!isSelectedPetal && !initialPlay && !isRootNode) ? 0.5 : 1 }}
         className={classNames(style.petalContent,
           (isSelectedPetal) ? style.petalContentNoClick : '')}
-        onClick={(e) => selectPetal(id)}
+        onClick={this.handleClick}
       >
         {wasSelected && isNativeVideo &&
         <video
@@ -405,4 +417,4 @@ Petal.propTypes = {
   center: PropTypes.array.isRequired
 }
 
-export default Petal
+export default withRouter(Petal)

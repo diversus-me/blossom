@@ -168,7 +168,7 @@ export function createPetalTreeComplex (data, rootRadius, centerX, centerY) {
   return { petals, links }
 }
 
-export function createRootNode (rootRadius, centerX, centerY) {
+export function createRootNode (rootRadius, centerX, centerY, rootNodeID) {
   return [{
     radius: rootRadius,
     radiusScale: 1,
@@ -179,6 +179,6 @@ export function createRootNode (rootRadius, centerX, centerY) {
     fixed: true,
     relevance: -1,
     linkAngle: 0,
-    id: 0
+    id: rootNodeID
   }]
 }

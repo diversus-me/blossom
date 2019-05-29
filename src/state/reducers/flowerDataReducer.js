@@ -32,7 +32,7 @@ function parseData (data, connections) {
       created: connection.created,
       flavor: connection.flavor,
       color: getColor(connection.flavor),
-      id: connection.id,
+      id: connection.targetNode.id,
       targetNode: connection.targetNode,
       user: connection.user,
       x: 0,
