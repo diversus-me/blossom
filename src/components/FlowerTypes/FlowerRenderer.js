@@ -348,20 +348,22 @@ class FlowerRenderer extends React.Component {
     this.refs.petals.style.transform = `translate(0px, 0px)`
   }
 
-  receiveProgress (progress) {
-    const { sorted } = this.props
-    const angle = progress * 360
+  receiveProgress (time, progress) {
+    this.props.sendTime(time)
+    // TODO: Fix Realtime Magnifier.
+    // const { sorted } = this.props
+    // const angle = progress * 360
 
-    if (sorted.length > 0) {
-      while (sorted[this.currentProgressIndex].linkAngle < angle) {
-        const index = this.nodes.findIndex((element) => sorted[this.currentProgressIndex].id === element.id)
-        this.ref[index].childNodes[0].classList.add(style.now)
-        this.currentProgressIndex++
-        if (this.currentProgressIndex === sorted.length) {
-          this.currentProgressIndex = 0
-        }
-      }
-    }
+    // if (sorted.length > 0) {
+    //   while (sorted[this.currentProgressIndex].linkAngle < angle) {
+    //     const index = this.nodes.findIndex((element) => sorted[this.currentProgressIndex].id === element.id)
+    //     this.ref[index].childNodes[0].classList.add(style.now)
+    //     this.currentProgressIndex++
+    //     if (this.currentProgressIndex === sorted.length) {
+    //       this.currentProgressIndex = 0
+    //     }
+    //   }
+    // }
   }
 
   render () {

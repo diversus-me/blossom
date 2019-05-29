@@ -24,13 +24,15 @@ class FlowerView extends React.Component {
     this.toggleSettings = this.toggleSettings.bind(this)
     this.selectPetal = this.selectPetal.bind(this)
     this.toggleAddNodeOverlay = this.toggleAddNodeOverlay.bind(this)
+    this.receiveCurrentTime = this.receiveCurrentTime.bind(this)
     const { history } = this.props
     const parsedQuery = queryString.parse(history.location.search)
 
     this.state = {
       settingsVisibility: false,
       selectedPetalID: parseInt(parsedQuery.s),
-      overlayVisible: false
+      overlayVisible: false,
+      currentTime: 0
     }
   }
 
@@ -48,6 +50,11 @@ class FlowerView extends React.Component {
     if (!data[id]) {
       this.props.getFlowerData(id)
     }
+  }
+
+  receiveCurrentTime (time) {
+    // console.log(this.currentTime)
+    this.currentTime = time
   }
 
   toggleSettings () {
@@ -76,7 +83,9 @@ class FlowerView extends React.Component {
   }
 
   toggleAddNodeOverlay (e) {
+    console.log(this.currentTime)
     this.setState({
+      currentTime: this.currentTime,
       overlayVisible: !this.state.overlayVisible
     })
   }
@@ -85,7 +94,8 @@ class FlowerView extends React.Component {
     const { settings, history, id, flowerData } = this.props
     const data = flowerData.data[id]
 
-    const { overlayVisible } = this.state
+    const { overlayVisible, currentTime } = this.state
+    console.log(currentTime)
 
     const selectedPetalID = parseInt(queryString.parse(history.location.search).s)
 
@@ -125,6 +135,8 @@ class FlowerView extends React.Component {
             <AddNodeForm
               id={id}
               rootDuration={data.data.video.duration}
+              currentTime={currentTime}
+              visibility={overlayVisible}
             />
           </Overlay>
           }
@@ -134,6 +146,7 @@ class FlowerView extends React.Component {
           data={data.data.connections}
           rootNode={data.data.id}
           selectPetal={this.selectPetal}
+          sendTime={this.receiveCurrentTime}
           selectedPetalID={selectedPetalID}
           min={data.data.min}
           max={data.data.max}

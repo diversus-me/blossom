@@ -25,6 +25,25 @@ class AddNodeForm extends React.Component {
     }
   }
 
+  shouldComponentUpdate (nextProps, nextState) {
+    const { visibility } = this.props
+    if (visibility !== nextProps.visibility) {
+      this.setState({
+        sourceInValue: moment.utc(nextProps.currentTime * 1000).format('HH:mm:ss'),
+        sourceOutValue: moment.utc(nextProps.currentTime * 1000).format('HH:mm:ss')
+      })
+    }
+
+    const { nodeDuration } = this.state
+    if (nodeDuration !== nextState.nodeDuration) {
+      this.setState({
+        targetOutValue: moment.utc(nextState.nodeDuration * 1000).format('HH:mm:ss')
+      })
+    }
+
+    return true
+  }
+
   handleSubmit (e) {
     e.preventDefault()
     const { id } = this.props

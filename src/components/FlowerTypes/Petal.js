@@ -177,7 +177,7 @@ class Petal extends React.Component {
 
   updateTimeline () {
     const { videoPlaying, isScrubbing } = this.state
-    const { isNativeVideo, isSelectedPetal } = this.props
+    const { isNativeVideo, isSelectedPetal, isRootNode, sendProgress } = this.props
 
     if (!isSelectedPetal && videoPlaying) {
       return this.stopVideo()
@@ -202,9 +202,9 @@ class Petal extends React.Component {
       this.timeline.style.strokeDashoffset = this.circumference - progress
     }
 
-    // if (isRootNode) {
-    //   sendProgress(progressPercent)
-    // }
+    if (isRootNode) {
+      sendProgress(this.video.getCurrentTime(), progressPercent)
+    }
 
     this.setState({ currentTime: Math.floor(this.video.getCurrentTime()) })
     if (videoPlaying || isScrubbing) {
