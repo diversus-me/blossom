@@ -17,6 +17,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.0.1",
+    "react-share": "^3.0.0",
     "react-simple-timefield": "^2.0.3",
     "react-toastify": "^5.1.0",
     "react-transition-group": "^4.0.1",

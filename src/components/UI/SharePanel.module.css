@@ -1,0 +1,12 @@
+.sharePanel {
+  position: fixed;
+  bottom: 50px;
+  left: 50px;
+  display: inline-flex;
+  padding: 10px;
+}
+
+.shareButton {
+  margin: 5px;
+  cursor: pointer;
+}

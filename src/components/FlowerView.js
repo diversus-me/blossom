@@ -14,6 +14,8 @@ import FlowerRenderer from './FlowerTypes/FlowerRenderer'
 import Overlay from './UI/Overlay'
 import AddNodeForm from './Forms/AddNodeForm'
 import FloatingButton from './UI/FloatingButton'
+import ShareButton from './UI/ShareButton'
+import SharePanel from './UI/SharePanel'
 
 import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
@@ -32,7 +34,8 @@ class FlowerView extends React.Component {
       settingsVisibility: false,
       selectedPetalID: parseInt(parsedQuery.s),
       overlayVisible: false,
-      currentTime: 0
+      currentTime: 0,
+      showShare: false
     }
   }
 
@@ -124,6 +127,13 @@ class FlowerView extends React.Component {
             toggle={this.toggleSettings}
           />
           }
+          <SharePanel
+            title={data && data.finished && data.data.title}
+            styling={this.state.showShare ? {} : {display: 'none'}}
+          />
+          <ShareButton
+            onClickCallback={() => {this.setState({showShare: !this.state.showShare})}}
+          />
           <FloatingButton
             onClickCallback={this.toggleAddNodeOverlay}
           />
