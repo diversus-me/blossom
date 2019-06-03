@@ -64,14 +64,18 @@ class App extends Component {
 
   render () {
     const { session } = this.props
-    const { flowerOverlayVisible } = this.state
+    // const { flowerOverlayVisible } = this.state
 
     return (
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
             {session.authenticated &&
-              <Route path='/' exact component={Navigation} />
+              <Route path='/' exact render={() =>
+                <FlowerView
+                  id={18}
+                />
+              } />
             }
             <Route
               path='/login'
@@ -80,12 +84,7 @@ class App extends Component {
                 <Login />
               } />
           </Switch>
-          {location.pathname.slice(8) &&
-          <FlowerView
-            id={location.pathname.slice(8)}
-          />
-          }
-          {session.authenticated &&
+          {/* {session.authenticated &&
             <FloatingButton
               onClickCallback={this.toggleAddFlowerOverlay}
             />
@@ -95,7 +94,7 @@ class App extends Component {
             onOuterClick={this.toggleAddFlowerOverlay}
           >
             <AddFlowerForm />
-          </Overlay>
+          </Overlay> */}
         </div>
       )} />
     )
