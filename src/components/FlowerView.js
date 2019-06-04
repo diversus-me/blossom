@@ -83,7 +83,6 @@ class FlowerView extends React.Component {
   }
 
   toggleAddNodeOverlay (e) {
-    console.log(this.currentTime)
     this.setState({
       currentTime: this.currentTime,
       overlayVisible: !this.state.overlayVisible
@@ -95,14 +94,13 @@ class FlowerView extends React.Component {
     const data = flowerData.data[id]
 
     const { overlayVisible, currentTime } = this.state
-    console.log(currentTime)
 
     const selectedPetalID = parseInt(queryString.parse(history.location.search).s)
 
     return (
       <div className={style.container}>
         <div className={style.navigation}>
-          <Link to='/'>
+          {/* <Link to='/'>
             <div className={style.close}>
               <FiX size='2em' color='#777' />
             </div>
@@ -112,7 +110,7 @@ class FlowerView extends React.Component {
             onClick={(e) => this.toggleSettings(e)}
           >
             <GoSettings size='2em' color='#777' />
-          </div>
+          </div> */}
           {data && data.finished &&
           <span>
             <h2 className={style.title}>{data.data.title}</h2>
