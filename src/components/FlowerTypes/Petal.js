@@ -384,7 +384,7 @@ class Petal extends React.Component {
         <div
           className={style.overlay}
           style={{
-            background: color,
+            // background: color,
             opacity: (isSelectedPetal || isRootNode) ? 0 : (r * zoom < 20) ? 1 : 0.7,
             pointerEvents: (!isSelectedPetal && !isNativeVideo) ? 'all' : 'none'
           }}
