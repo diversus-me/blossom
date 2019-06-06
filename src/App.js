@@ -47,9 +47,9 @@ class App extends Component {
   }
 
   componentDidUpdate () {
-    if (this.props.session.failed && this.props.location.pathname !== '/login') {
-      this.props.history.push('/login')
-    }
+    // if (this.props.session.failed && this.props.location.pathname !== '/login') {
+    //   this.props.history.push('/login')
+    // }
 
     if (this.props.session.authenticated && this.props.location.pathname === '/login') {
       this.props.history.push('/')
@@ -63,20 +63,18 @@ class App extends Component {
   }
 
   render () {
-    const { session } = this.props
+    // const { session } = this.props
     // const { flowerOverlayVisible } = this.state
 
     return (
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
-            {session.authenticated &&
-              <Route path='/' exact render={() =>
-                <FlowerView
-                  id={18}
-                />
-              } />
-            }
+            <Route path='/' exact render={() =>
+              <FlowerView
+                id={18}
+              />
+            } />
             <Route
               path='/login'
               exact

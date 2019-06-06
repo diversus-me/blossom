@@ -90,7 +90,7 @@ class FlowerView extends React.Component {
   }
 
   render () {
-    const { settings, history, id, flowerData } = this.props
+    const { settings, history, id, flowerData, session } = this.props
     const data = flowerData.data[id]
 
     const { overlayVisible, currentTime } = this.state
@@ -117,15 +117,17 @@ class FlowerView extends React.Component {
             <p className={style.subtitle}>{data.data.connections.length} Petals</p>
           </span>
           }
-          {this.state.settingsVisibility &&
+          {/* {this.state.settingsVisibility &&
           <Settings
             toggle={this.toggleSettings}
           />
-          }
+          } */}
+          { session.authenticated &&
           <FloatingButton
             onClickCallback={this.toggleAddNodeOverlay}
           />
-          {data && data.data && data.data.connections &&
+          }
+          {session.authenticated && data && data.data && data.data.connections &&
           <Overlay
             visibility={overlayVisible}
             onOuterClick={this.toggleAddNodeOverlay}
@@ -165,8 +167,8 @@ FlowerView.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const { settings, flowerData } = state
-  return { settings, flowerData }
+  const { settings, flowerData, session } = state
+  return { settings, flowerData, session }
 }
 
 const mapDispatchToProps = {
