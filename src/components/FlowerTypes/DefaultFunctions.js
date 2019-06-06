@@ -41,7 +41,7 @@ function getRelevanceDistance (node, rootRadius, min, max) {
 }
 
 export function getPetalSize (relevance, rootRadius, min, max) {
-  return translate(relevance, min, max, rootRadius * 0.2, Math.floor(rootRadius * 0.25))
+  return translate(relevance, min, max, rootRadius * 0.18, Math.floor(rootRadius * 0.23))
 }
 
 export function createCircles (data, rootRadius, centerX, centerY) {
