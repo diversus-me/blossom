@@ -15,7 +15,7 @@ import Overlay from './UI/Overlay'
 import AddNodeForm from './Forms/AddNodeForm'
 import FloatingButton from './UI/FloatingButton'
 
-import Settings from './Settings/SettingsView'
+// import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
 
 class FlowerView extends React.Component {
@@ -91,7 +91,7 @@ class FlowerView extends React.Component {
   }
 
   render () {
-    const { settings, history, id, flowerData } = this.props
+    const { settings, history, id, flowerData, session } = this.props
     const data = flowerData.data[id]
 
     const { overlayVisible, currentTime } = this.state
@@ -107,27 +107,29 @@ class FlowerView extends React.Component {
               <FiX size='2em' color='#777' />
             </div>
           </Link>
-          <div
+          {/* <div
             className={style.settings}
             onClick={(e) => this.toggleSettings(e)}
           >
             <GoSettings size='2em' color='#777' />
-          </div>
+          </div> */}
           {data && data.finished &&
           <span>
             <h2 className={style.title}>{data.data.title}</h2>
             <p className={style.subtitle}>{data.data.connections.length} Petals</p>
           </span>
           }
-          {this.state.settingsVisibility &&
+          {/* {this.state.settingsVisibility &&
           <Settings
             toggle={this.toggleSettings}
           />
-          }
+          } */}
+          {session.autheticated &&
           <FloatingButton
             onClickCallback={this.toggleAddNodeOverlay}
           />
-          {data && data.data && data.data.connections &&
+          }
+          {session.autheticated && data && data.data && data.data.connections &&
           <Overlay
             visibility={overlayVisible}
             onOuterClick={this.toggleAddNodeOverlay}
@@ -167,8 +169,8 @@ FlowerView.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const { settings, flowerData } = state
-  return { settings, flowerData }
+  const { settings, flowerData, session } = state
+  return { settings, flowerData, session }
 }
 
 const mapDispatchToProps = {

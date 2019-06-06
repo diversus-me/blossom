@@ -15,6 +15,7 @@ import Overlay from './components/UI/Overlay'
 import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
+import UserIcon from './components/User/UserIcon'
 import FlowerView from './components/FlowerView'
 
 class App extends Component {
@@ -47,13 +48,13 @@ class App extends Component {
   }
 
   componentDidUpdate () {
-    if (this.props.session.failed && this.props.location.pathname !== '/login') {
-      this.props.history.push('/login')
-    }
+    // if (this.props.session.failed && this.props.location.pathname !== '/login') {
+    //   this.props.history.push('/login')
+    // }
 
-    if (this.props.session.authenticated && this.props.location.pathname === '/login') {
-      this.props.history.push('/')
-    }
+    // if (this.props.session.authenticated && this.props.location.pathname === '/login') {
+    //   this.props.history.push('/')
+    // }
   }
 
   toggleAddFlowerOverlay () {
@@ -70,9 +71,7 @@ class App extends Component {
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
-            {session.authenticated &&
-              <Route path='/' exact component={Navigation} />
-            }
+            <Route path='/' exact component={Navigation} />
             <Route
               path='/login'
               exact
@@ -80,6 +79,7 @@ class App extends Component {
                 <Login />
               } />
           </Switch>
+          <UserIcon />
           {location.pathname.slice(8) &&
           <FlowerView
             id={location.pathname.slice(8)}
