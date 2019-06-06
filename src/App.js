@@ -70,7 +70,7 @@ class App extends Component {
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
-            <Route path='/' exact render={() =>
+            <Route path={['/', '/flower/:id']} exact render={() =>
               <FlowerView
                 id={18}
               />
