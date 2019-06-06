@@ -70,9 +70,9 @@ class App extends Component {
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
-            <Route path={['/', '/flower/:id']} exact render={() =>
+            <Route path={['/', '/flower/:id']} exact render={(match) =>
               <FlowerView
-                id={18}
+                id={location.pathname.slice(8) || 18}
               />
             } />
             <Route
