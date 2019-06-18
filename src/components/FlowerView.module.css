@@ -44,3 +44,19 @@
     font-size: 0.8em;
     text-align: center;
 }
+
+.edit {
+    position: absolute;
+    z-index: 2;
+    bottom: 33px;
+    right: 120px;
+    cursor: pointer;
+}
+
+.delete {
+    position: absolute;
+    z-index: 2;
+    bottom: 30px;
+    right: 80px;
+    cursor: pointer;
+}

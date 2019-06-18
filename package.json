@@ -18,6 +18,7 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.0.1",
     "react-simple-timefield": "^2.0.3",
+    "react-spinners": "^0.5.4",
     "react-toastify": "^5.1.0",
     "react-transition-group": "^4.0.1",
     "react-youtube": "^7.9.0",
@@ -38,7 +39,8 @@
       "jest",
       "es6",
       "browser"
-    ]
+    ],
+    "parser": "babel-eslint"
   },
   "browserslist": [
     ">0.2%",

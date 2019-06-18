@@ -4,8 +4,10 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { FiX } from 'react-icons/fi'
 import { GoSettings } from 'react-icons/go'
+import { MdEdit, MdClear } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
+import { toast } from 'react-toastify'
 
 import { getFlowerData } from '../state/actions/flowerData'
 
@@ -14,6 +16,8 @@ import FlowerRenderer from './FlowerTypes/FlowerRenderer'
 import Overlay from './UI/Overlay'
 import AddNodeForm from './Forms/AddNodeForm'
 import FloatingButton from './UI/FloatingButton'
+
+import EditNodeFrom from './Forms/EditNodeForm'
 
 // import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
@@ -32,8 +36,26 @@ class FlowerView extends React.Component {
       settingsVisibility: false,
       selectedPetalID: parseInt(parsedQuery.s),
       overlayVisible: false,
-      currentTime: 0
+      currentTime: 0,
+      editNodeVisibility: false
     }
+  }
+
+  shouldComponentUpdate (nextProps) {
+    const { history, id, flowerData: { data } } = nextProps
+    let selectedPetalID = queryString.parse(history.location.search).s
+    if (selectedPetalID) {
+      selectedPetalID = parseInt(selectedPetalID)
+    }
+
+    if (selectedPetalID && data[id] && data[id].data &&
+      !data[id].data.connections.find(connection => connection.id === selectedPetalID)) {
+      history.push({ search: '' })
+      this.setState({
+        selectedPetalID: ''
+      })
+    }
+    return true
   }
 
   componentDidMount () {
@@ -52,8 +74,48 @@ class FlowerView extends React.Component {
     }
   }
 
+  toggleEditNode = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    this.setState({
+      editNodeVisibility: !this.state.editNodeVisibility
+    })
+  }
+
+  delete = () => {
+    const { history, id } = this.props
+    let selectedPetalID = queryString.parse(history.location.search).s
+    if (selectedPetalID) {
+      selectedPetalID = parseInt(selectedPetalID)
+    }
+    if (window.confirm(`Are you sure you want to delete the selected Node?`)) {
+      fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/node`,
+        {
+          credentials: 'include',
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id: parseInt(selectedPetalID) })
+        })
+        .then(response => {
+          if (response.ok) {
+            return response
+          } else {
+            throw new Error('failed')
+          }
+        })
+        .then(() => toast.success('Node successfully deleted'))
+        // TODO: Why does reloading the flower instantly after deleting cause wrong responses?
+        .then(setTimeout(this.props.getFlowerData(id), 300))
+        .catch(() => {
+          toast.error('Node could not be deleted.')
+        })
+    }
+  }
+
   receiveCurrentTime (time) {
-    // console.log(this.currentTime)
     this.currentTime = time
   }
 
@@ -83,7 +145,8 @@ class FlowerView extends React.Component {
   }
 
   toggleAddNodeOverlay (e) {
-    console.log(this.currentTime)
+    e.stopPropagation()
+    e.preventDefault()
     this.setState({
       currentTime: this.currentTime,
       overlayVisible: !this.state.overlayVisible
@@ -92,12 +155,20 @@ class FlowerView extends React.Component {
 
   render () {
     const { settings, history, id, flowerData, session } = this.props
+    const { editNodeVisibility } = this.state
     const data = flowerData.data[id]
 
     const { overlayVisible, currentTime } = this.state
-    console.log(currentTime)
 
-    const selectedPetalID = parseInt(queryString.parse(history.location.search).s)
+    let selectedPetalID = queryString.parse(history.location.search).s
+    if (selectedPetalID) {
+      selectedPetalID = parseInt(selectedPetalID)
+    }
+
+    let selectedPetal
+    if (data && data.data) {
+      selectedPetal = data.data.connections.find(connection => connection.id === selectedPetalID)
+    }
 
     return (
       <div className={style.container}>
@@ -124,12 +195,12 @@ class FlowerView extends React.Component {
             toggle={this.toggleSettings}
           />
           } */}
-          {session.autheticated &&
+          {session.authenticated &&
           <FloatingButton
             onClickCallback={this.toggleAddNodeOverlay}
           />
           }
-          {session.autheticated && data && data.data && data.data.connections &&
+          {session.authenticated && data && data.data && data.data.connections &&
           <Overlay
             visibility={overlayVisible}
             onOuterClick={this.toggleAddNodeOverlay}
@@ -143,9 +214,50 @@ class FlowerView extends React.Component {
           </Overlay>
           }
         </div>
+        {/* {&& data.data && selectedPetalID && selectedPetalID !== data.data.id &&
+           (session.role === 'admin' || session.id === data.data.connections[selectedPetalID].user.id)} */}
+        {session.authenticated && data && data.data && selectedPetalID && selectedPetalID !== data.data.id &&
+           (session.role === 'admin' || session.id === selectedPetal.user.id) &&
+          [
+            <div
+              key='edit'
+              className={style.edit}
+              onClick={this.toggleEditNode}
+            >
+              <MdEdit color='grey' size='25px' />
+            </div>,
+            <div
+              key='delete'
+              className={style.delete}
+              onClick={this.delete}
+            >
+              <MdClear color='grey' size='30px' />
+            </div>,
+            <Overlay key='editOverlay' visibility={editNodeVisibility} onOuterClick={this.toggleEditNode}>
+              {
+                selectedPetal &&
+                <EditNodeFrom
+                  flowerID={id}
+                  id={selectedPetal.targetNode.id}
+                  rootDuration={data.data.video.duration}
+                  currentTime={currentTime}
+                  visibility={editNodeVisibility}
+                  sourceIn={selectedPetal.sourceIn}
+                  sourceOut={selectedPetal.sourceOut}
+                  targetIn={selectedPetal.targetIn}
+                  targetOut={selectedPetal.targetOut}
+                  flavor={selectedPetal.flavor}
+                  title={selectedPetal.targetNode.title}
+                />
+              }
+
+            </Overlay>
+          ]
+        }
         {data && data.data && data.data.connections &&
         <FlowerRenderer
           data={data.data.connections}
+          received={data.data.received}
           rootNode={data.data.id}
           selectPetal={this.selectPetal}
           sendTime={this.receiveCurrentTime}

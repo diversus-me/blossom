@@ -37,10 +37,10 @@ class Login extends React.Component {
     return (
       <div className={style.container}>
         <h1 className={style.title}>Request a login link.</h1>
-        <form onSubmit={this.handleSubmit} className={style.form}>
+        <form onSubmit={this.handleSubmit} className={style.form} autoComplete='on'>
           <input
             className={style.input}
-            type='text'
+            type='email'
             placeholder='Email'
             value={value}
             onChange={this.handleChange}
