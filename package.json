@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@uppy/aws-s3": "^1.1.0",
+    "@uppy/aws-s3-multipart": "^1.1.0",
+    "@uppy/core": "^1.1.0",
+    "@uppy/dashboard": "^1.1.0",
+    "@uppy/drag-drop": "^1.1.0",
+    "@uppy/file-input": "^1.1.0",
+    "@uppy/webcam": "^1.1.0",
     "classnames": "^2.2.6",
     "d3": "^5.9.2",
     "get-video-id": "^3.1.1",

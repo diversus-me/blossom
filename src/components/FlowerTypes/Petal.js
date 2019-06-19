@@ -256,12 +256,14 @@ class Petal extends React.Component {
   }
 
   render () {
-    const { r, isSelectedPetal, zoom, color, isRootNode, isNativeVideo, videoId, duration } = this.props
+    const { r, isSelectedPetal, zoom, color, isRootNode, isNativeVideo, videoId, duration, node } = this.props
     const { videoPlaying, aspect, wasSelected, initialPlay, currentTime } = this.state
     const videoStyle = {
       marginLeft: `-${Math.floor((r * aspect) - r)}px`,
       height: `${r * 2}px`
     }
+
+    console.log(node)
 
     return (
       <div
@@ -304,7 +306,9 @@ class Petal extends React.Component {
                 showinfo: 0,
                 playsinline: 1,
                 allowfullscreen: 1,
-                frameborder: 0
+                frameborder: 0,
+                start: (!isRootNode) ? node.targetIn : undefined,
+                end: (!isRootNode) ? node.targetOut : undefined
               }
             }}
             onReady={this.onYoutubeReady}

@@ -44,16 +44,6 @@ class App extends Component {
     }
   }
 
-  componentDidUpdate () {
-    // if (this.props.session.failed && this.props.location.pathname !== '/login') {
-    //   this.props.history.push('/login')
-    // }
-
-    // if (this.props.session.authenticated && this.props.location.pathname === '/login') {
-    //   this.props.history.push('/')
-    // }
-  }
-
   toggleAddFlowerOverlay = () => {
     this.setState({
       flowerOverlayVisible: !this.state.flowerOverlayVisible

@@ -415,6 +415,7 @@ class FlowerRenderer extends React.Component {
               videoId={(node.targetNode) ? node.targetNode.video.url : url}
               duration={(node.targetNode) ? node.targetNode.video.duration : duration}
               center={this.center}
+              node={node}
               isNativeVide
             />
           </div>

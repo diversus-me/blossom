@@ -4,7 +4,6 @@ import { toast } from 'react-toastify'
 
 import style from './Forms.module.css'
 import { getFlowerData } from '../../state/actions/flowerData'
-import getVideoId from 'get-video-id'
 import TimeField from 'react-simple-timefield'
 import moment from 'moment'
 
