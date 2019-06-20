@@ -263,8 +263,6 @@ class Petal extends React.Component {
       height: `${r * 2}px`
     }
 
-    console.log(node)
-
     return (
       <div
         style={{ width: `${(r * 2) - 2}px`, height: `${(r * 2) - 2}px`, opacity: (!isSelectedPetal && !initialPlay && !isRootNode) ? 0.5 : 1 }}
