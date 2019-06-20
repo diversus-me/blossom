@@ -4,15 +4,13 @@ import { MdAdd } from 'react-icons/md'
 
 import style from './FloatingButton.module.css'
 
-class FloatingButton extends React.Component {
-  render () {
-    const { onClickCallback, styling } = this.props
-    return (
-      <div style={styling} className={style.button} onClick={onClickCallback}>
-        <MdAdd size={'25px'} color='white' />
-      </div>
-    )
-  }
+function FloatingButton (props) {
+  const { onClickCallback, styling } = props
+  return (
+    <div style={styling} className={style.button} onClick={onClickCallback}>
+      <MdAdd size={'25px'} color='white' />
+    </div>
+  )
 }
 
 FloatingButton.defaultProps = {

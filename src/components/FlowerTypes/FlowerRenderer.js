@@ -57,12 +57,13 @@ class FlowerRenderer extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const { selectedPetalID, data } = this.props
+    const { selectedPetalID, data, received } = this.props
     const { width, height } = this.state
 
     if (data.length !== prevProps.data.length ||
         width !== prevState.width ||
-        height !== prevState.height) {
+        height !== prevState.height ||
+        received !== prevProps.received) {
       this.rebuild()
     } else {
       if (selectedPetalID !== prevProps.selectedPetalID) {
@@ -169,7 +170,9 @@ class FlowerRenderer extends React.Component {
     } else {
       window.requestAnimationFrame(() => {
         e.data.nodes.forEach((node, i) => {
-          this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px)  scale(${node.radius / this.rootRadius})`
+          if (this.ref[i]) {
+            this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px)  scale(${node.radius / this.rootRadius})`
+          }
         })
       })
     }
@@ -412,6 +415,7 @@ class FlowerRenderer extends React.Component {
               videoId={(node.targetNode) ? node.targetNode.video.url : url}
               duration={(node.targetNode) ? node.targetNode.video.duration : duration}
               center={this.center}
+              node={node}
               isNativeVide
             />
           </div>

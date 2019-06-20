@@ -5,24 +5,19 @@ import style from './Forms.module.css'
 import { addFlower } from '../../state/actions/flowerList'
 
 class AddFlowerForm extends React.Component {
-  constructor (props) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.state = {
-      titleValue: '',
-      descriptionValue: '',
-      youtubeLinkValue: ''
-    }
+  state = {
+    titleValue: '',
+    descriptionValue: '',
+    youtubeLinkValue: ''
   }
 
-  handleSubmit (e) {
+  handleSubmit = (e) => {
     e.preventDefault()
     const { titleValue, descriptionValue, youtubeLinkValue } = this.state
     this.props.addFlower({ title: titleValue, description: descriptionValue, type: 'youtube', link: youtubeLinkValue })
   }
 
-  handleChange (e, type) {
+  handleChange = (e, type) => {
     switch (type) {
       case 'title':
         this.setState({

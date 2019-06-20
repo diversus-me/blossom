@@ -1,0 +1,35 @@
+.button {
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    transform: scale(1);
+    transition: transform 150ms;
+    position: relative;
+}
+
+.button:hover {
+    transform: scale(1.2);
+}
+
+.button:active {
+    transform: scale(0.9);
+}
+
+.delete {
+    background: red;
+}
+
+.edit {
+    background: blue;
+}
+
+.addUser {
+    background: green;
+}
+
+.icon {
+
+}

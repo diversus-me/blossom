@@ -6,10 +6,13 @@
     top: 10%;
     left: 10%;
     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    overflow: scroll;
+    z-index: 5;
 }
 
 .outerContainer {
     position: fixed;
+    z-index: 5;
     top: 0;
     left: 0;
     width: 100%;
