@@ -33,6 +33,7 @@ class Navigation extends React.Component {
                   description={flower.description || undefined}
                   created={new Date(flower.created)}
                   user={flower.user}
+                  id={flower.id}
                 />
               </Link>
             )

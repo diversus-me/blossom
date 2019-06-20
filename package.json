@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@uppy/aws-s3": "^1.1.0",
+    "@uppy/aws-s3-multipart": "^1.1.0",
+    "@uppy/core": "^1.1.0",
+    "@uppy/dashboard": "^1.1.0",
+    "@uppy/drag-drop": "^1.1.0",
+    "@uppy/file-input": "^1.1.0",
+    "@uppy/webcam": "^1.1.0",
     "classnames": "^2.2.6",
     "d3": "^5.9.2",
     "get-video-id": "^3.1.1",
@@ -19,6 +26,7 @@
     "react-scripts": "^3.0.1",
     "react-share": "^3.0.0",
     "react-simple-timefield": "^2.0.3",
+    "react-spinners": "^0.5.4",
     "react-toastify": "^5.1.0",
     "react-transition-group": "^4.0.1",
     "react-youtube": "^7.9.0",
@@ -39,7 +47,8 @@
       "jest",
       "es6",
       "browser"
-    ]
+    ],
+    "parser": "babel-eslint"
   },
   "browserslist": [
     ">0.2%",

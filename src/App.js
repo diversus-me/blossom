@@ -15,15 +15,13 @@ import Overlay from './components/UI/Overlay'
 import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
+import Hub from './components/User/Hub'
+import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
 class App extends Component {
-  constructor (props) {
-    super(props)
-    this.toggleAddFlowerOverlay = this.toggleAddFlowerOverlay.bind(this)
-    this.state = {
-      flowerOverlayVisible: false
-    }
+  state = {
+    flowerOverlayVisible: false
   }
 
   componentDidMount () {
@@ -46,17 +44,7 @@ class App extends Component {
     }
   }
 
-  componentDidUpdate () {
-    if (this.props.session.failed && this.props.location.pathname !== '/login') {
-      this.props.history.push('/login')
-    }
-
-    if (this.props.session.authenticated && this.props.location.pathname === '/login') {
-      this.props.history.push('/')
-    }
-  }
-
-  toggleAddFlowerOverlay () {
+  toggleAddFlowerOverlay = () => {
     this.setState({
       flowerOverlayVisible: !this.state.flowerOverlayVisible
     })
@@ -65,14 +53,12 @@ class App extends Component {
   render () {
     const { session } = this.props
     const { flowerOverlayVisible } = this.state
-
     return (
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
-            {session.authenticated &&
-              <Route path='/' exact component={Navigation} />
-            }
+            <Route path='/' exact component={Navigation} />
+            <Route path='/admin' exact component={AdminArea} />
             <Route
               path='/login'
               exact
@@ -80,15 +66,25 @@ class App extends Component {
                 <Login />
               } />
           </Switch>
-          {location.pathname.slice(8) &&
+          <Hub />
+          {session.authenticated && location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
           <FlowerView
             id={location.pathname.slice(8)}
           />
           }
+          {!session.authenticated && location.pathname.slice(8) &&
+            <h2 style={{
+              textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
+            }}>
+              Please log in to see content.
+            </h2>
+          }
           {session.authenticated &&
-            <FloatingButton
-              onClickCallback={this.toggleAddFlowerOverlay}
-            />
+            <Route path='/' exact render={() =>
+              <FloatingButton
+                onClickCallback={this.toggleAddFlowerOverlay}
+              />
+            } />
           }
           <Overlay
             visibility={flowerOverlayVisible}
