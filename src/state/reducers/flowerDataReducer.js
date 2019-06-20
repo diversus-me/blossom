@@ -35,6 +35,11 @@ function parseData (data, connections) {
       id: connection.targetNode.id,
       targetNode: connection.targetNode,
       user: connection.user,
+      sourceIn: connection.sourceIn,
+      sourceOut: connection.sourceOut,
+      targetIn: connection.targetIn,
+      targetOut: connection.targetOut,
+      title: connection.title,
       x: 0,
       y: 0,
       linkAngle: ((connection.sourceIn + (connection.sourceOut - connection.sourceIn)) / data.video.duration) * 360
@@ -46,6 +51,7 @@ function parseData (data, connections) {
   })
   return {
     ...data,
+    received: new Date(),
     connections: parsed,
     sorted: parsed.slice().sort((a, b) => {
       return a.linkAngle - b.linkAngle

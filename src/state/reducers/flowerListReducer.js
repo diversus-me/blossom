@@ -34,6 +34,7 @@ export default function flowerListReducer (state = initialState, action) {
         finished: true
       }
     case LIST_FLOWER_SUCCESS:
+      console.log(action.data)
       return {
         ...state,
         loading: false,
