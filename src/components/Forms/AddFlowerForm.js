@@ -1,8 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Uppy from '@uppy/core'
+import { Dashboard } from '@uppy/react'
+import Webcam from '@uppy/webcam'
+import AwsS3 from '@uppy/aws-s3'
+
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
+import '@uppy/webcam/dist/style.css'
 
 import style from './Forms.module.css'
 import { addFlower } from '../../state/actions/flowerList'
+
+const uppy = Uppy({
+  meta: { type: 'avatar' },
+  restrictions: { maxNumberOfFiles: 1 },
+  autoProceed: true
+})
+
+uppy.use(Webcam)
+uppy.use(AwsS3, {
+  companionUrl: 'http://localhost:3020'
+})
 
 class AddFlowerForm extends React.Component {
   state = {
@@ -50,6 +69,7 @@ class AddFlowerForm extends React.Component {
           <input className={style.input} type='text' placeholder='Provide Youtube Link' value={youtubeLinkValue} onChange={e => { this.handleChange(e, 'link') }} />
           <input className={style.submit} type='submit' value='Submit' />
         </form>
+        <Dashboard uppy={uppy} plugins={['Webcam']} />
       </div>
     )
   }

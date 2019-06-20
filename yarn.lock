@@ -1482,7 +1482,7 @@
     preact "8.2.9"
     prettier-bytes "^1.0.4"
 
-"@uppy/dashboard@^1.1.0":
+"@uppy/dashboard@1.1.0", "@uppy/dashboard@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@uppy/dashboard/-/dashboard-1.1.0.tgz#25e526350ad6ccaaa5dbce34668c9f8bc597484c"
   integrity sha512-T4R8xSRb322Aw8+e7aVvIrc8j4pWRrn8ISxAiSPC7p4H5XbH8d1aX39P1oMdv10csha0Q5HMzy8Upt7nNTlpsw==
@@ -1500,7 +1500,7 @@
     prettier-bytes "^1.0.4"
     resize-observer-polyfill "^1.5.0"
 
-"@uppy/drag-drop@^1.1.0":
+"@uppy/drag-drop@1.1.0", "@uppy/drag-drop@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@uppy/drag-drop/-/drag-drop-1.1.0.tgz#27b14cd49ebac40b0d19183da841363d33ea96cf"
   integrity sha512-cpuGtA3qtexJDtjYHoHUsQeyLsJBFylB+INHrPp7/ZC+jhdn4dwgn8YyH86hudhIGwvwwiYzRP+9xYZkRLN+Rg==
@@ -1524,6 +1524,14 @@
     "@uppy/utils" "1.1.0"
     preact "8.2.9"
 
+"@uppy/progress-bar@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@uppy/progress-bar/-/progress-bar-1.1.0.tgz#c3b7b982f6b1c7a84300104faf7fbba18a8ee9c7"
+  integrity sha512-BFmW/KJsR35N33SBua+CBAugz89U+rT4nU5Bk53BXTg2lV19rYp8xv1jIC1ygliBD2q8b+xd6KN1kv29+mat8w==
+  dependencies:
+    "@uppy/utils" "1.1.0"
+    preact "8.2.9"
+
 "@uppy/provider-views@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@uppy/provider-views/-/provider-views-1.1.0.tgz#f03c1af0b488b759d7ba2f11b51ecadfffe4e8f3"
@@ -1532,6 +1540,18 @@
     "@uppy/utils" "1.1.0"
     classnames "^2.2.6"
     preact "8.2.9"
+
+"@uppy/react@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@uppy/react/-/react-1.1.0.tgz#24bb78561b1875845aaf92056947d92500a98f35"
+  integrity sha512-dc3IfYYmfpehn67tKleaXuooilNQsEcxlNsJyMPnP1PyxLdldVmsB/64yuI5cX6mFYW/2EhU2lmPi4CzTLe+Yg==
+  dependencies:
+    "@uppy/dashboard" "1.1.0"
+    "@uppy/drag-drop" "1.1.0"
+    "@uppy/progress-bar" "1.1.0"
+    "@uppy/status-bar" "1.1.0"
+    "@uppy/utils" "1.1.0"
+    prop-types "^15.6.1"
 
 "@uppy/status-bar@1.1.0":
   version "1.1.0"
@@ -1548,6 +1568,13 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@uppy/store-default/-/store-default-1.1.0.tgz#c4ded532ed38d13ca955962edbffe58ecd9abb7e"
   integrity sha512-xCnLDnQ9P42vGV5Q+f9TK/IdRFhZDwBpuAqwJtywPLdbN3sfVsf7uTTUn7ZcWs/jGs0rC/UgKnvIco1Kh7zpWg==
+
+"@uppy/store-redux@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@uppy/store-redux/-/store-redux-1.1.0.tgz#a738049db3aa7f1400fc0768873d77f83837399c"
+  integrity sha512-IeIJdgWYAEBPrap/R1KcC66KFchCukiRw0c7duA25pbvM2IboegPSy96cNGP0CEzRCjtfp+YMBZYW5u0M7m6tg==
+  dependencies:
+    cuid "^2.1.1"
 
 "@uppy/thumbnail-generator@1.1.0":
   version "1.1.0"
@@ -8601,7 +8628,7 @@ prompts@^2.0.1:
     kleur "^3.0.2"
     sisteransi "^1.0.0"
 
-prop-types@^15.5.10, prop-types@^15.5.3, prop-types@^15.5.7, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.3, prop-types@^15.5.7, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
