@@ -20,7 +20,7 @@ const uppy = Uppy({
 
 uppy.use(Webcam)
 uppy.use(AwsS3, {
-  companionUrl: 'http://localhost:3020'
+  companionUrl: process.env.REACT_APP_SERVER_URL
 })
 
 class AddFlowerForm extends React.Component {
