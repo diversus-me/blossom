@@ -34,6 +34,7 @@
     "redux": "^4.0.1",
     "redux-saga": "^1.0.2",
     "victor": "^1.1.0",
+    "video.js": "^7.5.5",
     "zingtouch": "^1.0.6"
   },
   "scripts": {

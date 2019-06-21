@@ -18,7 +18,11 @@ const uppy = Uppy({
   autoProceed: true
 })
 
-uppy.use(Webcam)
+uppy.use(Webcam, {
+  modes: [
+    'video-audio'
+  ]
+})
 uppy.use(AwsS3, {
   companionUrl: process.env.REACT_APP_SERVER_URL
 })
@@ -69,7 +73,7 @@ class AddFlowerForm extends React.Component {
           <input className={style.input} type='text' placeholder='Provide Youtube Link' value={youtubeLinkValue} onChange={e => { this.handleChange(e, 'link') }} />
           <input className={style.submit} type='submit' value='Submit' />
         </form>
-        <Dashboard uppy={uppy} plugins={['Webcam']} />
+        <Dashboard uppy={uppy} plugins={['Webcam']} hideUploadButton={false} />
       </div>
     )
   }
