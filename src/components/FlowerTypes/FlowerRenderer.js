@@ -5,7 +5,7 @@ import Victor from 'victor'
 
 import { DOWN_SCALE_FACTOR, MAGNIFY_SPEED } from '../Defaults'
 
-import Petal from './Petal'
+import PetalNative from './PetalNative'
 
 import { createRootNode, createCircles, deg2rad } from './DefaultFunctions'
 
@@ -402,7 +402,7 @@ class FlowerRenderer extends React.Component {
               transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
             }}
           >
-            <Petal
+            <PetalNative
               r={this.rootRadius}
               selectPetal={selectPetal}
               id={node.id}

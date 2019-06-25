@@ -67,12 +67,12 @@ class App extends Component {
               } />
           </Switch>
           <Hub />
-          {session.authenticated && location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
+          {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
           <FlowerView
             id={location.pathname.slice(8)}
           />
           }
-          {!session.authenticated && location.pathname.slice(8) &&
+          {!session.authenticated && location.pathname.slice(8) && false &&
             <h2 style={{
               textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
             }}>
