@@ -205,7 +205,6 @@ class FlowerView extends React.Component {
           <ShareButton
             onClickCallback={() => {this.setState({showShare: !this.state.showShare})}}
           />
-          }
           {session.authenticated &&
           <FloatingButton
             onClickCallback={this.toggleAddNodeOverlay}
