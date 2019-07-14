@@ -392,7 +392,7 @@ class FlowerRenderer extends React.Component {
           height={height * 2}
           ref={(ref) => { this.svg = ref }}
           onClick={() => selectPetal()}
-        />,
+        />
         {divNodes.map((node, i) =>
           <div
             key={node.id}
