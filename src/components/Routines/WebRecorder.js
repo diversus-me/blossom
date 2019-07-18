@@ -118,7 +118,7 @@ class WebRecorder extends React.Component {
 
   render () {
     const { recorderReady, recording, finished, videoURL } = this.state
-    const { size, color } = this.props
+    const { size, color, showControls } = this.props
 
     return [
       <div
@@ -138,12 +138,16 @@ class WebRecorder extends React.Component {
           ref={(ref) => { this.webcamPreview = ref }}
         />
       </div>,
-      <span key='videoPlayer'>
+      <span key='webcamPlayerContainer'>
         {finished &&
           <VideoPlayer
+            key='webcamPlayer'
             url={videoURL}
             color={color}
             r={Math.ceil(size * 0.5)}
+            isSelectedPetal={showControls}
+            isPetal
+            wasSelected
             simple
             shouldUpdate
           />

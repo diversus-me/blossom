@@ -8,6 +8,8 @@ import style from './Petal.module.css'
 
 import VideoPlayer from '../VideoPlayer/VideoPlayer'
 
+import { FLAVORS } from '../Defaults'
+
 function getFullVideoURL (url, type) {
   switch (type) {
     case 'youtube':
@@ -19,7 +21,7 @@ function getFullVideoURL (url, type) {
   }
 }
 
-class PetalNative extends React.Component {
+class Petal extends React.Component {
   static getDerivedStateFromProps (props, state) {
     if (props.isSelectedPetal && !state.wasSelected) {
       return {
@@ -37,7 +39,7 @@ class PetalNative extends React.Component {
   currentScrub = 0
 
   shouldComponentUpdate (nextProps, nextState) {
-    if (this.props.isSelectedPetal !== nextProps.isSelectedPetal) {
+    if (this.props.isSelectedPetal !== nextProps.isSelectedPetal || this.props.petalHidden !== nextProps.petalHidden) {
       return true
     }
 
@@ -56,6 +58,7 @@ class PetalNative extends React.Component {
   }
 
   handleClick = (event) => {
+    console.log('YES')
     const { id, selectPetal, isRootNode } = this.props
     if (event.altKey && !isRootNode) {
       this.props.history.push(`/flower/${id}`)
@@ -65,7 +68,6 @@ class PetalNative extends React.Component {
   }
 
   handleDeepDive = (e) => {
-    console.log('lel')
     const { id } = this.props
     e.stopPropagation()
     e.preventDefault()
@@ -73,19 +75,21 @@ class PetalNative extends React.Component {
   }
 
   render () {
-    const { r, isSelectedPetal, zoom, color, isRootNode, video, setCurrentTime } = this.props
+    const { r, isSelectedPetal, zoom, color, isRootNode, video, setCurrentTime, petalHidden, flavor } = this.props
     const { wasSelected, initialPlay } = this.state
+
+    const Icon = FLAVORS.find((element) => { console.log(element.name.toLowerCase(), flavor) })
 
     return (
       <div
         style={{
           width: `${(r * 2) - 2}px`,
-          height: `${(r * 2) - 2}px`,
-          opacity: (!isSelectedPetal && !initialPlay && !isRootNode) ? 0.5 : 1
+          height: `${(r * 2) - 2}px`
+          // opacity: (!isSelectedPetal && !initialPlay && !isRootNode) ? 0.5 : 1
         }}
         className={classNames(style.petalContent,
           (isSelectedPetal) ? style.petalContentNoClick : '')}
-        onClick={this.handleClick}
+        onClick={(!petalHidden) ? this.handleClick : () => {}}
       >
         <VideoPlayer
           r={r}
@@ -96,6 +100,7 @@ class PetalNative extends React.Component {
           isPetal={!isRootNode}
           isSelectedPetal={isSelectedPetal}
           wasSelected={wasSelected}
+          // hideControls={petalHidden}
         />
         {!isRootNode && isSelectedPetal &&
         <IoIosGlasses
@@ -115,20 +120,27 @@ class PetalNative extends React.Component {
             opacity: (isSelectedPetal || isRootNode) ? 0 : (r * zoom < 20) ? 1 : 0.7,
             pointerEvents: (!isSelectedPetal) ? 'all' : 'none'
           }}
-        />
+        >
+          {
+            // <Icon
+            //   size={25}
+            //   color={color}
+            // />
+          }
+        </div>
       </div>
     )
   }
 }
 
-PetalNative.defaultProps = {
+Petal.defaultProps = {
   isSelectedPetal: false,
   color: 'red',
   zoom: 1,
   isRootNode: false
 }
 
-PetalNative.propTypes = {
+Petal.propTypes = {
   r: PropTypes.number.isRequired,
   id: PropTypes.number.isRequired,
   selectPetal: PropTypes.func.isRequired,
@@ -141,4 +153,4 @@ PetalNative.propTypes = {
   video: PropTypes.object.isRequired
 }
 
-export default withRouter(PetalNative)
+export default withRouter(Petal)

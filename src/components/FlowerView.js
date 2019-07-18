@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { FiX } from 'react-icons/fi'
-// import { GoSettings } from 'react-icons/go'
 import { MdEdit, MdClear } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
@@ -14,13 +13,11 @@ import { getFlowerData } from '../state/actions/flowerData'
 import FlowerRenderer from './Flower/FlowerRenderer'
 
 import Overlay from './UI/Overlay'
-import AddNodeForm from './Forms/AddNodeForm'
 import FloatingButton from './UI/FloatingButton'
 
 import EditNodeFrom from './Forms/EditNodeForm'
 import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
 
-// import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
 
 class FlowerView extends React.Component {
@@ -149,11 +146,19 @@ class FlowerView extends React.Component {
   toggleAddNodeOverlay = (e) => {
     e.stopPropagation()
     e.preventDefault()
+
     this.setState({
       currentTime: this.currentTime,
       currentProgress: this.currentProgress,
       overlayVisible: !this.state.overlayVisible
     })
+
+    window.setInterval(() => {
+      this.setState({
+        currentTime: this.currentTime,
+        currentProgress: this.currentProgress
+      })
+    }, 2000)
   }
 
   render () {

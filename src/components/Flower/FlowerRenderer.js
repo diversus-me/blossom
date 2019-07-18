@@ -402,10 +402,11 @@ class FlowerRenderer extends React.Component {
               isSelectedPetal={(node.id === selectedPetalID) || (!selectedPetalID && node.id === rootNode)}
               isRootNode={node.id === rootNode}
               zoom={node.zoom}
-              flavor={node.type}
+              flavor={(node.targetNode) ? node.targetNode.type : 'neutral'}
               color={node.color}
               setCurrentTime={this.setCurrentTime}
               video={(node.targetNode) ? node.targetNode.video : rootVideo}
+              petalHidden={hidePetals}
             />
           </div>
         )}

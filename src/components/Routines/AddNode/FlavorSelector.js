@@ -1,12 +1,10 @@
 import React from 'react'
-import { MdNotInterested } from 'react-icons/md'
-
+import { FLAVORS } from '../../Defaults'
 import { getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 
 import style from './FlavorSelector.module.css'
 
-const MARGIN = 100
-const TYPES = ['', '', '', '', '']
+const MARGIN = 0.2
 
 class FlavorSelector extends React.Component {
   handleClick = (i) => {
@@ -14,16 +12,20 @@ class FlavorSelector extends React.Component {
   }
 
   render () {
-    const angleStep = 360 / TYPES.length
-    const { size } = this.props
+    const { size, angle } = this.props
+    const angleStep = (270 / FLAVORS.length)
+    const rotationCorrection = 110 - angle
     return (
       <div className={style.container}>
-        {TYPES.map((type, i) => {
+        {FLAVORS.map((flavor, i) => {
           return (
             <div
+              key={flavor.name}
               style={{
                 position: 'absolute',
-                transform: `translate(${getCirclePosX(size * 0.5 + MARGIN, angleStep * i, 0)}px, ${getCirclePosY(size * 0.5 + MARGIN, angleStep * i, 0)}px)`
+                transform:
+                `translate(${getCirclePosX(size * 0.5 + MARGIN * size, (angleStep * i) - rotationCorrection, 0)}px,
+                ${getCirclePosY(size * 0.5 + MARGIN * size, (angleStep * i) - rotationCorrection, 0)}px)`
               }}
             >
               <div
@@ -31,9 +33,9 @@ class FlavorSelector extends React.Component {
                 style={{ animationDelay: `${i * 100}ms` }}
                 onClick={() => { this.handleClick(i) }}
               >
-                <MdNotInterested
-                  size={`${size * 0.25}px`}
-                  fill='red'
+                <flavor.icon
+                  size={`${size * 0.2}px`}
+                  fill={flavor.color}
                 />
               </div>
 

@@ -91,15 +91,20 @@ class VideoPlayer extends React.Component {
 
   updateTime = () => {
     if (this.props.shouldUpdate && this.player) {
-      const progress = this.player.getCurrentTime() / this.player.getDuration()
-      if (progress !== this.state.progress) {
-        const time = this.player.getCurrentTime()
-        this.setState({
-          played: progress,
-          playedSeconds: time
-        })
-        if (this.props.setCurrentTime) {
-          this.props.setCurrentTime(time, progress)
+      const currentTime = this.player.getCurrentTime()
+      const currentProgress = this.player.getCurrentTime() / this.player.getDuration()
+
+      if (currentTime || currentProgress) {
+        const progress = this.player.getCurrentTime() / this.player.getDuration()
+        if (progress !== this.state.progress) {
+          const time = this.player.getCurrentTime()
+          this.setState({
+            played: progress,
+            playedSeconds: time
+          })
+          if (this.props.setCurrentTime) {
+            this.props.setCurrentTime(time, progress)
+          }
         }
       }
     }
@@ -109,7 +114,7 @@ class VideoPlayer extends React.Component {
 
   render () {
     const { playing, isFullscreen, played, loaded, playedSeconds, duration } = this.state
-    const { color, r, url, loop, start, end, simple, isPetal, isSelectedPetal, wasSelected } = this.props
+    const { color, r, url, loop, start, end, simple, isPetal, isSelectedPetal, wasSelected, hideControls } = this.props
 
     return [
       <div
@@ -171,7 +176,7 @@ class VideoPlayer extends React.Component {
         }
       </div>,
       <div key='controlsContainer'>
-        {(isSelectedPetal || !isPetal) &&
+        {(isSelectedPetal || !isPetal) && !hideControls &&
         <Controls
           key='controls'
           playing={playing}
@@ -195,7 +200,8 @@ class VideoPlayer extends React.Component {
 
 VideoPlayer.defaultProps = {
   simple: false,
-  isPetal: false
+  isPetal: false,
+  hideControls: false
 }
 
 export default VideoPlayer
