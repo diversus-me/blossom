@@ -5,7 +5,7 @@ import Victor from 'victor'
 
 import { DOWN_SCALE_FACTOR, MAGNIFY_SPEED } from '../Defaults'
 
-import PetalNative from './PetalNative'
+import Petal from './Petal'
 
 import { createRootNode, createCircles, deg2rad } from './DefaultFunctions'
 
@@ -14,15 +14,6 @@ import style from './FlowerRenderer.module.css'
 class FlowerRenderer extends React.Component {
   constructor (props) {
     super(props)
-    this.rebuild = this.rebuild.bind(this)
-    this.magnify = this.magnify.bind(this)
-    this.unmagnify = this.unmagnify.bind(this)
-    this.remagnify = this.remagnify.bind(this)
-    this.newPositionsReceived = this.newPositionsReceived.bind(this)
-    this.startSimulation = this.startSimulation.bind(this)
-    this.receiveProgress = this.receiveProgress.bind(this)
-    this.resize = this.resize.bind(this)
-    this.handleFullscreen = this.handleFullscreen.bind(this)
     this.fullscreenVideo = false
     this.blockResize = false
 
@@ -95,7 +86,7 @@ class FlowerRenderer extends React.Component {
     }
   }
 
-  resize () {
+  resize = () => {
     const isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || document.fullScreen
     if (!this.blockResize && !isFullscreen) {
       const width = window.innerWidth
@@ -109,7 +100,7 @@ class FlowerRenderer extends React.Component {
     }
   }
 
-  rebuild () {
+  rebuild = () => {
     const { data, settings, rootNode } = this.props
     const { width, height } = this.state
     this.center = [Math.floor(width * 0.5), Math.floor(height * 0.5)]
@@ -162,7 +153,7 @@ class FlowerRenderer extends React.Component {
     })
   }
 
-  newPositionsReceived (e) {
+  newPositionsReceived = (e) => {
     this.nodes = e.data.nodes
 
     if (e.data.hidden) {
@@ -178,7 +169,7 @@ class FlowerRenderer extends React.Component {
     }
   }
 
-  startSimulation (positioning) {
+  startSimulation = (positioning) => {
     this.nodes.forEach((node, i) => {
       if (this.ref[i]) {
         this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px) scale(${node.radius / this.rootRadius})`
@@ -192,7 +183,7 @@ class FlowerRenderer extends React.Component {
     }
   }
 
-  magnify () {
+  magnify = () => {
     const { selectedPetalID } = this.props
     const selectedPetal = this.nodes.find(node => node.id === selectedPetalID)
     const neighboursID = []
@@ -326,12 +317,12 @@ class FlowerRenderer extends React.Component {
     this.magnified = true
   }
 
-  remagnify () {
+  remagnify = () => {
     this.nodes = this.originalNodes
     this.magnify()
   }
 
-  unmagnify () {
+  unmagnify = () => {
     // console.log(this.originalNodes, this.nodes)
     if (this.originalNodes[0].id === this.nodes[0].id) {
       this.originalNodes.forEach((node, i) => {
@@ -351,8 +342,8 @@ class FlowerRenderer extends React.Component {
     this.refs.petals.style.transform = `translate(0px, 0px)`
   }
 
-  receiveProgress (time, progress) {
-    this.props.sendTime(time)
+  setCurrentTime = (time, progress) => {
+    this.props.setCurrentTime(time, progress)
     // TODO: Fix Realtime Magnifier.
     // const { sorted } = this.props
     // const angle = progress * 360
@@ -370,7 +361,7 @@ class FlowerRenderer extends React.Component {
   }
 
   render () {
-    const { selectedPetalID, url, duration, selectPetal, rootNode } = this.props
+    const { selectedPetalID, rootVideo, selectPetal, rootNode, hidePetals } = this.props
     const { width, height } = this.state
     const { divNodes } = this.state
 
@@ -399,24 +390,22 @@ class FlowerRenderer extends React.Component {
             ref={(ref) => { this.ref[i] = ref }}
             className={style.petal}
             style={{
-              transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
+              transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`,
+              opacity: (hidePetals && !(node.id === rootNode)) ? 0 : 1,
+              zIndex: ((node.id === selectedPetalID) || node.id === rootNode) ? 1 : ''
             }}
           >
-            <PetalNative
+            <Petal
               r={this.rootRadius}
               selectPetal={selectPetal}
               id={node.id}
               isSelectedPetal={(node.id === selectedPetalID) || (!selectedPetalID && node.id === rootNode)}
               isRootNode={node.id === rootNode}
               zoom={node.zoom}
-              type={node.type}
+              flavor={node.type}
               color={node.color}
-              sendProgress={this.receiveProgress}
-              videoId={(node.targetNode) ? node.targetNode.video.url : url}
-              duration={(node.targetNode) ? node.targetNode.video.duration : duration}
-              center={this.center}
-              node={node}
-              isNativeVide
+              setCurrentTime={this.setCurrentTime}
+              video={(node.targetNode) ? node.targetNode.video : rootVideo}
             />
           </div>
         )}

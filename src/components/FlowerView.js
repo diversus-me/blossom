@@ -11,13 +11,14 @@ import { toast } from 'react-toastify'
 
 import { getFlowerData } from '../state/actions/flowerData'
 
-import FlowerRenderer from './FlowerTypes/FlowerRenderer'
+import FlowerRenderer from './Flower/FlowerRenderer'
 
 import Overlay from './UI/Overlay'
 import AddNodeForm from './Forms/AddNodeForm'
 import FloatingButton from './UI/FloatingButton'
 
 import EditNodeFrom from './Forms/EditNodeForm'
+import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
 
 // import Settings from './Settings/SettingsView'
 import style from './FlowerView.module.css'
@@ -25,10 +26,6 @@ import style from './FlowerView.module.css'
 class FlowerView extends React.Component {
   constructor (props) {
     super(props)
-    this.toggleSettings = this.toggleSettings.bind(this)
-    this.selectPetal = this.selectPetal.bind(this)
-    this.toggleAddNodeOverlay = this.toggleAddNodeOverlay.bind(this)
-    this.receiveCurrentTime = this.receiveCurrentTime.bind(this)
     const { history } = this.props
     const parsedQuery = queryString.parse(history.location.search)
 
@@ -37,8 +34,12 @@ class FlowerView extends React.Component {
       selectedPetalID: parseInt(parsedQuery.s),
       overlayVisible: false,
       currentTime: 0,
+      currentProgress: 0,
       editNodeVisibility: false
     }
+
+    this.currentTime = 0
+    this.currentProgress = 0
   }
 
   shouldComponentUpdate (nextProps) {
@@ -115,17 +116,18 @@ class FlowerView extends React.Component {
     }
   }
 
-  receiveCurrentTime (time) {
+  setCurrentTime = (time, progress) => {
     this.currentTime = time
+    this.currentProgress = progress
   }
 
-  toggleSettings () {
+  toggleSettings = () => {
     this.setState({
       settingsVisibility: !this.state.settingsVisibility
     })
   }
 
-  selectPetal (id) {
+  selectPetal = (id) => {
     const { history } = this.props
     const parsed = queryString.parse(history.location.search)
 
@@ -144,21 +146,20 @@ class FlowerView extends React.Component {
     }
   }
 
-  toggleAddNodeOverlay (e) {
+  toggleAddNodeOverlay = (e) => {
     e.stopPropagation()
     e.preventDefault()
     this.setState({
       currentTime: this.currentTime,
+      currentProgress: this.currentProgress,
       overlayVisible: !this.state.overlayVisible
     })
   }
 
   render () {
     const { settings, history, id, flowerData, session } = this.props
-    const { editNodeVisibility } = this.state
+    const { editNodeVisibility, currentProgress, overlayVisible, currentTime } = this.state
     const data = flowerData.data[id]
-
-    const { overlayVisible, currentTime } = this.state
 
     let selectedPetalID = queryString.parse(history.location.search).s
     if (selectedPetalID) {
@@ -200,18 +201,24 @@ class FlowerView extends React.Component {
             onClickCallback={this.toggleAddNodeOverlay}
           />
           }
-          {session.authenticated && data && data.data && data.data.connections &&
-          <Overlay
-            visibility={overlayVisible}
-            onOuterClick={this.toggleAddNodeOverlay}
-          >
-            <AddNodeForm
-              id={id}
-              rootDuration={data.data.video.duration}
-              currentTime={currentTime}
-              visibility={overlayVisible}
-            />
-          </Overlay>
+          {session.authenticated && data && data.data && data.data.connections && overlayVisible &&
+          // <Overlay
+          //   visibility={overlayVisible && false}
+          //   onOuterClick={this.toggleAddNodeOverlay}
+          // >
+          //   <AddNodeForm
+          //     id={id}
+          //     rootDuration={data.data.video.duration}
+          //     currentTime={currentTime}
+          //     visibility={overlayVisible}
+          //   />
+          // </Overlay>
+          <AddNodeRoutine
+            id={id}
+            rootDuration={data.data.video.duration}
+            currentTime={currentTime}
+            currentProgress={currentProgress}
+          />
           }
         </div>
         {/* {&& data.data && selectedPetalID && selectedPetalID !== data.data.id &&
@@ -250,27 +257,27 @@ class FlowerView extends React.Component {
                   title={selectedPetal.targetNode.title}
                 />
               }
-
             </Overlay>
           ]
         }
-        {data && data.data && data.data.connections &&
-        <FlowerRenderer
-          data={data.data.connections}
-          received={data.data.received}
-          rootNode={data.data.id}
-          selectPetal={this.selectPetal}
-          sendTime={this.receiveCurrentTime}
-          selectedPetalID={selectedPetalID}
-          min={data.data.min}
-          max={data.data.max}
-          settings={settings}
-          url={data.data.video.url}
-          duration={data.data.video.duration}
-          sorted={data.data.sorted}
-          useWebWorker
-        />
-        }
+        <div style={{ transform: '', position: 'relative' }}>
+          {data && data.data && data.data.connections &&
+          <FlowerRenderer
+            data={data.data.connections}
+            received={data.data.received}
+            rootNode={data.data.id}
+            rootVideo={data.data.video}
+            selectPetal={this.selectPetal}
+            setCurrentTime={this.setCurrentTime}
+            selectedPetalID={selectedPetalID}
+            min={data.data.min}
+            max={data.data.max}
+            settings={settings}
+            sorted={data.data.sorted}
+            hidePetals={overlayVisible}
+          />
+          }
+        </div>
       </div>
     )
   }

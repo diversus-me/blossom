@@ -1,0 +1,71 @@
+.video {
+    /* position: absolute;
+    top: 0; */
+}
+
+.videoContainer {
+    transform: translate(-50%, -50%) scaleX(-1);
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 50%;
+}
+
+.record {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 100ms ease-out;
+}
+
+.record:hover {
+    transform: scale(1.2) !important;
+    transition: transform 100ms ease-out;
+}
+
+.record:active {
+    transform: scale(0.9) !important;
+}
+
+.recordClicked {
+    transition: transform 300ms ease-out,
+                opacity 300ms ease-out !important;
+    transform: scale(1) !important;
+    opacity: 0;
+}
+
+.stopRecord {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    opacity: 0;
+    transform: scale(1);
+    transition: transform 100ms ease-out;
+}
+
+.stopRecord:hover {
+    transform: scale(1.2) !important;
+    transition: transform 100ms ease-out;
+}
+
+.stopRecord:active {
+    transform: scale(0.9) !important;
+}
+
+.recordStarted {
+    animation: appear 300ms ease-out 500ms forwards;
+}
+
+.recordStopped {
+    animation: appear 300ms ease-out 500ms backwards;
+}
+
+@keyframes appear {
+    from {  opacity: 0; transform: scale(1.2); }
+    to   {  opacity: 1; transform: scale(1); }
+}
