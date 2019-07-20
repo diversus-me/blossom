@@ -17,12 +17,43 @@ class AddNodeRoutine extends React.Component {
       recorderFinished: false,
       flavorSelected: false,
       seeking: false,
-      desiredValue: -1
+      desiredValue: -1,
+      url: ''
     }
+
+    fetch(
+      `${process.env.REACT_APP_SERVER_URL}/api/uploadLink`,
+      {
+        credentials: 'include',
+        method: 'GET'
+      })
+      .then((res) => {
+        if (res.ok) {
+          return res.json()
+        } else {
+          throw new Error()
+        }
+      })
+      .then((json) => {
+        this.setState({ url: json.url })
+      })
+      .catch((error) => { console.log(error) })
   }
 
   recorderFinished = (videoFile) => {
     this.videoFile = videoFile
+    fetch(
+      this.state.url,
+      {
+        credentials: 'include',
+        method: 'POST',
+        // headers: {
+        //   'Content-Type': 'application/video'
+        // },
+        file: videoFile
+      }
+    ).then((response) => { console.log(response) })
+      .catch((error) => { console.log(error) })
     this.setState({
       recorderFinished: true
     })
@@ -109,19 +140,19 @@ class AddNodeRoutine extends React.Component {
             angle={angle}
           />
         }
+      </div>,
+      <div style={{ position: 'absolute', top: center[1], left: center[0], width: `${rootRadius * 2}px`, height: `${rootRadius * 2}px`, transform: 'translate(-50%, -50%)', zIndex: 200 }}>
+        <Timeline
+          key='timeline'
+          round r={rootRadius}
+          color={'red'}
+          played={20}
+          loaded={0}
+          seekTo={() => {}}
+          duration={100}
+          playedSeconds={0}
+        />
       </div>
-      // <div style={{ position: 'absolute', top: center[1], left: center[0], width: `${rootRadius * 2}px`, height: `${rootRadius * 2}px`, transform: 'translate(-50%, -50%)', zIndex: 200 }}>
-      //   <Timeline
-      //     key='timeline'
-      //     round r={rootRadius}
-      //     color={'red'}
-      //     played={20}
-      //     loaded={0}
-      //     seekTo={() => {}}
-      //     duration={100}
-      //     playedSeconds={0}
-      //   />
-      // </div>
     ]
   }
 }

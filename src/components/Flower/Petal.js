@@ -58,7 +58,7 @@ class Petal extends React.Component {
   }
 
   handleClick = (event) => {
-    console.log('YES')
+    // console.log('YES')
     const { id, selectPetal, isRootNode } = this.props
     if (event.altKey && !isRootNode) {
       this.props.history.push(`/flower/${id}`)
@@ -78,7 +78,7 @@ class Petal extends React.Component {
     const { r, isSelectedPetal, zoom, color, isRootNode, video, setCurrentTime, petalHidden, flavor } = this.props
     const { wasSelected, initialPlay } = this.state
 
-    const Icon = FLAVORS.find((element) => { console.log(element.name.toLowerCase(), flavor) })
+    // const Icon = FLAVORS.find((element) => { console.log(element.name.toLowerCase(), flavor) })
 
     return (
       <div
