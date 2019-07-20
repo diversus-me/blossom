@@ -53,7 +53,7 @@ class AddNodeRoutine extends React.Component {
         file: videoFile
       }
     ).then((response) => { console.log(response) })
-      .catch((error) => { console.log(error) })
+    // .catch((error) => { console.log(error) })
     this.setState({
       recorderFinished: true
     })
