@@ -24,7 +24,6 @@ class AddNodeRoutine extends React.Component {
     fetch(
       `${process.env.REACT_APP_SERVER_URL}/api/uploadLink`,
       {
-        credentials: 'include',
         method: 'GET'
       })
       .then((res) => {
@@ -45,11 +44,10 @@ class AddNodeRoutine extends React.Component {
     fetch(
       this.state.url,
       {
-        credentials: 'include',
-        method: 'POST',
-        // headers: {
-        //   'Content-Type': 'application/video'
-        // },
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/video'
+        },
         file: videoFile
       }
     ).then((response) => { console.log(response) })
