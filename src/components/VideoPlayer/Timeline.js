@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { MdSkipNext, MdSkipPrevious } from 'react-icons/md'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../Flower/DefaultFunctions'
 
@@ -11,7 +12,11 @@ const SVG_OFFSET = 20
 class Timeline extends React.Component {
   state = {
     desiredValue: 0,
-    seeking: false
+    seeking: false,
+    leftHandlePosition: 0,
+    rightHandlePosition: 1,
+    seekingLeft: false,
+    seekingRight: false
   }
 
   currentScrub = 0
@@ -29,14 +34,31 @@ class Timeline extends React.Component {
   //   })
   // }
 
-  onScrubStart = (e) => {
-    this.setState({
-      seeking: true
-    })
+  onScrubStart = (type) => {
+    switch (type) {
+      case 'left':
+        this.setState({
+          seekingLeft: true
+        })
+        break
+      case 'right':
+        this.setState({
+          seekingRight: true
+        })
+        break
+      case 'center':
+        this.setState({
+          seeking: true
+        })
+        break
+      default:
+        break
+    }
   }
 
   onScrub = e => {
-    if (this.state.seeking) {
+    const { seeking, seekingLeft, seekingRight } = this.state
+    if (seeking || seekingLeft || seekingRight) {
       const { r } = this.props
       const boundingBox = this.container.getBoundingClientRect()
       const centerX = boundingBox.left + r
@@ -44,18 +66,48 @@ class Timeline extends React.Component {
       const angle = getAngle(e.clientX, e.clientY, centerX, centerY)
       const progress = angle / 360
 
-      this.currentScrub = progress
+      const { showHandles } = this.props
+      const { leftHandlePosition, rightHandlePosition } = this.state
 
-      this.setState({
-        desiredValue: progress
-      })
+      if (seeking) {
+        let desiredValue = progress
+        if (showHandles && progress < leftHandlePosition) {
+          desiredValue = leftHandlePosition
+        } else if (showHandles && progress > rightHandlePosition) {
+          desiredValue = rightHandlePosition
+        }
+
+        this.currentScrub = desiredValue
+        this.setState({
+          desiredValue
+        })
+      }
+
+      if (seekingLeft) {
+        let newLeftHandlePosition = (progress > rightHandlePosition) ? rightHandlePosition : progress
+        this.setState({
+          leftHandlePosition: newLeftHandlePosition
+        })
+      }
+
+      if (seekingRight) {
+        let newRightHandlePosition = (progress < leftHandlePosition) ? leftHandlePosition : progress
+
+        this.setState({
+          rightHandlePosition: newRightHandlePosition
+        })
+      }
     }
   }
 
   onScrubEnd = e => {
-    this.props.seekTo(this.currentScrub)
+    if (this.state.seeking) {
+      this.props.seekTo(this.currentScrub)
+    }
     this.setState({
-      seeking: false
+      seeking: false,
+      seekingLeft: false,
+      seekingRight: false
     })
   }
 
@@ -70,9 +122,23 @@ class Timeline extends React.Component {
     this.props.seekTo(progress)
   }
 
+  componentDidUpdate () {
+    const { showHandles, playing } = this.props
+    if (showHandles && playing) {
+      const { played, togglePlay } = this.props
+      const { leftHandlePosition, rightHandlePosition } = this.state
+
+      if (played > rightHandlePosition) {
+        togglePlay()
+      } else if (played < leftHandlePosition) {
+        togglePlay()
+      }
+    }
+  }
+
   render () {
-    const { round, color, played, r, playedSeconds, simple } = this.props
-    const { desiredValue, seeking } = this.state
+    const { round, color, played, r, playedSeconds, simple, showHandles, togglePlay } = this.props
+    const { desiredValue, seeking, seekingLeft, seekingRight, leftHandlePosition, rightHandlePosition } = this.state
 
     const currentPlayed = (played) ? (seeking) ? desiredValue : played : 0
 
@@ -81,6 +147,8 @@ class Timeline extends React.Component {
     const dashOffset = circumference - progress
 
     const angle = currentPlayed * 360
+    const leftAngle = leftHandlePosition * 360
+    const rightAngle = rightHandlePosition * 360
 
     return [
       <div
@@ -115,6 +183,8 @@ class Timeline extends React.Component {
             <circle
               fill={color}
               r={10}
+              style={{ pointerEvents: 'all' }}
+              onMouseDown={() => { this.onScrubStart('center') }}
               cx={getCirclePosX(r, angle, r) - 1}
               cy={getCirclePosY(r, angle, r) - 1}
             />
@@ -123,22 +193,22 @@ class Timeline extends React.Component {
         }
         <div
           className={style.timelineClickArea}
-          onClick={this.onTimelineSelect}
-          onMouseDown={this.onScrubStart}
+          onClick={togglePlay}
+          // onMouseDown={() => { this.onScrubStart('center') }}
           onMouseMove={this.onScrub}
           onMouseUp={this.onScrubEnd}
           style={{
-            transform: (seeking) ? 'translate3d(0, 0, 0) scale(10)' : 'translate3d(0, 0, 0)',
-            zIndex: (seeking) ? 100 : ''
+            transform: (seeking || seekingLeft || seekingRight) ? 'translate3d(0, 0, 0) scale(10)' : 'translate3d(0, 0, 0)',
+            zIndex: (seeking || seekingLeft || seekingRight) ? 100 : ''
           }}
         />
-        {round && !!angle && !simple &&
+        {round && !!angle && !simple && !showHandles &&
         <div
           className={style.time}
           style={{
             transform: `translate(${getCirclePosX(r, angle, r) - 1}px, ${getCirclePosY(r, angle, r) - 1}px)`
           }}
-          onMouseDown={this.onScrubStart}
+          onMouseDown={() => { this.onScrubStart('center') }}
           onMouseMove={this.onScrub}
           onMouseUp={this.onScrubEnd}
         >
@@ -149,6 +219,46 @@ class Timeline extends React.Component {
             padding: '5px'
           }}>
             {moment.utc(playedSeconds * 1000).format('mm:ss')}
+          </div>
+        </div>
+        }
+        {showHandles &&
+        <div
+          className={style.handle}
+          style={{
+            transform: `translate(${getCirclePosX(r, leftAngle, r)}px, ${getCirclePosY(r, leftAngle, r)}px)`
+          }}
+          onMouseDown={() => { this.onScrubStart('left') }}
+          onMouseMove={this.onScrub}
+          onMouseUp={this.onScrubEnd}
+        >
+          <div style={{
+            transform: `translate(-50%, -50%) rotate(${leftAngle}deg)`
+          }}>
+            <MdSkipNext
+              size={35}
+              color={color}
+            />
+          </div>
+        </div>
+        }
+        {showHandles &&
+        <div
+          className={style.handle}
+          style={{
+            transform: `translate(${getCirclePosX(r, rightAngle, r)}px, ${getCirclePosY(r, rightAngle, r)}px)`
+          }}
+          onMouseDown={() => { this.onScrubStart('right') }}
+          onMouseMove={this.onScrub}
+          onMouseUp={this.onScrubEnd}
+        >
+          <div style={{
+            transform: `translate(-50%, -50%) rotate(${rightAngle}deg)`
+          }}>
+            <MdSkipPrevious
+              size={35}
+              color={color}
+            />
           </div>
         </div>
         }
@@ -174,7 +284,8 @@ class Timeline extends React.Component {
 }
 
 Timeline.defaultProps = {
-  round: false
+  round: false,
+  showHandles: false
 }
 
 Timeline.propTypes = {
@@ -184,7 +295,9 @@ Timeline.propTypes = {
   color: PropTypes.string.isRequired,
   played: PropTypes.number.isRequired,
   loaded: PropTypes.number.isRequired,
-  seekTo: PropTypes.func.isRequired
+  seekTo: PropTypes.func.isRequired,
+  showHandles: PropTypes.bool,
+  togglePlay: PropTypes.func.isRequired
 }
 
 export default Timeline

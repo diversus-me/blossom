@@ -9,7 +9,7 @@ class ShareButton extends React.Component {
     const { onClickCallback, styling } = this.props
     return (
       <div style={styling} className={style.button} onClick={onClickCallback}>
-        <MdShare size={'25px'} color='grey' />
+        <MdShare size={'20px'} color='grey' />
       </div>
     )
   }

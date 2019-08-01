@@ -14,31 +14,37 @@ export const UNMAGNIFY_SPEED = 800
 export const FLAVORS = [
   {
     name: 'Neutral',
+    type: 'neutral',
     color: '#979ca6',
     icon: FaBalanceScale
   },
   {
     name: 'Pro',
+    type: 'pro',
     color: '#4b8a6e',
     icon: IoIosCheckmarkCircle
   },
   {
     name: 'Contra',
+    type: 'contra',
     color: '#ff2b4d',
     icon: MdNotInterested
   },
   {
     name: 'Science',
+    type: 'science',
     color: '#496f8e',
     icon: GoBeaker
   },
   {
     name: 'Joke',
+    type: 'joke',
     color: '#ffe761',
     icon: FaLaughBeam
   },
   {
     name: 'Fact Check',
+    type: 'fact check',
     color: '#457ece',
     icon: IoIosHammer
   }

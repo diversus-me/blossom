@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { connect } from 'react-redux'
 import { IoIosGlasses } from 'react-icons/io'
 import { withRouter } from 'react-router'
 
@@ -43,8 +44,8 @@ class Petal extends React.Component {
       return true
     }
 
-    const { r, color } = this.props
-    if (r !== nextProps.r || color !== nextProps.color) {
+    const { r, color, globals } = this.props
+    if (r !== nextProps.r || color !== nextProps.color || globals.addedNodePosition !== nextProps.globals.addedNodePosition) {
       return true
     }
 
@@ -58,7 +59,6 @@ class Petal extends React.Component {
   }
 
   handleClick = (event) => {
-    // console.log('YES')
     const { id, selectPetal, isRootNode } = this.props
     if (event.altKey && !isRootNode) {
       this.props.history.push(`/flower/${id}`)
@@ -75,17 +75,18 @@ class Petal extends React.Component {
   }
 
   render () {
-    const { r, isSelectedPetal, zoom, color, isRootNode, video, setCurrentTime, petalHidden, flavor } = this.props
-    const { wasSelected, initialPlay } = this.state
+    const { r, isSelectedPetal, zoom, color, isRootNode, video, setCurrentTime, petalHidden, globals, flavor } = this.props
+    const { wasSelected } = this.state
 
-    // const Icon = FLAVORS.find((element) => { console.log(element.name.toLowerCase(), flavor) })
+    const Flavor = FLAVORS.find((element) => {
+      return element.type === flavor
+    })
 
     return (
       <div
         style={{
           width: `${(r * 2) - 2}px`,
           height: `${(r * 2) - 2}px`
-          // opacity: (!isSelectedPetal && !initialPlay && !isRootNode) ? 0.5 : 1
         }}
         className={classNames(style.petalContent,
           (isSelectedPetal) ? style.petalContentNoClick : '')}
@@ -100,6 +101,11 @@ class Petal extends React.Component {
           isPetal={!isRootNode}
           isSelectedPetal={isSelectedPetal}
           wasSelected={wasSelected}
+          showHandles={globals.nodeGetsPositioneds}
+          progress={globals.addedNodePosition}
+          shouldReceiveProgress={globals.nodeGetsPositioned}
+          autoplay
+          isIFrame
           // hideControls={petalHidden}
         />
         {!isRootNode && isSelectedPetal &&
@@ -117,16 +123,27 @@ class Petal extends React.Component {
           className={style.overlay}
           style={{
             background: color,
-            opacity: (isSelectedPetal || isRootNode) ? 0 : (r * zoom < 20) ? 1 : 0.7,
-            pointerEvents: (!isSelectedPetal) ? 'all' : 'none'
+            opacity: (isSelectedPetal || isRootNode) ? 0 : 1,
+            pointerEvents: (!isSelectedPetal) ? 'visible' : 'none',
+            border: `solid 1px ${color}`
           }}
         >
-          {
-            // <Icon
-            //   size={25}
-            //   color={color}
-            // />
-          }
+          <img
+            className={style.image}
+            src={`https://img.youtube.com/vi/${video.url}/sddefault.jpg`}
+          />
+          <div
+            className={style.overlayColor}
+            style={{
+              background: color,
+              opacity: (isSelectedPetal || isRootNode) ? 0 : (r * zoom < 20) ? 1 : 0.35
+            }}
+          />
+          <Flavor.icon
+            size={r * 0.8}
+            color={color}
+            className={style.flavorIcon}
+          />
         </div>
       </div>
     )
@@ -153,4 +170,9 @@ Petal.propTypes = {
   video: PropTypes.object.isRequired
 }
 
-export default withRouter(Petal)
+function mapStateToProps (state) {
+  const { globals } = state
+  return { globals }
+}
+
+export default connect(mapStateToProps)(withRouter(Petal))

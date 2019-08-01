@@ -1,4 +1,4 @@
-export default async function fetchAsync (func) {
+export async function fetchAsync (func) {
   const response = await func()
   if (response.ok) {
     return response.json()

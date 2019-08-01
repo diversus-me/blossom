@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 
 import style from './Forms.module.css'
-import { getFlowerData } from '../../state/actions/flowerData'
+import { getFlowerData } from '../../state/flowerData/actions'
 import TimeField from 'react-simple-timefield'
 import moment from 'moment'
 

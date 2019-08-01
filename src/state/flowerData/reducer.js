@@ -1,5 +1,5 @@
 import { GET_FLOWER_ERROR, GET_FLOWER_LOADING, GET_FLOWER_SUCCESS,
-  ADD_NODE_LOADING, ADD_NODE_SUCCESS, ADD_NODE_ERROR } from '../actions/flowerData'
+  ADD_NODE_LOADING, ADD_NODE_SUCCESS, ADD_NODE_ERROR } from './actions'
 import { toast } from 'react-toastify'
 
 const initialState = {
@@ -18,6 +18,8 @@ function getColor (type) {
       return '#ff2b4d'
     case 'factChecker':
       return '#457ece'
+    case 'fact check':
+      return '#457ece'
     case 'joke':
       return '#ffe761'
     default:
@@ -30,7 +32,7 @@ function parseData (data, connections) {
     return {
       relevance: (Math.random() * 200) + 100,
       created: connection.created,
-      flavor: connection.flavor,
+      flavor: (connection.flavor === 'factChecker') ? 'fact check' : connection.flavor,
       color: getColor(connection.flavor),
       id: connection.targetNode.id,
       targetNode: connection.targetNode,

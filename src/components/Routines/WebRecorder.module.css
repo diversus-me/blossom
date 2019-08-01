@@ -1,6 +1,5 @@
 .video {
-    /* position: absolute;
-    top: 0; */
+    margin-left: -50%;
 }
 
 .videoContainer {
@@ -12,6 +11,8 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border-radius: 50%;
+    background: black;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 }
 
 .record {

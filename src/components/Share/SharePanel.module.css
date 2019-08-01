@@ -1,0 +1,19 @@
+.sharePanel {
+  position: fixed;
+  top: 60px;
+  left: 18px;
+  width: 45px;
+}
+
+@media (max-device-width: 500px) {
+  .sharePanel {
+    left: 4vw;
+    width: 10vw;
+    /* top: 12vw; */
+  }
+}
+
+.shareButton {
+  margin: 5px;
+  cursor: pointer;
+}

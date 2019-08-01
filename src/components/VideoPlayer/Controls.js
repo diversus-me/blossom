@@ -7,8 +7,8 @@ import Timeline from './Timeline'
 import style from './Controls.module.css'
 
 function Controls (props) {
-  const { playing, color, r, clickPlay, toggleFullscreen, played, loaded,
-    seekTo, duration, playedSeconds, simple, isPetal } = props
+  const { playing, color, r, togglePlay, toggleFullscreen, played, loaded,
+    seekTo, duration, playedSeconds, simple, isPetal, showHandles } = props
 
   return [
     <Timeline
@@ -16,22 +16,25 @@ function Controls (props) {
       round r={r}
       color={color}
       played={played}
+      playing={playing}
       loaded={loaded}
       seekTo={seekTo}
       duration={duration}
       playedSeconds={playedSeconds}
       simple={simple}
+      showHandles={showHandles}
+      togglePlay={togglePlay}
     />,
     <MdPlayArrow
       key='play'
       className={classNames(style.play, (playing) ? style.playClicked : '')}
-      size={`${r * 0.5}px`}
+      size={`${r * 0.7}px`}
       fill={color}
       stroke='black'
       style={{
-        margin: `-${r * 0.25}px 0 0 -${r * 0.25}px`
+        margin: `-${r * 0.35}px 0 0 -${r * 0.35}px`
       }}
-      onClick={clickPlay}
+      onClick={togglePlay}
     />,
     <MdFullscreen
       key='fullscreen'

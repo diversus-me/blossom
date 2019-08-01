@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as d3 from 'd3'
+import { connect } from 'react-redux'
 import Victor from 'victor'
 
 import { DOWN_SCALE_FACTOR, MAGNIFY_SPEED } from '../Defaults'
-
-import Petal from './Petal'
-
 import { createRootNode, createCircles, deg2rad } from './DefaultFunctions'
+
+import Axes from './Axes'
+import Petal from './Petal'
 
 import style from './FlowerRenderer.module.css'
 
@@ -15,46 +15,37 @@ class FlowerRenderer extends React.Component {
   constructor (props) {
     super(props)
     this.fullscreenVideo = false
-    this.blockResize = false
+    this.preventRebuild = false
 
     this.worker = new Worker('/d3Worker.js')
     this.worker.onmessage = this.newPositionsReceived
 
     this.currentProgressIndex = 0
+    this.magnified = false
 
     this.state = {
-      divNodes: [],
-      width: window.innerWidth,
-      height: window.innerHeight
+      divNodes: []
     }
   }
 
   componentDidMount () {
-    window.addEventListener('resize', this.resize)
     document.addEventListener('webkitfullscreenchange', this.handleFullscreen)
     document.addEventListener('fullscreenchange', this.handleFullscreen)
     document.addEventListener('mozfullscreenchange', this.handleFullscreen)
     document.addEventListener('msfullscreenchange', this.handleFullscreen)
-    const svg = d3.select(this.svg)
-    this.group = svg.append('g')
-    this.lines = this.group.append('g')
-    this.sublines = this.group.append('g')
-    this.lostPetals = this.group.append('g')
-
-    this.lostPetals.style('display', 'none')
 
     this.rebuild()
-    this.magnified = false
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const { selectedPetalID, data, received } = this.props
-    const { width, height } = this.state
+    const { selectedPetalID, data, received, dimensions } = this.props
 
-    if (data.length !== prevProps.data.length ||
-        width !== prevState.width ||
-        height !== prevState.height ||
-        received !== prevProps.received) {
+    const isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || document.fullScreen
+    if (!this.preventRebuild && !isFullscreen &&
+      (data.length !== prevProps.data.length ||
+        dimensions.width !== prevProps.dimensions.width ||
+        dimensions.height !== prevProps.dimensions.height ||
+        received !== prevProps.received)) {
       this.rebuild()
     } else {
       if (selectedPetalID !== prevProps.selectedPetalID) {
@@ -70,7 +61,6 @@ class FlowerRenderer extends React.Component {
   }
 
   componentWillUnmount () {
-    window.removeEventListener('resize', this.resize)
     document.removeEventListener('webkitfullscreenchange', this.handleFullscreen)
     document.removeEventListener('fullscreenchange', this.handleFullscreen)
     document.removeEventListener('mozfullscreenchange', this.handleFullscreen)
@@ -78,82 +68,34 @@ class FlowerRenderer extends React.Component {
   }
 
   handleFullscreen () {
+    // Fullscrenn does not trigger rebuilds
     const isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || document.fullScreen
     if (isFullscreen) {
-      this.blockResize = true
+      this.preventRebuild = true
     } else {
-      this.blockResize = false
-    }
-  }
-
-  resize = () => {
-    const isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || document.fullScreen
-    if (!this.blockResize && !isFullscreen) {
-      const width = window.innerWidth
-      const height = window.innerHeight
-
-      if (width !== this.state.width || height !== this.state.height) {
-        this.setState({
-          width, height
-        })
-      }
+      this.preventRebuild = false
     }
   }
 
   rebuild = () => {
-    const { data, settings, rootNode } = this.props
-    const { width, height } = this.state
-    this.center = [Math.floor(width * 0.5), Math.floor(height * 0.5)]
-
-    const maxLength = (width < height) ? width : height
-    this.rootRadius = Math.floor(maxLength * 0.45 * 0.5)
+    const { dimensions } = this.props
+    const { data, rootNode } = this.props
 
     // Initial Positions
-    this.rootNode = createRootNode(this.rootRadius, this.center[0], this.center[1], rootNode)
-    const petals = createCircles(data, this.rootRadius, this.center[0], this.center[1])
+    this.rootNode = createRootNode(dimensions.rootRadius, dimensions.centerX, dimensions.centerY, rootNode)
+    const petals = createCircles(data, dimensions.rootRadius, dimensions.centerX, dimensions.centerY)
 
     this.nodes = this.rootNode.concat(petals)
-
-    // Create Radial Axes
-    const lines = this.lines
-      .selectAll('line')
-      .data([0, 45, 90, 135, 180])
-
-    lines.enter()
-      .append('line')
-      .merge(lines)
-      .attr('x1', this.center[0] * 2)
-      .attr('y1', -5000)
-      .attr('x2', this.center[0] * 2)
-      .attr('y2', 5000)
-      .style('stroke', 'rgb(200, 200, 200)')
-      .style('stroke-width', 1)
-      .style('transform', d => `rotate(${d}deg)`)
-      .style('transform-origin', `${this.center[0] * 2}px ${this.center[1] * 2}px`)
-
-    const sublines = this.sublines
-      .selectAll('line')
-      .data(Array(72).fill(0).map((d, i) => i * 5))
-    sublines.enter()
-      .append('line')
-      .merge(sublines)
-      .attr('x1', this.center[0] * 2)
-      .attr('y1', this.center[1] * 2 - (maxLength * 0.2))
-      .attr('x2', this.center[0] * 2)
-      .attr('y2', this.center[1] * 2 - (maxLength * 0.35))
-      .style('stroke', 'rgb(200, 200, 200)')
-      .style('stroke-width', 1)
-      .style('transform', d => `rotate(${d}deg)`)
-      .style('transform-origin', `${this.center[0] * 2}px ${this.center[1] * 2}px`)
 
     this.ref = Array(this.nodes.length)
 
     this.setState({ divNodes: this.nodes }, () => {
-      this.startSimulation(settings.positioning)
+      this.startSimulation()
     })
   }
 
   newPositionsReceived = (e) => {
+    const { dimensions: { rootRadius } } = this.props
     this.nodes = e.data.nodes
 
     if (e.data.hidden) {
@@ -162,29 +104,33 @@ class FlowerRenderer extends React.Component {
       window.requestAnimationFrame(() => {
         e.data.nodes.forEach((node, i) => {
           if (this.ref[i]) {
-            this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px)  scale(${node.radius / this.rootRadius})`
+            this.ref[i].style.transform = `translate(${node.x - rootRadius}px, ${node.y - rootRadius}px)  scale(${node.radius / rootRadius})`
           }
         })
       })
     }
   }
 
-  startSimulation = (positioning) => {
+  startSimulation = () => {
+    const { dimensions: { rootRadius, centerX, centerY } } = this.props
     this.nodes.forEach((node, i) => {
       if (this.ref[i]) {
-        this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px) scale(${node.radius / this.rootRadius})`
+        this.ref[i].style.transform = `translate(${node.x - rootRadius}px, ${node.y - rootRadius}px) scale(${node.radius / rootRadius})`
       }
     })
 
     if (this.props.selectedPetalID) {
-      this.worker.postMessage({ positioning, nodes: this.nodes, rootRadius: this.rootRadius, center: this.center, links: this.links, hidden: true })
+      this.worker.postMessage({ positioning: 1, nodes: this.nodes, rootRadius, centerX, centerY, links: this.links, hidden: true })
     } else {
-      this.worker.postMessage({ positioning, nodes: this.nodes, rootRadius: this.rootRadius, center: this.center, links: this.links, hidden: false })
+      this.worker.postMessage({ positioning: 1, nodes: this.nodes, rootRadius, centerX, centerY, links: this.links, hidden: false })
     }
   }
 
   magnify = () => {
-    const { selectedPetalID } = this.props
+    const { selectedPetalID,
+      dimensions: {
+        rootRadius, centerX, centerY
+      } } = this.props
     const selectedPetal = this.nodes.find(node => node.id === selectedPetalID)
     const neighboursID = []
     const neighbours = []
@@ -296,16 +242,16 @@ class FlowerRenderer extends React.Component {
     this.nodes.forEach((node, i) => {
       if (this.ref[i]) {
         const zoom = (node.zoom) ? node.zoom : 1
-        this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px) scale(${zoom * node.radiusScale})`
+        this.ref[i].style.transform = `translate(${node.x - rootRadius}px, ${node.y - rootRadius}px) scale(${zoom * node.radiusScale})`
       }
     })
 
-    this.xTrans = selectedPetal.x - this.center[0]
-    this.yTrans = selectedPetal.y - this.center[1]
+    this.xTrans = selectedPetal.x - centerX
+    this.yTrans = selectedPetal.y - centerY
     this.refs.petals.style.transform = `translate(${-this.xTrans}px, ${-this.yTrans}px)`
 
     setTimeout(() => {
-      this.worker.postMessage({ positioning: 1, nodes: this.nodes, rootRadius: this.rootRadius, center: this.center, links: this.links })
+      this.worker.postMessage({ positioning: 1, nodes: this.nodes, rootRadius, centerX, centerY, links: this.links, hidden: false })
     }, MAGNIFY_SPEED)
 
     const { divNodes } = this.state
@@ -323,12 +269,12 @@ class FlowerRenderer extends React.Component {
   }
 
   unmagnify = () => {
-    // console.log(this.originalNodes, this.nodes)
+    const { dimensions: { rootRadius } } = this.props
     if (this.originalNodes[0].id === this.nodes[0].id) {
       this.originalNodes.forEach((node, i) => {
         if (this.ref[i]) {
           const zoom = (node.zoom) ? node.zoom : 1
-          this.ref[i].style.transform = `translate(${node.x - this.rootRadius}px, ${node.y - this.rootRadius}px) scale(${zoom * node.radiusScale})`
+          this.ref[i].style.transform = `translate(${node.x - rootRadius}px, ${node.y - rootRadius}px) scale(${zoom * node.radiusScale})`
         }
       })
       this.nodes = this.originalNodes
@@ -361,8 +307,7 @@ class FlowerRenderer extends React.Component {
   }
 
   render () {
-    const { selectedPetalID, rootVideo, selectPetal, rootNode, hidePetals } = this.props
-    const { width, height } = this.state
+    const { selectedPetalID, rootVideo, selectPetal, rootNode, globals, dimensions } = this.props
     const { divNodes } = this.state
 
     return [
@@ -376,13 +321,8 @@ class FlowerRenderer extends React.Component {
           transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
         }}
       >
-        <svg
-          key={'mainSVG'}
-          style={{ position: 'absolute', top: `-${Math.floor(height * 0.5)}px`, left: `-${Math.floor(width * 0.5)}px`, fill: '#979ca6' }}
-          width={width * 2}
-          height={height * 2}
-          ref={(ref) => { this.svg = ref }}
-          onClick={() => selectPetal()}
+        <Axes
+          key={'axes'}
         />
         {divNodes.map((node, i) =>
           <div
@@ -391,22 +331,24 @@ class FlowerRenderer extends React.Component {
             className={style.petal}
             style={{
               transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`,
-              opacity: (hidePetals && !(node.id === rootNode)) ? 0 : 1,
+              visibility: (((node.id !== rootNode) && globals.addNodeRoutineRunning) ||
+              ((node.id === rootNode) && !globals.nodeGetsPositioned && globals.addNodeRoutineRunning)) ? 'hidden' : 'visible',
               zIndex: ((node.id === selectedPetalID) || node.id === rootNode) ? 1 : ''
             }}
           >
             <Petal
-              r={this.rootRadius}
+              r={dimensions.rootRadius}
               selectPetal={selectPetal}
               id={node.id}
               isSelectedPetal={(node.id === selectedPetalID) || (!selectedPetalID && node.id === rootNode)}
               isRootNode={node.id === rootNode}
               zoom={node.zoom}
-              flavor={(node.targetNode) ? node.targetNode.type : 'neutral'}
+              flavor={(node.targetNode) ? node.flavor : 'neutral'}
               color={node.color}
               setCurrentTime={this.setCurrentTime}
               video={(node.targetNode) ? node.targetNode.video : rootVideo}
-              petalHidden={hidePetals}
+              petalHidden={globals.addNodeRoutineRunning}
+              current
             />
           </div>
         )}
@@ -423,4 +365,9 @@ FlowerRenderer.propTypes = {
   useWebWorker: PropTypes.bool
 }
 
-export default FlowerRenderer
+function mapStateToProps (state) {
+  const { globals, dimensions } = state
+  return { globals, dimensions }
+}
+
+export default connect(mapStateToProps)(FlowerRenderer)

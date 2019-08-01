@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { listFlowers } from '../../state/actions/flowerList'
+import { listFlowers } from '../../state/flowerList/actions'
 
 import style from './Navigation.module.css'
 

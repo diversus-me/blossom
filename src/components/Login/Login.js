@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { requestLoginLink } from '../../state/actions/session'
+import { requestLoginLink } from '../../state/session/actions'
 
 import style from './Login.module.css'
 

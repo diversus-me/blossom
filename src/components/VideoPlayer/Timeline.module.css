@@ -54,7 +54,15 @@
     user-select: none;
     text-align: center;
     pointer-events: auto;
-    /* pointer-events: none; */
+}
+
+.handle {
+    position: absolute;
+    top: 0;
+    transform-origin: 50% 50%;
+    user-select: none;
+    text-align: center;
+    pointer-events: auto;
 }
 
 /* .fullscreen {

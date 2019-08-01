@@ -1,14 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { MdAdd } from 'react-icons/md'
 
-import style from './FloatingButton.module.css'
+import classNames from './FloatingButton.module.css'
 
 function FloatingButton (props) {
-  const { onClickCallback, styling } = props
+  const { style, children, onClick } = props
   return (
-    <div style={styling} className={style.button} onClick={onClickCallback}>
-      <MdAdd size={'25px'} color='white' />
+    <div
+      style={style}
+      className={classNames.button}
+      onClick={onClick}
+    >
+      {children}
     </div>
   )
 }

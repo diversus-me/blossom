@@ -1,14 +1,14 @@
 import React from 'react'
 import classNames from 'classnames'
-
 import { toast } from 'react-toastify'
 import getFileTypeExtension from '@uppy/utils/lib/getFileTypeExtension'
 import { TiMediaRecord, TiMediaStop } from 'react-icons/ti'
 
-import style from './WebRecorder.module.css'
 import VideoPlayer from '../VideoPlayer/VideoPlayer'
 
-/* Function copied from uppy */
+import style from './WebRecorder.module.css'
+
+/* Function copied from @uppy/webcam */
 function getMediaDevices () {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     return navigator.mediaDevices
@@ -53,6 +53,10 @@ class WebRecorder extends React.Component {
       })
   }
 
+  componentWillUnmount () {
+    this.unregister()
+  }
+
   record = () => {
     this.recorder = new MediaRecorder(this.stream)
     this.recordingChunks = []
@@ -64,6 +68,19 @@ class WebRecorder extends React.Component {
     this.setState({
       recording: true
     })
+  }
+
+  unregister = () => {
+    this.recordingChunks = null
+    this.recorder = null
+    if (this.stream) {
+      this.stream.getAudioTracks().forEach((track) => {
+        track.stop()
+      })
+      this.stream.getVideoTracks().forEach((track) => {
+        track.stop()
+      })
+    }
   }
 
   stopRecord = () => {
@@ -80,7 +97,7 @@ class WebRecorder extends React.Component {
       .then((file) => {
         this.videoFile = file
         this.webcamPreview.srcObject = undefined
-        this.props.recorderFinished(this.file)
+        this.props.recorderFinished(file)
         this.setState({
           recording: false,
           finished: true,
@@ -88,11 +105,9 @@ class WebRecorder extends React.Component {
         })
       })
       .then(() => {
-        this.recordingChunks = null
-        this.recorder = null
+        this.unregister()
       }, (error) => {
-        this.recordingChunks = null
-        this.recorder = null
+        this.unregister()
         toast.error(error.message)
       })
   }
@@ -120,39 +135,49 @@ class WebRecorder extends React.Component {
     const { recorderReady, recording, finished, videoURL } = this.state
     const { size, color, showControls } = this.props
 
+    // TODO: issues with Timeline size due to required sizing of enclosing box
+    const r = Math.floor(size * 0.5)
+
     return [
       <div
         className={style.videoContainer}
         key='video'
         style={{
-          width: `${size}px`,
-          height: `${size}px`
+          width: `${(r * 2) - 8}px`,
+          height: `${(r * 2) - 8}px`
         }}
       >
         <video
           key='preview'
           height='100%'
           autoPlay
+          muted
           className={style.video}
           loop
           ref={(ref) => { this.webcamPreview = ref }}
         />
       </div>,
-      <span key='webcamPlayerContainer'>
+      <div
+        key='webcamPlayerContainer'
+        style={{
+          width: `${(r * 2) - 2}px`,
+          height: `${(r * 2) - 2}px`
+        }}
+      >
         {finished &&
           <VideoPlayer
             key='webcamPlayer'
             url={videoURL}
             color={color}
-            r={Math.ceil(size * 0.5)}
+            r={r}
             isSelectedPetal={showControls}
-            isPetal
+            isPetal={!showControls}
             wasSelected
             simple
             shouldUpdate
           />
         }
-      </span>,
+      </div>,
       <span key='controls'>
         {recorderReady &&
           [

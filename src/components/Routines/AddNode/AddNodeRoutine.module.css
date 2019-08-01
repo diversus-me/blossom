@@ -5,3 +5,58 @@
     -webkit-backface-visibility: hidden;
     transform: translate3d(0, 0, 0); */
 }
+
+.title {
+    display: block;
+    background: rgba(0, 0, 0, 0);
+    color: black;
+    font-size: 35px;
+    font-weight: bold;
+    border: none;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+.phase {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.phaseTitle {
+    padding: 20px 30px;
+    transform: translateY(-50%);
+}
+
+.description {
+    display: block;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0);
+    color: black;
+    border: none;
+}
+
+.title::placeholder {
+    color: grey;
+}
+
+.description::placeholder {
+    color: grey;
+}
+
+.description:focus, .title:focus{
+    outline: none;
+}
+
+.inputContainer {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    /* left: 200px; */
+
+}

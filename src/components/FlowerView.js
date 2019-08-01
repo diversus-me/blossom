@@ -2,21 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { FiX } from 'react-icons/fi'
-import { MdEdit, MdClear } from 'react-icons/md'
+import { MdEdit, MdClear, MdAdd, MdSlowMotionVideo, MdVideoCall, MdKeyboardArrowLeft } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 import { toast } from 'react-toastify'
+import { Fab, Action } from 'react-tiny-fab'
+import 'react-tiny-fab/dist/styles.min.css'
 
-import { getFlowerData } from '../state/actions/flowerData'
+import { getFlowerData } from '../state/flowerData/actions'
+import { setNodeRoutineRunning } from '../state/globals/actions'
 
 import FlowerRenderer from './Flower/FlowerRenderer'
-
 import Overlay from './UI/Overlay'
 import FloatingButton from './UI/FloatingButton'
-import ShareButton from './UI/ShareButton'
-import SharePanel from './UI/SharePanel'
-
+import Share from './Share/Share'
 import EditNodeFrom from './Forms/EditNodeForm'
 import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
 
@@ -29,13 +28,14 @@ class FlowerView extends React.Component {
     const parsedQuery = queryString.parse(history.location.search)
 
     this.state = {
-      settingsVisibility: false,
       selectedPetalID: parseInt(parsedQuery.s),
       overlayVisible: false,
       currentTime: 0,
       currentProgress: 0,
       showShare: false,
-      editNodeVisibility: false
+      editNodeVisibility: false,
+      showHandles: false,
+      addNodeType: ''
     }
 
     this.currentTime = 0
@@ -73,6 +73,10 @@ class FlowerView extends React.Component {
     if (!data[id]) {
       this.props.getFlowerData(id)
     }
+  }
+
+  componentWillUnmount () {
+    this.props.setNodeRoutineRunning(false)
   }
 
   toggleEditNode = (e) => {
@@ -121,9 +125,9 @@ class FlowerView extends React.Component {
     this.currentProgress = progress
   }
 
-  toggleSettings = () => {
+  setHandles = (show) => {
     this.setState({
-      settingsVisibility: !this.state.settingsVisibility
+      showHandles: show
     })
   }
 
@@ -146,9 +150,11 @@ class FlowerView extends React.Component {
     }
   }
 
-  toggleAddNodeOverlay = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
+  toggleAddNodeOverlay = () => {
+    // e.stopPropagation()
+    // e.preventDefault()
+
+    this.props.setNodeRoutineRunning(!this.state.overlayVisible)
 
     this.setState({
       currentTime: this.currentTime,
@@ -165,8 +171,8 @@ class FlowerView extends React.Component {
   }
 
   render () {
-    const { settings, history, id, flowerData, session } = this.props
-    const { editNodeVisibility, currentProgress, overlayVisible, currentTime } = this.state
+    const { history, id, flowerData, session } = this.props
+    const { editNodeVisibility, currentProgress, overlayVisible, currentTime, addNodePos } = this.state
     const data = flowerData.data[id]
 
     let selectedPetalID = queryString.parse(history.location.search).s
@@ -181,63 +187,14 @@ class FlowerView extends React.Component {
 
     return (
       <div className={style.container}>
-        <div className={style.navigation}>
-          <Link to='/'>
-            <div className={style.close}>
-              <FiX size='2em' color='#777' />
-            </div>
-          </Link>
-          {/* <div
-            className={style.settings}
-            onClick={(e) => this.toggleSettings(e)}
-          >
-            <GoSettings size='2em' color='#777' />
-          </div> */}
-          {data && data.finished &&
-          <span>
+        <div className={style.outerClickContainer} onClick={() => this.selectPetal()} />
+        {data && data.finished &&
+          <div className={style.titleContainer}>
             <h2 className={style.title}>{data.data.title}</h2>
-            <p className={style.subtitle}>{data.data.connections.length} Petals</p>
-          </span>
-          }
-          {/* {this.state.settingsVisibility &&
-          <Settings
-            toggle={this.toggleSettings}
-          />
-          } */}
-          <SharePanel
-            title={data && data.finished && data.data.title}
-            styling={this.state.showShare ? {} : { display: 'none' }}
-          />
-          <ShareButton
-            onClickCallback={() => { this.setState({ showShare: !this.state.showShare }) }}
-          />
-          {session.authenticated &&
-          <FloatingButton
-            onClickCallback={this.toggleAddNodeOverlay}
-          />
-          }
-          {session.authenticated && data && data.data && data.data.connections && overlayVisible &&
-          // <Overlay
-          //   visibility={overlayVisible && false}
-          //   onOuterClick={this.toggleAddNodeOverlay}
-          // >
-          //   <AddNodeForm
-          //     id={id}
-          //     rootDuration={data.data.video.duration}
-          //     currentTime={currentTime}
-          //     visibility={overlayVisible}
-          //   />
-          // </Overlay>
-          <AddNodeRoutine
-            id={id}
-            rootDuration={data.data.video.duration}
-            currentTime={currentTime}
-            currentProgress={currentProgress}
-          />
-          }
-        </div>
-        {/* {&& data.data && selectedPetalID && selectedPetalID !== data.data.id &&
-           (session.role === 'admin' || session.id === data.data.connections[selectedPetalID].user.id)} */}
+            {/* <p className={style.subtitle}>{data.data.connections.length} Petals</p> */}
+          </div>
+        }
+        <Share />
         {session.authenticated && data && data.data && selectedPetalID && selectedPetalID !== data.data.id &&
            (session.role === 'admin' || session.id === selectedPetal.user.id) &&
           [
@@ -275,6 +232,81 @@ class FlowerView extends React.Component {
             </Overlay>
           ]
         }
+        {session.authenticated && data && data.data && data.data.connections && overlayVisible &&
+        <AddNodeRoutine
+          id={id}
+          rootDuration={data.data.video.duration}
+          currentTime={currentTime}
+          currentProgress={currentProgress}
+          setHandles={this.setHandles}
+        />
+        }
+        <div>
+          {session.authenticated && !overlayVisible &&
+          <Fab
+            mainButtonStyles={{
+              width: '45px',
+              height: '45px',
+              background: '#f64f59'
+            }}
+            position={{
+              bottom: -6, right: -6
+            }}
+            icon={<MdAdd size={'25px'} />}
+            showTitle
+          >
+            <Action
+              text='Record a Video'
+              style={{
+                width: '45px',
+                height: '45px',
+                marginRight: 0,
+                background: 'rgb(206, 89, 149)'
+              }}
+              onClick={this.toggleAddNodeOverlay}
+            >
+              <MdVideoCall
+                size={'20px'}
+              />
+            </Action>
+            <Action
+              style={{
+                width: '45px',
+                height: '45px',
+                marginRight: 0,
+                background: '#c471ed'
+              }}
+              text='Link an existing Video'
+            // onClick={}
+            >
+              <MdSlowMotionVideo
+                size={'20px'}
+              />
+            </Action>
+          </Fab>
+          }
+          {overlayVisible &&
+          <FloatingButton
+            onClick={() => {
+              this.props.setNodeRoutineRunning(false)
+              this.setState({ overlayVisible: false })
+            }}
+            style={{
+              background: 'red'
+            }}
+          >
+            <MdClear
+              size={25}
+              color={'white'}
+            />
+          </FloatingButton>
+          }
+          <Link to='/'>
+            <div className={style.close}>
+              <MdKeyboardArrowLeft size='2em' color='#777' />
+            </div>
+          </Link>
+        </div>
         <div style={{ transform: '', position: 'relative' }}>
           {data && data.data && data.data.connections &&
           <FlowerRenderer
@@ -287,9 +319,9 @@ class FlowerView extends React.Component {
             selectedPetalID={selectedPetalID}
             min={data.data.min}
             max={data.data.max}
-            settings={settings}
             sorted={data.data.sorted}
             hidePetals={overlayVisible}
+            addNodePos={addNodePos}
           />
           }
         </div>
@@ -303,12 +335,12 @@ FlowerView.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const { settings, flowerData, session } = state
-  return { settings, flowerData, session }
+  const { flowerData, session } = state
+  return { flowerData, session }
 }
 
 const mapDispatchToProps = {
-  getFlowerData
+  getFlowerData, setNodeRoutineRunning
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FlowerView))

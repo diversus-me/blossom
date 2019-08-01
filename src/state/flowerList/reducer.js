@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { ADD_FLOWER_ERROR, ADD_FLOWER_LOADING, ADD_FLOWER_SUCCESS,
-  LIST_FLOWER_LOADING, LIST_FLOWER_ERROR, LIST_FLOWER_SUCCESS } from '../actions/flowerList'
+  LIST_FLOWER_LOADING, LIST_FLOWER_ERROR, LIST_FLOWER_SUCCESS } from './actions'
 
 const initialState = {
   list: [],

@@ -1,24 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { IoIosCheckmark } from 'react-icons/io'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
+import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
 
 import WebRecorder from '../WebRecorder'
-import Timeline from '../../VideoPlayer/Timeline'
+import FlavorSelector from './FlavorSelector'
+import FloatingButton from '../../UI/FloatingButton'
 
 import style from './AddNodeRoutine.module.css'
-import FlavorSelector from './FlavorSelector'
+
+const PHASES = [
+  { name: 'RECORD_VIDEO', title: 'Record a video.' },
+  { name: 'SELECT_FLAVOR', title: 'Select a flavor.' },
+  { name: 'ADD_META', title: 'Provide additional information.' },
+  { name: 'POSITION', title: 'Position your answer.' }
+]
 
 class AddNodeRoutine extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       angle: (props.currentTime / props.rootDuration) * 360,
-      recorderFinished: false,
-      flavorSelected: false,
       seeking: false,
       desiredValue: -1,
-      url: ''
+      uploadUrl: '',
+      phase: 0,
+      animationsFinished: false
     }
 
     fetch(
@@ -34,34 +44,65 @@ class AddNodeRoutine extends React.Component {
         }
       })
       .then((json) => {
-        this.setState({ url: json.url })
+        this.setState({ uploadUrl: json.url })
       })
       .catch((error) => { console.log(error) })
+  }
+
+  componentWillUnmount () {
+    this.props.nodeGetsPositioned(false)
+  }
+
+  nextPhase = () => {
+    const { phase } = this.state
+    const nextPhase = phase + 1
+    if (nextPhase === 3) {
+      this.props.nodeGetsPositioned(true)
+      this.setState({
+        phase: nextPhase
+      }, () => {
+        setTimeout(() => {
+          this.setState({
+            animationsFinished: true
+          })
+        }, 500)
+      })
+    } else {
+      this.setState({
+        phase: nextPhase
+      })
+    }
   }
 
   recorderFinished = (videoFile) => {
     this.videoFile = videoFile
     fetch(
-      this.state.url,
+      this.state.uploadUrl,
       {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/video'
+          'Content-Type': videoFile.type,
+          headers: { 'Content-Type': 'video/*', 'x-amz-acl': 'public-read' },
+          'Access-Control-Request-Headers': 'content-type'
         },
         file: videoFile
       }
     ).then((response) => { console.log(response) })
     // .catch((error) => { console.log(error) })
-    this.setState({
-      recorderFinished: true
-    })
+    this.nextPhase()
   }
 
   flavorSelected = (flavor) => {
     this.flavor = flavor
+    this.nextPhase()
     this.setState({
       flavorSelected: true
     })
+  }
+
+  metaInformationSet = () => {
+    this.nextPhase()
+    this.props.nodeGetsPositioned(true)
   }
 
   onScrubStart = (e) => {
@@ -87,26 +128,57 @@ class AddNodeRoutine extends React.Component {
   }
 
   onScrubEnd = e => {
-    this.setState({
-      seeking: false
-    })
+    if (this.state.seeking) {
+      this.setState({
+        seeking: false
+      })
+      this.props.setNewNodePosition(this.state.desiredValue)
+    }
   }
 
   render () {
-    const { recorderFinished, flavorSelected, desiredValue, seeking } = this.state
-    const { currentProgress } = this.props
+    const { desiredValue, phase, animationsFinished } = this.state
+    const { currentProgress, dimensions } = this.props
     const angle = ((desiredValue !== -1) ? desiredValue : currentProgress) * 360
-    const width = window.innerWidth
-    const height = window.innerHeight
-    const center = [Math.floor(width * 0.5), Math.floor(height * 0.5)]
-    const maxLength = (width < height) ? width : height
-    const rootRadius = Math.floor(maxLength * 0.45 * 0.5)
-    const size = Math.floor(rootRadius)
+
+    let translateX
+    let translateY
+    let scale
+    switch (phase) {
+      case 2:
+        translateX = dimensions.centerX
+        translateY = dimensions.centerY - 0.3 * dimensions.centerY
+        scale = 0.8
+        break
+      case 3:
+        translateX = getCirclePosX(dimensions.rootRadius + (dimensions.rootRadius * 0.5), angle, dimensions.centerX)
+        translateY = getCirclePosY(dimensions.rootRadius + (dimensions.rootRadius * 0.5), angle, dimensions.centerY)
+        scale = 0.5
+        break
+      default:
+        translateX = dimensions.centerX
+        translateY = dimensions.centerY
+        scale = 1
+    }
+
+    let titlePositionY = (translateY - dimensions.rootSize) * 0.7
 
     return [
       <div
+        className={style.phase}
         style={{
-          transform: `translate(${getCirclePosX(rootRadius + (size * 0.5), angle, center[0])}px, ${getCirclePosY(rootRadius + (size * 0.5), angle, center[1])}px)`,
+          top: (phase === 3 && (angle > 45 && angle < 315)) ? '6%' : '',
+          bottom: (phase === 3 && (angle < 45 || angle > 315)) ? '6%' : '',
+          transform: (phase !== 3) ? `translateY(${(titlePositionY > 25) ? titlePositionY : 25}px)` : ''
+        }}
+      >
+        <h2 className={style.phaseTitle}>{PHASES[phase].title}</h2>
+      </div>,
+      <div
+        key='container'
+        style={{
+          transform: `translate(${translateX}px, ${translateY}px)`,
+          transition: (animationsFinished) ? 'none' : 'transform 400ms ease-out',
           position: 'absolute',
           top: 0
         }}
@@ -114,42 +186,55 @@ class AddNodeRoutine extends React.Component {
         <div
           className={style.petal}
           style={{
-            transform: `translate(-50%, -50%)`,
-            width: `${size}px`,
-            height: `${size}px`
+            transform: `translate(-50%, -50%) scale(${scale})`,
+            transition: 'transform 400ms ease-out',
+            width: `${dimensions.rootSize}px`,
+            height: `${dimensions.rootSize}px`
           }}
-          onMouseDown={(flavorSelected) ? this.onScrubStart : () => {}}
+          onMouseDown={(phase === 3) ? this.onScrubStart : () => {}}
           onMouseMove={this.onScrub}
-          onMouseUp={(flavorSelected) ? this.onScrubEnd : () => {}}
-          onMouseLeave={(flavorSelected) ? this.onScrubEnd : () => {}}
+          onMouseUp={(phase === 3) ? this.onScrubEnd : () => {}}
+          onMouseLeave={(phase === 3) ? this.onScrubEnd : () => {}}
           ref={(ref) => { this.container = ref }}
         >
           <WebRecorder
-            size={size}
+            size={dimensions.rootSize}
             recorderFinished={this.recorderFinished}
             color={'grey'}
-            showControls={!flavorSelected}
+            showControls={phase === 1 || phase === 2}
           />
         </div>
-        {recorderFinished && !flavorSelected &&
+        {phase === 1 &&
           <FlavorSelector
-            size={size}
+            size={dimensions.rootSize}
             flavorSelected={this.flavorSelected}
             angle={angle}
           />
         }
       </div>,
-      <div style={{ position: 'absolute', top: center[1], left: center[0], width: `${rootRadius * 2}px`, height: `${rootRadius * 2}px`, transform: 'translate(-50%, -50%)', zIndex: 200 }}>
-        <Timeline
-          key='timeline'
-          round r={rootRadius}
-          color={'red'}
-          played={20}
-          loaded={0}
-          seekTo={() => {}}
-          duration={100}
-          playedSeconds={0}
-        />
+      <div>
+        {phase === 2 &&
+        <div className={style.inputContainer} style={{ top: `${(dimensions.centerY * 1.2)}px` }}>
+          <input className={style.title} type='text' placeholder='Add a Title' />
+          <textarea className={style.description} type='text' cols='40' rows='5' placeholder='Add a Description' />
+        </div>
+        }
+        {true &&
+        <FloatingButton
+          // className={style.icon}
+          style={{
+            right: '75px',
+            background: 'green'
+          }}
+          onClick={() => { this.nextPhase() }}
+        >
+          <IoIosCheckmark
+            size={25}
+            color={'white'}
+          />
+          {/* Next Step */}
+        </FloatingButton>
+        }
       </div>
     ]
   }
@@ -168,4 +253,13 @@ AddNodeRoutine.propTypes = {
   currentProgress: PropTypes.number
 }
 
-export default AddNodeRoutine
+function mapStateToProps (state) {
+  const { dimensions } = state
+  return { dimensions }
+}
+
+const mapDispatchToProps = {
+  nodeGetsPositioned, setNewNodePosition
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddNodeRoutine)

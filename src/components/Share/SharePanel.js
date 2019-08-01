@@ -15,7 +15,7 @@ import {
   TelegramIcon,
   WhatsappIcon,
   RedditIcon,
-  EmailIcon,
+  EmailIcon
 } from 'react-share'
 
 import style from './SharePanel.module.css'
@@ -33,7 +33,7 @@ class SharePanel extends React.Component {
           className={style.shareButton}
         >
           <FacebookIcon
-            size={32}
+            size={'100%'}
             round />
         </FacebookShareButton>
 
@@ -43,7 +43,7 @@ class SharePanel extends React.Component {
           className={style.shareButton}
         >
           <TwitterIcon
-            size={32}
+            size={'100%'}
             round />
         </TwitterShareButton>
 
@@ -54,7 +54,7 @@ class SharePanel extends React.Component {
           className={style.shareButton}
         >
           <LinkedinIcon
-            size={32}
+            size={'100%'}
             round />
         </LinkedinShareButton>
 
@@ -63,16 +63,16 @@ class SharePanel extends React.Component {
           title={title}
           className={style.shareButton}
         >
-          <TelegramIcon size={32} round />
+          <TelegramIcon size={'100%'} round />
         </TelegramShareButton>
 
         <WhatsappShareButton
           url={shareUrl}
           title={title}
-          separator=":: "
+          separator=':: '
           className={style.shareButton}
         >
-          <WhatsappIcon size={32} round />
+          <WhatsappIcon size={'100%'}round />
         </WhatsappShareButton>
 
         <RedditShareButton
@@ -83,18 +83,18 @@ class SharePanel extends React.Component {
           className={style.shareButton}
         >
           <RedditIcon
-            size={32}
+            size={'100%'}
             round />
         </RedditShareButton>
 
         <EmailShareButton
           url={shareUrl}
           subject={title}
-          body="Hey Check out this cool video"
+          body='Hey Check out this cool video'
           className={style.shareButton}
         >
           <EmailIcon
-            size={32}
+            size={'100%'}
             round />
         </EmailShareButton>
       </div>

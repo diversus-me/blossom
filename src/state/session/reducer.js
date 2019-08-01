@@ -1,6 +1,6 @@
 import { LOGIN_LOADING, LOGIN_ERROR, LOGIN_SUCCESS,
   LOGIN_LINK_LOADING, LOGIN_LINK_SUCCESS, LOGIN_LINK_ERROR,
-  LOGOUT_ERROR, LOGOUT_LOADING, LOGOUT_SUCCESS } from '../actions/session'
+  LOGOUT_ERROR, LOGOUT_LOADING, LOGOUT_SUCCESS } from './actions'
 import { toast } from 'react-toastify'
 
 const initialState = {

@@ -10,7 +10,7 @@ import '@uppy/dashboard/dist/style.css'
 import '@uppy/webcam/dist/style.css'
 
 import style from './Forms.module.css'
-import { addFlower } from '../../state/actions/flowerList'
+import { addFlower } from '../../state/flowerList/actions'
 
 const uppy = Uppy({
   meta: { type: 'avatar' },

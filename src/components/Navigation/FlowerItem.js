@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { MdEdit, MdClear } from 'react-icons/md'
 import { toast } from 'react-toastify'
 
-import { listFlowers } from '../../state/actions/flowerList'
+import { listFlowers } from '../../state/flowerList/actions'
 
 import RandomUserImage from '../Dummies/RandomUserImage'
 import Overlay from '../UI/Overlay'

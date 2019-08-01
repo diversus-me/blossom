@@ -15,7 +15,9 @@ class VideoPlayer extends React.Component {
     progress: 0,
     played: 0,
     loaded: 0,
-    playedSeconds: 0
+    playedSeconds: 0,
+    handleLeftPos: 0,
+    handleRightPos: 0
   }
 
   componentDidMount () {
@@ -39,6 +41,13 @@ class VideoPlayer extends React.Component {
 
   componentWillUnmount () {
     screenfull.off()
+  }
+
+  shouldComponentUpdate (nextProps) {
+    if (nextProps.shouldReceiveProgress && (nextProps.progress !== this.props.progress)) {
+      this.seekTo(nextProps.progress)
+    }
+    return true
   }
 
   onStart = () => {
@@ -114,7 +123,7 @@ class VideoPlayer extends React.Component {
 
   render () {
     const { playing, isFullscreen, played, loaded, playedSeconds, duration } = this.state
-    const { color, r, url, loop, start, end, simple, isPetal, isSelectedPetal, wasSelected, hideControls } = this.props
+    const { color, r, url, loop, start, end, simple, isPetal, isSelectedPetal, wasSelected, hideControls, showHandles, isIFrame } = this.props
 
     return [
       <div
@@ -154,9 +163,10 @@ class VideoPlayer extends React.Component {
               }
             }
           }}
+          // style={{ transform: 'translateX(-50%)' }}
           onEnded={this.onEnded}
-          height={(!isFullscreen) ? '100%' : '100%'}
-          width={(!isFullscreen) ? 'auto' : '100%'}
+          height='100%'
+          width={(isIFrame) ? '100%' : 'auto'}
           className={style.video}
           onStart={this.onStart}
         />
@@ -182,7 +192,7 @@ class VideoPlayer extends React.Component {
           playing={playing}
           color={color}
           r={r}
-          clickPlay={this.togglePlay}
+          togglePlay={this.togglePlay}
           toggleFullscreen={this.toggleFullscreen}
           played={played}
           playedSeconds={playedSeconds}
@@ -191,6 +201,7 @@ class VideoPlayer extends React.Component {
           duration={duration}
           simple={simple}
           isPetal={isPetal}
+          showHandles={showHandles}
         />
         }
       </div>
@@ -201,7 +212,8 @@ class VideoPlayer extends React.Component {
 VideoPlayer.defaultProps = {
   simple: false,
   isPetal: false,
-  hideControls: false
+  hideControls: false,
+  isIFrame: false
 }
 
 export default VideoPlayer
