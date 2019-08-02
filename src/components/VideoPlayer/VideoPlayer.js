@@ -166,7 +166,7 @@ class VideoPlayer extends React.Component {
           // style={{ transform: 'translateX(-50%)' }}
           onEnded={this.onEnded}
           height='100%'
-          width={(isIFrame) ? '100%' : 'auto'}
+          width={(isFullscreen) ? 'auto' : '200%'}
           className={style.video}
           onStart={this.onStart}
         />

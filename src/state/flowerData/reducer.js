@@ -44,7 +44,8 @@ function parseData (data, connections) {
       title: connection.title,
       x: 0,
       y: 0,
-      linkAngle: ((connection.sourceIn + (connection.sourceOut - connection.sourceIn)) / data.video.duration) * 360
+      linkAngle: ((connection.sourceIn + (connection.sourceOut - connection.sourceIn)) / data.video.duration) * 360,
+      ...connection.targetNode
     }
   })
 

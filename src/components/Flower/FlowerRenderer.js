@@ -307,7 +307,7 @@ class FlowerRenderer extends React.Component {
   }
 
   render () {
-    const { selectedPetalID, rootVideo, selectPetal, rootNode, globals, dimensions } = this.props
+    const { selectedPetalID, rootVideo, rootNode, globals, dimensions } = this.props
     const { divNodes } = this.state
 
     return [
@@ -338,7 +338,7 @@ class FlowerRenderer extends React.Component {
           >
             <Petal
               r={dimensions.rootRadius}
-              selectPetal={selectPetal}
+              node={node}
               id={node.id}
               isSelectedPetal={(node.id === selectedPetalID) || (!selectedPetalID && node.id === rootNode)}
               isRootNode={node.id === rootNode}

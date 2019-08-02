@@ -11,6 +11,7 @@ import 'react-tiny-fab/dist/styles.min.css'
 
 import { getFlowerData } from '../state/flowerData/actions'
 import { setNodeRoutineRunning } from '../state/globals/actions'
+import { selectPetal } from '../state/flower/actions'
 
 import FlowerRenderer from './Flower/FlowerRenderer'
 import Overlay from './UI/Overlay'
@@ -18,6 +19,7 @@ import FloatingButton from './UI/FloatingButton'
 import Share from './Share/Share'
 import EditNodeFrom from './Forms/EditNodeForm'
 import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
+import Title from './FlowerUI/Title'
 
 import style from './FlowerView.module.css'
 
@@ -131,29 +133,7 @@ class FlowerView extends React.Component {
     })
   }
 
-  selectPetal = (id) => {
-    const { history } = this.props
-    const parsed = queryString.parse(history.location.search)
-
-    if (parseInt(parsed.s) !== id) {
-      if (id) {
-        history.push({ search: `s=${id}` })
-        this.setState({
-          selectedPetalID: id
-        })
-      } else {
-        history.push({ search: '' })
-        this.setState({
-          selectedPetalID: id
-        })
-      }
-    }
-  }
-
   toggleAddNodeOverlay = () => {
-    // e.stopPropagation()
-    // e.preventDefault()
-
     this.props.setNodeRoutineRunning(!this.state.overlayVisible)
 
     this.setState({
@@ -171,7 +151,7 @@ class FlowerView extends React.Component {
   }
 
   render () {
-    const { history, id, flowerData, session } = this.props
+    const { history, id, flowerData, session, selectPetal } = this.props
     const { editNodeVisibility, currentProgress, overlayVisible, currentTime, addNodePos } = this.state
     const data = flowerData.data[id]
 
@@ -187,13 +167,10 @@ class FlowerView extends React.Component {
 
     return (
       <div className={style.container}>
-        <div className={style.outerClickContainer} onClick={() => this.selectPetal()} />
-        {data && data.finished &&
-          <div className={style.titleContainer}>
-            <h2 className={style.title}>{data.data.title}</h2>
-            {/* <p className={style.subtitle}>{data.data.connections.length} Petals</p> */}
-          </div>
-        }
+        <div className={style.outerClickContainer} onClick={selectPetal} />
+        <Title
+          rootNode={(data && data.finished) ? data.data : ''}
+        />
         <Share />
         {session.authenticated && data && data.data && selectedPetalID && selectedPetalID !== data.data.id &&
            (session.role === 'admin' || session.id === selectedPetal.user.id) &&
@@ -314,7 +291,6 @@ class FlowerView extends React.Component {
             received={data.data.received}
             rootNode={data.data.id}
             rootVideo={data.data.video}
-            selectPetal={this.selectPetal}
             setCurrentTime={this.setCurrentTime}
             selectedPetalID={selectedPetalID}
             min={data.data.min}
@@ -340,7 +316,7 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = {
-  getFlowerData, setNodeRoutineRunning
+  getFlowerData, setNodeRoutineRunning, selectPetal
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FlowerView))

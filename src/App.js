@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom' // esl
 import { toast } from 'react-toastify'
 import queryString from 'query-string'
 
-import './App.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { login } from './state/session/actions'
@@ -19,8 +18,7 @@ import Login from './components/Login/Login'
 import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
-
-import style from './App.module.css'
+import Frame from './components/Frame'
 
 class App extends Component {
   state = {
@@ -59,28 +57,12 @@ class App extends Component {
   }
 
   render () {
-    const { session, dimensions } = this.props
+    const { session } = this.props
     const { flowerOverlayVisible } = this.state
     return (
       <Route render={({ location }) => (
         <div>
-          <div
-            className={style.colorContainer}
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%'
-            }}
-          />
-          <div
-            className={style.innerContainer}
-            style={{
-              height: `${dimensions.height - 12}px`,
-              top: '6px',
-              left: '6px',
-              width: `${dimensions.width - 12}px`,
-              borderRadius: '25px'
-            }}>
+          <Frame>
             <Switch location={location}>
               <Route path='/' exact component={Navigation} />
               <Route path='/admin' exact component={AdminArea} />
@@ -93,23 +75,23 @@ class App extends Component {
             </Switch>
             <Hub />
             {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
-            <FlowerView
-              id={location.pathname.slice(8)}
-            />
+              <FlowerView
+                id={location.pathname.slice(8)}
+              />
             }
             {!session.authenticated && location.pathname.slice(8) && false &&
-            <h2 style={{
-              textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
-            }}>
+              <h2 style={{
+                textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
+              }}>
               Please log in to see content.
-            </h2>
+              </h2>
             }
             {session.authenticated &&
-            <Route path='/' exact render={() =>
-              <FloatingButton
-                onClickCallback={this.toggleAddFlowerOverlay}
-              />
-            } />
+              <Route path='/' exact render={() =>
+                <FloatingButton
+                  onClickCallback={this.toggleAddFlowerOverlay}
+                />
+              } />
             }
             <Overlay
               visibility={flowerOverlayVisible}
@@ -117,7 +99,7 @@ class App extends Component {
             >
               <AddFlowerForm />
             </Overlay>
-          </div>
+          </Frame>
         </div>
       )} />
     )
@@ -125,8 +107,8 @@ class App extends Component {
 }
 
 function mapStateToProps (state) {
-  const { session, dimensions } = state
-  return { session, dimensions }
+  const { session } = state
+  return { session }
 }
 
 const mapDispatchToProps = {

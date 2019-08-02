@@ -33,41 +33,6 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-.title {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin: 0;
-    color: #555;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-.titleContainer {
-    left: 55px;
-    top: 20px;
-    position: absolute;
-    width: 60%;
-    text-overflow: ellipsis;
-}
-
-@media (max-device-width: 500px) {
-    .title {
-        font-size: 5vw;
-    }
-
-    .titleContainer {
-        left: 12vw;
-        /* top: 8vw; */
-    }
-}
-
-.subtitle {
-    margin-top: 0px;
-    font-size: 0.8em;
-}
-
 .edit {
     position: absolute;
     z-index: 2;

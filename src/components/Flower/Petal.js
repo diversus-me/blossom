@@ -5,11 +5,12 @@ import { connect } from 'react-redux'
 import { IoIosGlasses } from 'react-icons/io'
 import { withRouter } from 'react-router'
 
-import style from './Petal.module.css'
+import { selectPetal } from '../../state/flower/actions'
 
+import { getFlavor } from '../Defaults'
 import VideoPlayer from '../VideoPlayer/VideoPlayer'
 
-import { FLAVORS } from '../Defaults'
+import style from './Petal.module.css'
 
 function getFullVideoURL (url, type) {
   switch (type) {
@@ -59,11 +60,11 @@ class Petal extends React.Component {
   }
 
   handleClick = (event) => {
-    const { id, selectPetal, isRootNode } = this.props
+    const { id, selectPetal, isRootNode, node } = this.props
     if (event.altKey && !isRootNode) {
       this.props.history.push(`/flower/${id}`)
     } else {
-      selectPetal((isRootNode) ? undefined : id)
+      selectPetal((isRootNode) ? undefined : node)
     }
   }
 
@@ -78,9 +79,7 @@ class Petal extends React.Component {
     const { r, isSelectedPetal, zoom, color, isRootNode, video, setCurrentTime, petalHidden, globals, flavor } = this.props
     const { wasSelected } = this.state
 
-    const Flavor = FLAVORS.find((element) => {
-      return element.type === flavor
-    })
+    const Flavor = getFlavor(flavor)
 
     return (
       <div
@@ -160,7 +159,6 @@ Petal.defaultProps = {
 Petal.propTypes = {
   r: PropTypes.number.isRequired,
   id: PropTypes.number.isRequired,
-  selectPetal: PropTypes.func.isRequired,
   isSelectedPetal: PropTypes.bool,
   isRootNode: PropTypes.bool,
   zoom: PropTypes.number,
@@ -171,8 +169,12 @@ Petal.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const { globals } = state
-  return { globals }
+  const { globals, flower } = state
+  return { globals, flower }
 }
 
-export default connect(mapStateToProps)(withRouter(Petal))
+const mapDispatchToProps = {
+  selectPetal
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Petal))

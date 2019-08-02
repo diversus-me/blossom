@@ -49,3 +49,9 @@ export const FLAVORS = [
     icon: IoIosHammer
   }
 ]
+
+export function getFlavor (type) {
+  return FLAVORS.find((element) => {
+    return element.type === type
+  })
+}

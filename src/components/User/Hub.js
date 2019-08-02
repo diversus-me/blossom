@@ -25,7 +25,7 @@ class Hub extends React.Component {
       <div className={style.container} key='icon'>
         <div
           role='navigation'
-          onClick={this.toggleOverlay}
+          // onClick={this.toggleOverlay}
           className={style.iconContainer}
         >
           {session.authenticated &&
