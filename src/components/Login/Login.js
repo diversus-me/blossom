@@ -29,26 +29,30 @@ class Login extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault()
-    this.props.requestLoginLink(this.state.value)
+    const { session } = this.props
+    if (!session.loginLinkLoading && !session.loginLinkSuccess) {
+      this.props.requestLoginLink(this.state.value)
+    }
   }
 
   render () {
     const { value, isMail } = this.state
-    return (
+    return [
+      <div className={style.backgroundContainer} />,
       <div className={style.container}>
-        <h1 className={style.title}>Request a login link.</h1>
+        <img src='/images/diversusIcon.png' className={style.icon} />
         <form onSubmit={this.handleSubmit} className={style.form} autoComplete='on'>
           <input
             className={style.input}
             type='email'
-            placeholder='Email'
+            placeholder='Enter your Email'
             value={value}
             onChange={this.handleChange}
           />
-          <input disabled={!isMail} className={style.submit} type='submit' value='Submit' />
+          <input disabled={!isMail} className={style.submit} type='submit' value='Login' />
         </form>
       </div>
-    )
+    ]
   }
 }
 

@@ -10,7 +10,10 @@ const initialState = {
   error: '',
   name: '',
   role: '',
-  id: ''
+  id: '',
+  loginLinkLoading: false,
+  loginLinkFailed: false,
+  loginLinkSuccess: false
 }
 
 export default function sessionReducer (state = initialState, action) {
@@ -69,13 +72,28 @@ export default function sessionReducer (state = initialState, action) {
         id: ''
       }
     case LOGIN_LINK_LOADING:
-      return state
+      return {
+        ...state,
+        loginLinkLoading: true,
+        loginLinkFailed: false,
+        loginLinkSuccess: false
+      }
     case LOGIN_LINK_SUCCESS:
       toast.success('Email has been sent.')
-      return state
+      return {
+        ...state,
+        loginLinkLoading: false,
+        loginLinkFailed: false,
+        loginLinkSuccess: true
+      }
     case LOGIN_LINK_ERROR:
       toast.error('Something went wrong.')
-      return state
+      return {
+        ...state,
+        loginLinkLoading: false,
+        loginLinkFailed: true,
+        loginLinkSuccess: false
+      }
     default:
       return state
   }

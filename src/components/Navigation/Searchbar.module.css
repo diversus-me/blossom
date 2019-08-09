@@ -1,0 +1,29 @@
+.container {
+  width: 60%;
+  position: fixed;
+  margin: auto;
+  z-index: 1;
+  max-width: 500px;
+}
+
+.input {
+  position: absolute;
+  width: 100%;
+  margin: 10px 20px;
+  height: 40px;
+  font-size: 1em;
+  /* background: none; */
+  border: 1px #242843 solid;
+  border-radius: 10px;
+  padding: 0 15px;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.icon {
+  position: absolute;
+  right: -40px;
+  top: 18px;
+}

@@ -1,20 +1,33 @@
-.circle {
+.backgroundContainer {
+    background-image: url('/images/flowers1_small.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 30px;
-    background: blue;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    z-index: -1;
+    opacity: 0.5;
 }
+
 
 .container {
     position: absolute;
     width: 100%;
-    top: 30%;
+    top: 20%;
 }
 
+.icon {
+    width: 100px;
+    height: 100px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    border-radius:50%;
+    border: 1px solid black;
+}
 .title {
     width: 100%;
     text-align: center;
@@ -23,6 +36,7 @@
 .form {
     display: inline-block;
     width: 100%;
+    margin-top: 100px;
 }
 
 .input {
@@ -30,14 +44,47 @@
     margin: 10px auto;
     padding: 5px;
     font-size: 18px;
-    width: 80%;
-    max-width: 250px;
+    width: 70%;
+    max-width: 400px;
+    border: none;
+    background: none;
+    text-align: center;
+    font-size: 1em;
+    border-bottom: 1px solid #242843;
     /* font-weight: bold; */
+}
+
+.input:focus {
+    outline: none;
 }
 
 .submit {
     display: block;
     margin: 30px auto;
-    font-size: 1.2em;
-    font-weight: bold;
+    padding: 10px 60px;
+    border-radius: 50px;
+    font-size: 0.8em;
+    font-weight: light;
+    color: white;
+    background: #242843;
+    transform: scale(1);
+    transition: transform 100ms ease-out;
+}
+
+.submit:hover {
+    transform: scale(1.05);
+}
+
+.submit:active {
+    transform: scale(0.95);
+}
+
+.submit:disabled {
+    background: #4d516b;
+    color: #BBB;
+    transform: scale(1) !important;
+}
+
+.submit:focus {
+    outline: none;
 }

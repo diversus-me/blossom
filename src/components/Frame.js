@@ -10,10 +10,10 @@ class Frame extends React.Component {
   render () {
     const { children, dimensions, flower } = this.props
     return [
-      <div
-        key='color'
-        className={classNames(style.colorContainer, style.mainColor)}
-      />,
+      // <div
+      //   key='color'
+      //   className={classNames(style.colorContainer, style.mainColor)}
+      // />,
       <span key='flavors'>
         {FLAVORS.map((flavor) =>
           <div

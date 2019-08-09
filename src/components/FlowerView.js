@@ -20,6 +20,7 @@ import Share from './Share/Share'
 import EditNodeFrom from './Forms/EditNodeForm'
 import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
 import Title from './FlowerUI/Title'
+import Frame from './Frame'
 
 import style from './FlowerView.module.css'
 
@@ -167,12 +168,13 @@ class FlowerView extends React.Component {
 
     return (
       <div className={style.container}>
-        <div className={style.outerClickContainer} onClick={selectPetal} />
-        <Title
-          rootNode={(data && data.finished) ? data.data : ''}
-        />
-        <Share />
-        {session.authenticated && data && data.data && selectedPetalID && selectedPetalID !== data.data.id &&
+        <Frame>
+          <div className={style.outerClickContainer} onClick={selectPetal} />
+          <Title
+            rootNode={(data && data.finished) ? data.data : ''}
+          />
+          <Share />
+          {session.authenticated && data && data.data && selectedPetalID && selectedPetalID !== data.data.id &&
            (session.role === 'admin' || session.id === selectedPetal.user.id) &&
           [
             <div
@@ -208,99 +210,100 @@ class FlowerView extends React.Component {
               }
             </Overlay>
           ]
-        }
-        {session.authenticated && data && data.data && data.data.connections && overlayVisible &&
-        <AddNodeRoutine
-          id={id}
-          rootDuration={data.data.video.duration}
-          currentTime={currentTime}
-          currentProgress={currentProgress}
-          setHandles={this.setHandles}
-        />
-        }
-        <div>
-          {session.authenticated && !overlayVisible &&
-          <Fab
-            mainButtonStyles={{
-              width: '45px',
-              height: '45px',
-              background: '#f64f59'
-            }}
-            position={{
-              bottom: -6, right: -6
-            }}
-            icon={<MdAdd size={'25px'} />}
-            showTitle
-          >
-            <Action
-              text='Record a Video'
-              style={{
-                width: '45px',
-                height: '45px',
-                marginRight: 0,
-                background: 'rgb(206, 89, 149)'
-              }}
-              onClick={this.toggleAddNodeOverlay}
-            >
-              <MdVideoCall
-                size={'20px'}
-              />
-            </Action>
-            <Action
-              style={{
-                width: '45px',
-                height: '45px',
-                marginRight: 0,
-                background: '#c471ed'
-              }}
-              text='Link an existing Video'
-            // onClick={}
-            >
-              <MdSlowMotionVideo
-                size={'20px'}
-              />
-            </Action>
-          </Fab>
           }
-          {overlayVisible &&
-          <FloatingButton
-            onClick={() => {
-              this.props.setNodeRoutineRunning(false)
-              this.setState({ overlayVisible: false })
-            }}
-            style={{
-              background: 'red'
-            }}
-          >
-            <MdClear
-              size={25}
-              color={'white'}
-            />
-          </FloatingButton>
-          }
-          <Link to='/'>
-            <div className={style.close}>
-              <MdKeyboardArrowLeft size='2em' color='#777' />
-            </div>
-          </Link>
-        </div>
-        <div style={{ transform: '', position: 'relative' }}>
-          {data && data.data && data.data.connections &&
-          <FlowerRenderer
-            data={data.data.connections}
-            received={data.data.received}
-            rootNode={data.data.id}
-            rootVideo={data.data.video}
-            setCurrentTime={this.setCurrentTime}
-            selectedPetalID={selectedPetalID}
-            min={data.data.min}
-            max={data.data.max}
-            sorted={data.data.sorted}
-            hidePetals={overlayVisible}
-            addNodePos={addNodePos}
+          {session.authenticated && data && data.data && data.data.connections && overlayVisible &&
+          <AddNodeRoutine
+            id={id}
+            rootDuration={data.data.video.duration}
+            currentTime={currentTime}
+            currentProgress={currentProgress}
+            setHandles={this.setHandles}
           />
           }
-        </div>
+          <div>
+            {session.authenticated && !overlayVisible &&
+            <Fab
+              mainButtonStyles={{
+                width: '45px',
+                height: '45px',
+                background: '#f64f59'
+              }}
+              position={{
+                bottom: -6, right: -6
+              }}
+              icon={<MdAdd size={'25px'} />}
+              showTitle
+            >
+              <Action
+                text='Record a Video'
+                style={{
+                  width: '45px',
+                  height: '45px',
+                  marginRight: 0,
+                  background: 'rgb(206, 89, 149)'
+                }}
+                onClick={this.toggleAddNodeOverlay}
+              >
+                <MdVideoCall
+                  size={'20px'}
+                />
+              </Action>
+              <Action
+                style={{
+                  width: '45px',
+                  height: '45px',
+                  marginRight: 0,
+                  background: '#c471ed'
+                }}
+                text='Link an existing Video'
+                // onClick={}
+              >
+                <MdSlowMotionVideo
+                  size={'20px'}
+                />
+              </Action>
+            </Fab>
+            }
+            {overlayVisible &&
+            <FloatingButton
+              onClick={() => {
+                this.props.setNodeRoutineRunning(false)
+                this.setState({ overlayVisible: false })
+              }}
+              style={{
+                background: 'red'
+              }}
+            >
+              <MdClear
+                size={25}
+                color={'white'}
+              />
+            </FloatingButton>
+            }
+            <Link to='/'>
+              <div className={style.close}>
+                <MdKeyboardArrowLeft size='2em' color='#777' />
+              </div>
+            </Link>
+          </div>
+          <div style={{ transform: '', position: 'relative' }}>
+            {data && data.data && data.data.connections &&
+            <FlowerRenderer
+              data={data.data.connections}
+              received={data.data.received}
+              rootNode={data.data.id}
+              rootVideo={data.data.video}
+              setCurrentTime={this.setCurrentTime}
+              selectedPetalID={selectedPetalID}
+              min={data.data.min}
+              max={data.data.max}
+              sorted={data.data.sorted}
+              hidePetals={overlayVisible}
+              addNodePos={addNodePos}
+            />
+            }
+          </div>
+        </Frame>
       </div>
     )
   }
