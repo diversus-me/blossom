@@ -25,7 +25,7 @@ const uppy = Uppy({ autoProceed: false })
 uppy.use(AWS3, {
   limit: 2,
   timeout: 60000,
-  companionUrl: `${process.env.REACT_APP_SERVER_URL}`
+  companionUrl: process.env.REACT_APP_SERVER_URL
 })
 
 class AddNodeRoutine extends React.Component {
@@ -99,7 +99,7 @@ class AddNodeRoutine extends React.Component {
     // ).then((response) => { console.log(response) })
     // .catch((error) => { console.log(error) })
     uppy.addFile({
-      name: videoFile.name, // file name
+      name: 'testfile' + Math.random(), // file name
       type: videoFile.type, // file type
       data: videoFile, // file blob
       source: 'Local', // optional, determines the source of the file, for example, Instagram
