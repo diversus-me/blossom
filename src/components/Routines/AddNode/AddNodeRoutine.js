@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { IoIosCheckmark } from 'react-icons/io'
+import Uppy from '@uppy/core'
+import AWS3 from '@uppy/aws-s3'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
@@ -19,6 +21,13 @@ const PHASES = [
   { name: 'POSITION', title: 'Position your answer.' }
 ]
 
+const uppy = Uppy({ autoProceed: false })
+uppy.use(AWS3, {
+  limit: 2,
+  timeout: 60000,
+  companionUrl: process.env.REACT_APP_SERVER_URL
+})
+
 class AddNodeRoutine extends React.Component {
   constructor (props) {
     super(props)
@@ -31,22 +40,22 @@ class AddNodeRoutine extends React.Component {
       animationsFinished: false
     }
 
-    fetch(
-      `${process.env.REACT_APP_SERVER_URL}/api/uploadLink`,
-      {
-        method: 'GET'
-      })
-      .then((res) => {
-        if (res.ok) {
-          return res.json()
-        } else {
-          throw new Error()
-        }
-      })
-      .then((json) => {
-        this.setState({ uploadUrl: json.url })
-      })
-      .catch((error) => { console.log(error) })
+    // fetch(
+    //   `${process.env.REACT_APP_SERVER_URL}/api/uploadLink`,
+    //   {
+    //     method: 'GET'
+    //   })
+    //   .then((res) => {
+    //     if (res.ok) {
+    //       return res.json()
+    //     } else {
+    //       throw new Error()
+    //     }
+    //   })
+    //   .then((json) => {
+    //     this.setState({ uploadUrl: json.url })
+    //   })
+    //   .catch((error) => { console.log(error) })
   }
 
   componentWillUnmount () {
@@ -76,19 +85,39 @@ class AddNodeRoutine extends React.Component {
 
   recorderFinished = (videoFile) => {
     this.videoFile = videoFile
-    fetch(
-      this.state.uploadUrl,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': videoFile.type,
-          headers: { 'Content-Type': 'video/*', 'x-amz-acl': 'public-read' },
-          'Access-Control-Request-Headers': 'content-type'
-        },
-        file: videoFile
-      }
-    ).then((response) => { console.log(response) })
+    // fetch(
+    //   this.state.uploadUrl,
+    //   {
+    //     method: 'PUT',
+    //     headers: {
+    //       'Content-Type': videoFile.type,
+    //       headers: { 'Content-Type': 'video/*', 'x-amz-acl': 'public-read' },
+    //       'Access-Control-Request-Headers': 'content-type'
+    //     },
+    //     file: videoFile
+    //   }
+    // ).then((response) => { console.log(response) })
     // .catch((error) => { console.log(error) })
+    uppy.addFile({
+      name: 'testfile' + Math.random(), // file name
+      type: videoFile.type, // file type
+      data: videoFile, // file blob
+      source: 'Local', // optional, determines the source of the file, for example, Instagram
+      isRemote: false // optional, set to true if actual file is not in the browser, but on some remote server, for example, when using companion in combination with Instagram
+    })
+
+    uppy.upload().then((result) => {
+      console.info('Successful uploads:', result.successful)
+
+      if (result.failed.length > 0) {
+        console.error('Errors:')
+        result.failed.forEach((file) => {
+          console.error(file.error)
+        })
+      }
+    })
+
+    console.log('finisshed')
     this.nextPhase()
   }
 
