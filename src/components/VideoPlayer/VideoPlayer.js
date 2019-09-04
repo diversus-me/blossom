@@ -21,11 +21,13 @@ class VideoPlayer extends React.Component {
   }
 
   componentDidMount () {
-    screenfull.on('change', () => {
-      this.setState({
-        isFullscreen: screenfull.isFullscreen
+    if (screenfull.enabled) {
+      screenfull.on('change', () => {
+        this.setState({
+          isFullscreen: screenfull.isFullscreen
+        })
       })
-    })
+    }
     this.updateTime()
   }
 
@@ -40,7 +42,9 @@ class VideoPlayer extends React.Component {
   }
 
   componentWillUnmount () {
-    screenfull.off()
+    if (screenfull.enabled) {
+      screenfull.off()
+    }
   }
 
   shouldComponentUpdate (nextProps) {
