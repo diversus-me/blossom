@@ -12,7 +12,7 @@ import { resize } from './state/dimensions/actions'
 
 import FloatingButton from './components/UI/FloatingButton'
 import Overlay from './components/UI/Overlay'
-import AddFlowerForm from './components/Forms/AddFlowerForm'
+// import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
 import Hub from './components/User/Hub'
@@ -97,7 +97,7 @@ class App extends Component {
             visibility={flowerOverlayVisible}
             onOuterClick={this.toggleAddFlowerOverlay}
           >
-            <AddFlowerForm />
+            {/* <AddFlowerForm /> */}
           </Overlay>
         </div>
       )} />

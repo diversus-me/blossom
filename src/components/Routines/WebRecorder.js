@@ -120,9 +120,10 @@ class WebRecorder extends React.Component {
       return Promise.reject(new Error(`Could not retrieve recording: Unsupported media type "${mimeType}"`))
     }
 
-    const name = `${Date.now()}.${fileExtension}`
+    const name = `WebcamofUser${Date.now()}.${fileExtension}`
     const blob = new Blob(this.recordingChunks, { type: mimeType })
     const file = {
+      source: 'Webcam',
       name: name,
       data: new Blob([blob], { type: mimeType }),
       type: mimeType

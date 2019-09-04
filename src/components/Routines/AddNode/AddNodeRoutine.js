@@ -21,12 +21,26 @@ const PHASES = [
   { name: 'POSITION', title: 'Position your answer.' }
 ]
 
-const uppy = Uppy({ autoProceed: false })
+const uppy = Uppy({
+  meta: { type: 'avatar' },
+  restrictions: { maxNumberOfFiles: 1 },
+  autoProceed: true
+})
+
+// uppy.use(Webcam, {
+//   modes: [
+//     'video-audio'
+//   ]
+// })
 uppy.use(AWS3, {
-  limit: 2,
-  timeout: 60000,
   companionUrl: process.env.REACT_APP_SERVER_URL
 })
+// const uppy = Uppy({ autoProceed: false })
+// uppy.use(AWS3, {
+//   limit: 2,
+//   timeout: 60000,
+//   companionUrl: process.env.REACT_APP_SERVER_URL
+// })
 
 class AddNodeRoutine extends React.Component {
   constructor (props) {
@@ -98,13 +112,7 @@ class AddNodeRoutine extends React.Component {
     //   }
     // ).then((response) => { console.log(response) })
     // .catch((error) => { console.log(error) })
-    uppy.addFile({
-      name: 'testfile' + Math.random(), // file name
-      type: videoFile.type, // file type
-      data: videoFile, // file blob
-      source: 'Local', // optional, determines the source of the file, for example, Instagram
-      isRemote: false // optional, set to true if actual file is not in the browser, but on some remote server, for example, when using companion in combination with Instagram
-    })
+    uppy.addFile(videoFile)
 
     uppy.upload().then((result) => {
       console.info('Successful uploads:', result.successful)
