@@ -1,17 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Grid from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid'
 import { requestLoginLink } from '../../state/session/actions'
 
 import style from './Login.module.css'
-import { Paper } from '@material-ui/core';
-import Description from './Description';
-import Input from './Input';
-import SharedPaper from '../Share/SharePaper';
-import Info from './Info';
+import Description from './Description'
+import Input from './Input'
+import SharedPaper from '../Share/SharePaper'
+import Info from './Info'
 
 class Login extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
@@ -27,8 +26,7 @@ class Login extends React.Component {
     }
   }
 
-
-  render() {
+  render () {
     return [
       <div className={style.backgroundContainer} />,
       <div className={style.container}>
@@ -38,14 +36,14 @@ class Login extends React.Component {
           </Grid>
           <Grid item xs={12} sm={6} className={style.section}>
             <SharedPaper children={
-              // <Input
-              //   handleSubmit={this.handleSubmit}
-              // />
-              <Info
-                icon="/images/error.png"
-                text1="Something went wrong."
-                text2="Please try again."
+              <Input
+                handleSubmit={this.handleSubmit}
               />
+              // <Info
+              //   icon='/images/error.png'
+              //   text1='Something went wrong.'
+              //   text2='Please try again.'
+              // />
             } />
           </Grid>
         </Grid>
@@ -55,7 +53,7 @@ class Login extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const { session } = state
   return { session }
 }

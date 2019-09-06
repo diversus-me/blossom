@@ -19,18 +19,14 @@ import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
-import style from './App.module.css'
+// import style from './App.module.css'
 
 class App extends Component {
   state = {
     flowerOverlayVisible: false
   }
 
-<<<<<<< HEAD
-  componentDidMount() {
-=======
   componentDidMount () {
->>>>>>> 8d51953872967909f8bd1986965b491cb9ba6bb6
     window.addEventListener('resize', this.props.resize)
     toast.configure({
       position: 'top-right',
@@ -51,11 +47,7 @@ class App extends Component {
     }
   }
 
-<<<<<<< HEAD
-  componentWillUnmount() {
-=======
   componentWillUnmount () {
->>>>>>> 8d51953872967909f8bd1986965b491cb9ba6bb6
     window.removeEventListener('resize', this.props.resize)
   }
 
@@ -65,7 +57,7 @@ class App extends Component {
     })
   }
 
-  render() {
+  render () {
     const { session } = this.props
     const { flowerOverlayVisible } = this.state
     return (
@@ -81,18 +73,6 @@ class App extends Component {
                 <Login />
               } />
           </Switch>
-<<<<<<< HEAD
-          {/* <Hub /> */}
-          {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
-            <FlowerView
-              id={location.pathname.slice(8)}
-            />
-          }
-          {!session.authenticated && location.pathname.slice(8) && false &&
-            <h2 style={{
-              textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
-            }}>
-=======
           <Hub />
           {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
           <FlowerView
@@ -103,7 +83,6 @@ class App extends Component {
           <h2 style={{
             textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
           }}>
->>>>>>> 8d51953872967909f8bd1986965b491cb9ba6bb6
               Please log in to see content.
           </h2>
           }
@@ -126,7 +105,7 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const { session } = state
   return { session }
 }
