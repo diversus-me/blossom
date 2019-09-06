@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 
 import style from './Forms.module.css'
-import { listFlowers } from '../../state/actions/flowerList'
+import { listFlowers } from '../../state/flowerList/actions'
 
 class EditFlowerForm extends React.Component {
   constructor (props) {

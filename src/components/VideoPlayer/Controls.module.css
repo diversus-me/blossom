@@ -1,0 +1,47 @@
+.play {
+    position: absolute;
+    /* z-index: 101; */
+    top: 50%;
+    left: 50%;
+    transform: scale(1);
+    transition: transform 100ms ease-out,
+                opacity 300ms ease-out;
+}
+
+.play:hover {
+    transform: scale(1.2);
+    transition: transform 100ms ease-out,
+    opacity 300ms ease-out;
+}
+
+.play:active {
+    transform: scale(0.9);
+}
+
+.playClicked {
+    transition: transform 300ms ease-out,
+                opacity 300ms ease-out !important;
+    transform: scale(1.5) !important;
+    opacity: 0;
+}
+
+.fullscreen {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    opacity: 0.5;
+    transform: scale(1);
+    transition: transform 100ms ease-out,
+                opacity 100ms ease-out;
+}
+
+.fullscreen:hover {
+    transform: scale(1.2);
+    opacity: 1;
+    transition: transform 100ms ease-out,
+    opacity 100ms ease-out;
+}
+
+.fullscreen:active {
+    transform: scale(0.9);
+}

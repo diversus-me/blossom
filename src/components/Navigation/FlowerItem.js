@@ -3,10 +3,10 @@ import propTypes from 'prop-types'
 import classnames from 'classnames'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { MdEdit, MdClear } from 'react-icons/md'
+import { MdEdit, MdClear, MdDateRange } from 'react-icons/md'
 import { toast } from 'react-toastify'
 
-import { listFlowers } from '../../state/actions/flowerList'
+import { listFlowers } from '../../state/flowerList/actions'
 
 import RandomUserImage from '../Dummies/RandomUserImage'
 import Overlay from '../UI/Overlay'
@@ -69,7 +69,14 @@ class FlowerItem extends React.Component {
         </div>
         <div className={classnames(style.block, style.left)}>
           <div className={style.title}>{title}</div>
-          <p className={style.text}>{description}</p>
+          <div className={style.dateContainer}>
+            <MdDateRange size={'20px'} color='grey' />
+            <span className={style.date}>{moment(created).fromNow()}</span>
+          </div>
+          <div className={style.user}>
+            <RandomUserImage round />
+            <div className={classnames(style.username)}>{user.name}</div>
+          </div>
           {session.authenticated && (session.role === 'admin' || session.id === user.id) &&
           [
             <div
@@ -95,11 +102,6 @@ class FlowerItem extends React.Component {
             </Overlay>
           ]
           }
-          <div className={classnames(style.date)}>{moment(created).fromNow()}</div>
-          <div className={style.user}>
-            <RandomUserImage round />
-            <div className={classnames(style.username)}>{user.name}</div>
-          </div>
         </div>
       </div>
     )

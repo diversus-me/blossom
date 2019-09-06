@@ -1,50 +1,62 @@
 .container {
     display: flex;
-    max-width: 500px;
-    min-width: 300px;
-    margin: 30px auto;
+    /* flex: 2 1 auto; */
+    /* min-width: 300px; */
+    height: 150px;
+    margin: 10px 10px;
     position: relative;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .block {
     display: inline-block;
-    padding: 0 15px;
 }
 
 .left {
-    width: 75%;
+    width: 65%;
 }
 
 .edit {
     position: absolute;
-    top: 0;
-    right: 20px;
+    bottom: 11px;
+    right: 30px;
 }
 
 .delete {
     position: absolute;
-    top: 0;
-    right: 0;
+    bottom: 10px;
+    right: 10px;
 }
 
 .right {
-    width: 25%;
+    width: 35%;
     margin-left: 20px;
 }
 
 .image {
-    min-width: 100%;
-    padding-top: 100%;
+    width: 80%;
+    /* max-width: 100px; */
+    padding-top: 80%;
     background: #DDD;
-    border-radius: 80px;
-    background-size: cover;
+    border-radius: 50%;
+    background-size: 180%;
     background-repeat: no-repeat;
     background-position: 50% 50%;
+    top: 50%;
+    position: relative;
+    transform: translateY(-50%);
 }
 
 .title {
-    font-size: 1.2em;
+    font-size: 0.9em;
     font-weight: bold;
+    margin-top: 20px;
+    padding: 0 20px;
+    max-height: 2.4em;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .text {
@@ -53,23 +65,32 @@
     margin-left: 10px;
 }
 
-.date {
-    right: 0;
+.dateContainer {
+    /* right: 0;
     bottom: 0px;
-    position: absolute;
+    position: absolute; */
+    padding: 0 20px;
     font-size: 0.8em;
-    margin: 0 15px;
+    margin: 15px 0 5px 0;
+    display: table;
+}
+
+.date {
+    padding-left: 15px;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .user {
-    position: absolute;
-    bottom: 0;
+    /* position: absolute; */
+    /* bottom: 0; */
+    width: 20px;
     display: flex;
     align-items: center;
+    padding: 0 20px;
 }
 
 .username {
     font-size: 0.8em;
-    font-weight: bold;
-    margin-left: 0.5em;
+    padding-left: 15px;
 }

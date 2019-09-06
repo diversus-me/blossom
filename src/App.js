@@ -1,30 +1,33 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom' // eslint-disable-line no-unused-vars
 import { toast } from 'react-toastify'
 import queryString from 'query-string'
 
-import './App.css'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { login } from './state/actions/session'
+import { login } from './state/session/actions'
+import { resize } from './state/dimensions/actions'
 
 import FloatingButton from './components/UI/FloatingButton'
 import Overlay from './components/UI/Overlay'
-import AddFlowerForm from './components/Forms/AddFlowerForm'
+// import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
 import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
+import style from './App.module.css'
+
 class App extends Component {
   state = {
     flowerOverlayVisible: false
   }
 
-  componentDidMount () {
+  componentDidMount() {
+    window.addEventListener('resize', this.props.resize)
     toast.configure({
       position: 'top-right',
       autoClose: 3000,
@@ -44,13 +47,17 @@ class App extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.props.resize)
+  }
+
   toggleAddFlowerOverlay = () => {
     this.setState({
       flowerOverlayVisible: !this.state.flowerOverlayVisible
     })
   }
 
-  render () {
+  render() {
     const { session } = this.props
     const { flowerOverlayVisible } = this.state
     return (
@@ -66,18 +73,18 @@ class App extends Component {
                 <Login />
               } />
           </Switch>
-          <Hub />
-          {session.authenticated && location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
-          <FlowerView
-            id={location.pathname.slice(8)}
-          />
+          {/* <Hub /> */}
+          {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
+            <FlowerView
+              id={location.pathname.slice(8)}
+            />
           }
-          {!session.authenticated && location.pathname.slice(8) &&
+          {!session.authenticated && location.pathname.slice(8) && false &&
             <h2 style={{
               textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
             }}>
               Please log in to see content.
-            </h2>
+          </h2>
           }
           {session.authenticated &&
             <Route path='/' exact render={() =>
@@ -90,7 +97,7 @@ class App extends Component {
             visibility={flowerOverlayVisible}
             onOuterClick={this.toggleAddFlowerOverlay}
           >
-            <AddFlowerForm />
+            {/* <AddFlowerForm /> */}
           </Overlay>
         </div>
       )} />
@@ -98,13 +105,13 @@ class App extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   const { session } = state
   return { session }
 }
 
 const mapDispatchToProps = {
-  login
+  login, resize
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))

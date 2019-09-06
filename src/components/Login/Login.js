@@ -1,58 +1,61 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
-import { requestLoginLink } from '../../state/actions/session'
+import Grid from '@material-ui/core/Grid';
+import { requestLoginLink } from '../../state/session/actions'
 
 import style from './Login.module.css'
-
-function validateEmail (email) {
-  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return re.test(String(email).toLowerCase())
-}
+import { Paper } from '@material-ui/core';
+import Description from './Description';
+import Input from './Input';
+import SharedPaper from '../Share/SharePaper';
+import Info from './Info';
 
 class Login extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
       value: ''
     }
   }
 
-  handleChange (e) {
-    this.setState({
-      value: e.target.value,
-      isMail: validateEmail(e.target.value)
-    })
+  handleSubmit = (value) => {
+    // e.preventDefault()
+    const { session } = this.props
+    if (!session.loginLinkLoading && !session.loginLinkSuccess) {
+      this.props.requestLoginLink(value)
+    }
   }
 
-  handleSubmit (e) {
-    e.preventDefault()
-    this.props.requestLoginLink(this.state.value)
-  }
 
-  render () {
-    const { value, isMail } = this.state
-    return (
+  render() {
+    return [
+      <div className={style.backgroundContainer} />,
       <div className={style.container}>
-        <h1 className={style.title}>Request a login link.</h1>
-        <form onSubmit={this.handleSubmit} className={style.form} autoComplete='on'>
-          <input
-            className={style.input}
-            type='email'
-            placeholder='Email'
-            value={value}
-            onChange={this.handleChange}
-          />
-          <input disabled={!isMail} className={style.submit} type='submit' value='Submit' />
-        </form>
+        <Grid container className={style.mainGrid}>
+          <Grid item xs={12} sm={6} className={style.section}>
+            <Description />
+          </Grid>
+          <Grid item xs={12} sm={6} className={style.section}>
+            <SharedPaper children={
+              // <Input
+              //   handleSubmit={this.handleSubmit}
+              // />
+              <Info
+                icon="/images/error.png"
+                text1="Something went wrong."
+                text2="Please try again."
+              />
+            } />
+          </Grid>
+        </Grid>
+
       </div>
-    )
+    ]
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   const { session } = state
   return { session }
 }

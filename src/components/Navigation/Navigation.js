@@ -2,11 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { listFlowers } from '../../state/actions/flowerList'
+import { listFlowers } from '../../state/flowerList/actions'
 
 import style from './Navigation.module.css'
 
 import FlowerItem from './FlowerItem'
+import Searchbar from './Searchbar'
 
 class Navigation extends React.Component {
   componentDidMount () {
@@ -17,16 +18,18 @@ class Navigation extends React.Component {
   }
 
   render () {
+    console.log(style.linkContainer)
     const { flowerList } = this.props
-    return (
-      <div>
-        <div className={style.header}>
-          <h1>blossom</h1>
-        </div>
+    return [
+      <div key='mainNavigation' className={style.container}>
+        <Searchbar />
         <div className={style.content}>
           {flowerList.finished && !flowerList.error && flowerList.list.map((flower) => {
             return (
-              <Link to={`/flower/${flower.node.id}`} key={flower.node.id}>
+              <Link
+                className={style.linkContainer}
+                to={`/flower/${flower.node.id}`}
+                key={flower.node.id}>
                 <FlowerItem
                   title={flower.title}
                   videoId={flower.node.video.url}
@@ -39,8 +42,10 @@ class Navigation extends React.Component {
             )
           })}
         </div>
-      </div>
-    )
+      </div>,
+      <div key='topGradient' className={style.topGradient} />,
+      <div key='bottomGradient' className={style.bottomGradient} />
+    ]
   }
 }
 

@@ -26,8 +26,8 @@ onmessage = function (e) {
   var simulation = d3.forceSimulation(nodes)
 
   simulation.force('collision', d3.forceCollide().radius(d => d.radius))
-    .force('forceX', d3.forceX(d => getCirclePosX(e.data.rootRadius, d.linkAngle, e.data.center[0])).strength(0.07))
-    .force('forceY', d3.forceY(d => getCirclePosY(e.data.rootRadius, d.linkAngle, e.data.center[1])).strength(0.07))
+    .force('forceX', d3.forceX(d => getCirclePosX(e.data.rootRadius, d.linkAngle, e.data.centerX)).strength(0.07))
+    .force('forceY', d3.forceY(d => getCirclePosY(e.data.rootRadius, d.linkAngle, e.data.centerY)).strength(0.07))
     .stop()
 
   for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay())); i < n; ++i) {

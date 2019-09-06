@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { IoMdPerson, IoMdLogIn } from 'react-icons/io'
 
 import style from './Hub.module.css'
 
-import RandomUserImage from '../Dummies/RandomUserImage'
 import Overlay from '../UI/Overlay'
 
 class Hub extends React.Component {
@@ -23,20 +23,26 @@ class Hub extends React.Component {
     const { overlayVisibility } = this.state
     return [
       <div className={style.container} key='icon'>
-        {session.authenticated &&
         <div
           role='navigation'
-          onClick={this.toggleOverlay}
+          // onClick={this.toggleOverlay}
           className={style.iconContainer}
         >
-          <RandomUserImage round />
+          {session.authenticated &&
+            <IoMdPerson
+              size={25}
+              color='white'
+            />
+          }
+          {!session.authenticated && !session.loading &&
+          <Link to='/login'>
+            <IoMdLogIn
+              size={25}
+              color='white'
+            />
+          </Link>
+          }
         </div>
-        }
-        {!session.authenticated && !session.loading &&
-        <Link to='/login'>
-          <button className={style.loginButton} >Login</button>
-        </Link>
-        }
       </div>,
       <Overlay
         key='overlay'

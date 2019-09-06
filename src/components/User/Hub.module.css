@@ -1,10 +1,15 @@
 .container {
-    width: 50px;
-    height: 20px;
+    width: 45px;
+    height: 45px;
     position: fixed;
-    top: 15px;
-    right: 25px;
+    top: 18px;
+    right: 18px;
     z-index: 2;
+    background: #242843;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
 }
 
 .iconContainer {

@@ -1,21 +1,19 @@
 .button {
-    background: grey;
-    width: 35px;
-    height: 35px;
+    padding: 10px;
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    border-radius: 50px;
+    bottom: 25px;
+    right: 25px;
+    border-radius: 99999px;
     justify-content: center;
     align-items: center;
     display: inline-flex;
-    transition: transform 200ms ease;
+    transition: transform 100ms ease;
 }
 
 .button:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .button:active {
-    transform: scale(1.1);
+    transform: scale(0.9);
 }

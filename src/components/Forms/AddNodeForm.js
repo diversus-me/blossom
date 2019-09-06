@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import style from './Forms.module.css'
-import { addNode } from '../../state/actions/flowerData'
+import { addNode } from '../../state/flowerData/actions'
 import getVideoId from 'get-video-id'
 import TimeField from 'react-simple-timefield'
 import moment from 'moment'

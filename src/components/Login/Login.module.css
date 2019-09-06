@@ -1,20 +1,37 @@
-.circle {
+.backgroundContainer {
+    background-image: url('/images/bg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 30px;
-    background: blue;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    z-index: -1;
 }
+
 
 .container {
     position: absolute;
     width: 100%;
-    top: 30%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+      background-color: rgba(7, 10, 31, 0.3);
 }
 
+.icon {
+    width: 100px;
+    height: 100px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    border-radius:50%;
+    border: 1px solid black;
+}
 .title {
     width: 100%;
     text-align: center;
@@ -27,17 +44,94 @@
 
 .input {
     display: block;
-    margin: 10px auto;
-    padding: 5px;
-    font-size: 18px;
-    width: 80%;
-    max-width: 250px;
-    /* font-weight: bold; */
+    margin: 20px auto;
+    padding: 10px 0px;
+    width: 100%;
+    border: none;
+    background-color: rgb(243, 243, 243);
+    text-align: center;
+    font-size: 0.8em;
+    border-radius: 5px;
+}
+
+.input:focus {
+    outline: none;
 }
 
 .submit {
+    width: 100%;
     display: block;
-    margin: 30px auto;
-    font-size: 1.2em;
-    font-weight: bold;
+    margin: 20px auto;
+    padding: 10px 60px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    font-weight: light;
+    color: white;
+    background: #242843;
+    transform: scale(1);
+    transition: transform 100ms ease-out;
+}
+
+.submit:hover {
+    transform: scale(1.05);
+}
+
+.submit:active {
+    transform: scale(0.95);
+}
+
+.submit:disabled {
+    background: #4d516b;
+    color: #BBB;
+    transform: scale(1) !important;
+}
+
+.submit:focus {
+    outline: none;
+}
+
+.description {
+    width: 100%;
+      display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section {
+    padding: 10%;
+}
+
+
+
+.descriptionText {
+    color: rgb(212, 211, 211);
+    font-size: 14px;
+    line-height: 1.5em;
+}
+
+.heading {
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 1.4em;
+}
+
+.descriptionHeading {
+    color: white;
+}
+
+.info {
+    text-align: center;    
+}
+
+.img {
+    margin: 10px;
+    width: 50px;
+}
+
+.infoText {
+    color : gray;
+}
+
+.thankyou {
+    margin : 20px;
 }

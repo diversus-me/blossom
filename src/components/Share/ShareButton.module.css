@@ -1,0 +1,28 @@
+.button {
+  width: 25px;
+  height: 25px;
+  position: fixed;
+  top: 28px;
+  left: 25px;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  transition: transform 200ms ease;
+  cursor: pointer;
+}
+
+@media (max-device-width: 500px) {
+  .button {
+    width: 5vw;
+    height: 5vw;
+    left: 6vw;
+  }
+}
+
+.button:hover {
+  transform: scale(1.2);
+}
+
+.button:active {
+  transform: scale(1.1);
+}
