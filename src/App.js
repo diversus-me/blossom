@@ -26,7 +26,11 @@ class App extends Component {
     flowerOverlayVisible: false
   }
 
+<<<<<<< HEAD
   componentDidMount() {
+=======
+  componentDidMount () {
+>>>>>>> 8d51953872967909f8bd1986965b491cb9ba6bb6
     window.addEventListener('resize', this.props.resize)
     toast.configure({
       position: 'top-right',
@@ -47,7 +51,11 @@ class App extends Component {
     }
   }
 
+<<<<<<< HEAD
   componentWillUnmount() {
+=======
+  componentWillUnmount () {
+>>>>>>> 8d51953872967909f8bd1986965b491cb9ba6bb6
     window.removeEventListener('resize', this.props.resize)
   }
 
@@ -73,6 +81,7 @@ class App extends Component {
                 <Login />
               } />
           </Switch>
+<<<<<<< HEAD
           {/* <Hub /> */}
           {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
             <FlowerView
@@ -83,15 +92,27 @@ class App extends Component {
             <h2 style={{
               textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
             }}>
+=======
+          <Hub />
+          {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
+          <FlowerView
+            id={location.pathname.slice(8)}
+          />
+          }
+          {!session.authenticated && location.pathname.slice(8) && false &&
+          <h2 style={{
+            textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
+          }}>
+>>>>>>> 8d51953872967909f8bd1986965b491cb9ba6bb6
               Please log in to see content.
           </h2>
           }
           {session.authenticated &&
-            <Route path='/' exact render={() =>
-              <FloatingButton
-                onClickCallback={this.toggleAddFlowerOverlay}
-              />
-            } />
+          <Route path='/' exact render={() =>
+            <FloatingButton
+              onClickCallback={this.toggleAddFlowerOverlay}
+            />
+          } />
           }
           <Overlay
             visibility={flowerOverlayVisible}

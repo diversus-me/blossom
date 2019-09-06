@@ -40,6 +40,7 @@
 .form {
     display: inline-block;
     width: 100%;
+    margin-top: 100px;
 }
 
 .input {
@@ -52,6 +53,10 @@
     text-align: center;
     font-size: 0.8em;
     border-radius: 5px;
+}
+
+.input:focus {
+    outline: none;
 }
 
 .input:focus {
