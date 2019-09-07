@@ -35,7 +35,7 @@ export default ({ handleSubmit }) => {
         value={state.value}
         onChange={handleChange}
       />
-      <input disabled={!state.isMail} className={style.submit} type='submit' value='Login' />
+      <input disabled={!state.isMail} className={style.submit} onSubmit={handleSubmitLocal} type='submit' value='Login' />
     </form>
   )
 }
