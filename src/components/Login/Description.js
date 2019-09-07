@@ -1,7 +1,7 @@
 import React from 'react'
 import style from './Login.module.css'
 
-export default function Description() {
+export default function Description () {
   return (
     <div className={style.description}>
       <h2 className={style.descriptionHeading}>Welcome to DIVERSUS.</h2>

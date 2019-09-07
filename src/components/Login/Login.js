@@ -1,31 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Grid from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid'
 import { requestLoginLink } from '../../state/session/actions'
 
 import style from './Login.module.css'
-import { Paper } from '@material-ui/core';
-import Description from './Description';
-import Input from './Input';
-import SharedPaper from '../Share/SharePaper';
-import Info from './Info';
+import Description from './Description'
+import Input from './Input'
+import SharedPaper from '../Share/SharePaper'
+import Info from './Info'
 
- const InfoMessage = (message) => {
-   switch(message) {
-     case "error" : 
-       return <Info
-         icon="/images/error.png"
-         text1="Something went wrong."
-         text2="Please try again."
-       />
-       case "Success" :
-       return <Info
-         icon="/images/error.png"
-         text1="Successfull."
-         text2="Please try again."
-       />
-   }
- }
+const InfoMessage = (message) => {
+  switch (message) {
+    case "error":
+      return <Info
+        icon="/images/error.png"
+        text1="Something went wrong."
+        text2="Please try again."
+      />
+    case "Success":
+      return <Info
+        icon="/images/error.png"
+        text1="Successfull."
+        text2="Please try again."
+      />
+  }
+}
 
 class Login extends React.Component {
   constructor(props) {
@@ -42,8 +41,8 @@ class Login extends React.Component {
     if (!session.loginLinkLoading && !session.loginLinkSuccess) {
       this.props.requestLoginLink(value)
       this.setState({
-        isInfoMessage : true,
-        message : "error"
+        isInfoMessage: true,
+        message: "error"
       })
     }
     else {
@@ -56,7 +55,7 @@ class Login extends React.Component {
 
 
   render() {
-    const {message} = this.state;
+    const { message } = this.state;
     return [
       <div className={style.backgroundContainer} />,
       <div className={style.container}>
@@ -71,7 +70,7 @@ class Login extends React.Component {
                   handleSubmit={this.handleSubmit}
                 />
               ) : (
-                InfoMessage("error")
+                  InfoMessage("error")
                 )
             } />
           </Grid>

@@ -19,7 +19,7 @@ import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
-import style from './App.module.css'
+// import style from './App.module.css'
 
 class App extends Component {
   state = {
@@ -57,7 +57,7 @@ class App extends Component {
     })
   }
 
-  render() {
+  render () {
     const { session } = this.props
     const { flowerOverlayVisible } = this.state
     return (
@@ -105,7 +105,7 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const { session } = state
   return { session }
 }

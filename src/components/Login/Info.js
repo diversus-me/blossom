@@ -1,7 +1,7 @@
 import React from 'react'
 import style from './Login.module.css'
 
-export default function Info({icon, text1, text2}) {
+export default function Info ({ icon, text1, text2 }) {
   return (
     <div className={style.info}>
       <div className={style.heading}>diversus</div>

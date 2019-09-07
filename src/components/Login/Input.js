@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import style from './Login.module.css'
 
 export default ({ handleSubmit }) => {
-
   const validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(String(email).toLowerCase())
@@ -21,7 +20,7 @@ export default ({ handleSubmit }) => {
   }
 
   const handleSubmitLocal = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     handleSubmit(state.value)
   }
 
