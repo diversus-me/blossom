@@ -79,7 +79,6 @@ export default function sessionReducer (state = initialState, action) {
         loginLinkSuccess: false
       }
     case LOGIN_LINK_SUCCESS:
-      toast.success('Email has been sent.')
       return {
         ...state,
         loginLinkLoading: false,
@@ -87,7 +86,6 @@ export default function sessionReducer (state = initialState, action) {
         loginLinkSuccess: true
       }
     case LOGIN_LINK_ERROR:
-      toast.error('Something went wrong.')
       return {
         ...state,
         loginLinkLoading: false,
