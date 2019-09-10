@@ -14,12 +14,12 @@
 .container {
     position: absolute;
     width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-      background-color: rgba(7, 10, 31, 0.3);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(7, 10, 31, 0.3);
 }
 
 .icon {
@@ -43,23 +43,7 @@
 }
 
 .input {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 0px;
     width: 100%;
-    border: none;
-    background-color: rgb(243, 243, 243);
-    text-align: center;
-    font-size: 0.8em;
-    border-radius: 5px;
-}
-
-.input:focus {
-    outline: none;
-}
-
-.input:focus {
-    outline: none;
 }
 
 .submit {
@@ -105,8 +89,6 @@
     padding: 10%;
 }
 
-
-
 .descriptionText {
     color: rgb(212, 211, 211);
     font-size: 14px;
@@ -117,6 +99,7 @@
     text-align: center;
     letter-spacing: 1px;
     font-size: 1.4em;
+    margin-bottom: 25px;
 }
 
 .descriptionHeading {
@@ -128,7 +111,6 @@
 }
 
 .img {
-    margin: 10px;
     width: 50px;
 }
 
@@ -137,5 +119,12 @@
 }
 
 .thankyou {
-    margin : 20px;
+    margin : 30px 0 20px;
+}
+
+.paper {
+    padding: 50px 30px;
+    margin: auto;
+    border-radius: '20px';
+    max-width: 250px;
 }

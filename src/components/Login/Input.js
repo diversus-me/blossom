@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import TextField from '@material-ui/core/TextField'
+
 import style from './Login.module.css'
 
-export default ({ handleSubmit }) => {
+export default ({ handleSubmit, error, disabled }) => {
   const validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(String(email).toLowerCase())
@@ -26,15 +28,21 @@ export default ({ handleSubmit }) => {
 
   return (
     <form onSubmit={handleSubmitLocal} className={style.form} autoComplete='on'>
-      <div className={style.heading}>diversus</div>
-      <input
+      <TextField
+        id='outlined-email-input'
+        label='Email'
         className={style.input}
         type='email'
-        placeholder='Email'
+        name='email'
+        autoComplete='email'
+        margin='dense'
         value={state.value}
         onChange={handleChange}
+        variant='outlined'
+        inputProps={{ style: { textAlign: 'center' } }}
+        hintProps={{ style: { textAlign: 'center' } }}
       />
-      <input disabled={!state.isMail} className={style.submit} onSubmit={handleSubmitLocal} type='submit' value='Login' />
+      <input disabled={!state.isMail || disabled} className={style.submit} onSubmit={handleSubmitLocal} type='submit' value='Login' />
     </form>
   )
 }

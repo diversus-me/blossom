@@ -1,38 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+
 import { requestLoginLink } from '../../state/session/actions'
 
 import style from './Login.module.css'
+
 import Description from './Description'
 import Input from './Input'
-import SharedPaper from '../Share/SharePaper'
 import Info from './Info'
 
-const InfoMessage = (message) => {
-  switch (message) {
-    case "error":
-      return <Info
-        icon="/images/error.png"
-        text1="Something went wrong."
-        text2="Please try again."
-      />
-    case "Success":
-      return <Info
-        icon="/images/error.png"
-        text1="Successfull."
-        text2="Please try again."
-      />
-  }
-}
-
 class Login extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
-      value: '',
-      isInfoMessage: false
+      value: ''
     }
   }
 
@@ -42,20 +26,15 @@ class Login extends React.Component {
       this.props.requestLoginLink(value)
       this.setState({
         isInfoMessage: true,
-        message: "error"
+        message: 'error'
       })
-    }
-    else {
-      this.setState({
-        isInfoMessage: true,
-        message: "success"
-      })
+    } else {
+
     }
   }
 
-
-  render() {
-    const { message } = this.state;
+  render () {
+    const { session } = this.props
     return [
       <div className={style.backgroundContainer} />,
       <div className={style.container}>
@@ -64,15 +43,21 @@ class Login extends React.Component {
             <Description />
           </Grid>
           <Grid item xs={12} sm={6} className={style.section}>
-            <SharedPaper children={
-              (!this.state.isInfoMessage) ? (
-                <Input
-                  handleSubmit={this.handleSubmit}
-                />
-              ) : (
-                  InfoMessage("error")
+            <Paper
+              className={style.paper}
+              children={[
+                <div className={style.heading}>diversus</div>,
+                (session.loginLinkSuccess) ? (
+                  <Info />
+                ) : (
+                  <Input
+                    handleSubmit={this.handleSubmit}
+                    error={session.loginLinkFailed}
+                    disabled={session.loginLinkLoading}
+                  />
                 )
-            } />
+
+              ]} />
           </Grid>
         </Grid>
 
@@ -81,7 +66,7 @@ class Login extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const { session } = state
   return { session }
 }
