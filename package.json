@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.4.0",
+    "@material-ui/core": "latest",
     "@uppy/aws-s3": "^1.1.0",
     "@uppy/aws-s3-multipart": "^1.1.0",
     "@uppy/core": "^1.1.0",
