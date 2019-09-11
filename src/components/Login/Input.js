@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 
 import style from './Login.module.css'
+import ShareTextfield from '../Share/ShareTextfield';
 
-export default ({ handleSubmit, error, disabled }) => {
+export default ({ handleSubmit, disabled }) => {
   const validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(String(email).toLowerCase())
@@ -14,10 +15,10 @@ export default ({ handleSubmit, error, disabled }) => {
     isMail: false
   })
 
-  const handleChange = (e) => {
+  const handleChange = (val) => {
     setState({
-      value: e.target.value,
-      isMail: validateEmail(e.target.value)
+      value: val,
+      isMail: validateEmail(val)
     })
   }
 
@@ -28,20 +29,23 @@ export default ({ handleSubmit, error, disabled }) => {
 
   return (
     <form onSubmit={handleSubmitLocal} className={style.form} autoComplete='on'>
-      <TextField
+      <ShareTextfield
+        onChange={handleChange}
+      />
+      {/* <TextField
         id='outlined-email-input'
         label='Email'
         className={style.input}
         type='email'
         name='email'
-        autoComplete='email'
+        autoComplete='email'  
         margin='dense'
         value={state.value}
         onChange={handleChange}
         variant='outlined'
         inputProps={{ style: { textAlign: 'center' } }}
         hintProps={{ style: { textAlign: 'center' } }}
-      />
+      /> */}
       <input disabled={!state.isMail || disabled} className={style.submit} onSubmit={handleSubmitLocal} type='submit' value='Login' />
     </form>
   )
