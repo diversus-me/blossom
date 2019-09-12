@@ -14,6 +14,13 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     textAlign: 'center',
     padding: 'none'
+  },
+  root: {
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: theme.palette.primary.main,
+      }
+    },
   }
 }));
 
@@ -40,11 +47,13 @@ export default function Textfield({ onChange, type, error, autoComplete }) {
         className={classes.formControl}
         fullWidth
         variant="outlined"
+        className={classes.root}
       >
         <InputLabel required ref={labelRef} htmlFor="component-outlined">
           Email
         </InputLabel>
         <OutlinedInput
+
           autoComplete={autoComplete}
           fullWidth
           id="component-outlined"
