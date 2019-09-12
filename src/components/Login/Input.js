@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import TextField from '@material-ui/core/TextField'
 
 import style from './Login.module.css'
-import ShareTextfield from '../Share/ShareTextfield';
+import Textfield from '../UI/Textfield';
 
 export default ({ handleSubmit, disabled }) => {
   const validateEmail = (email) => {
@@ -29,23 +28,12 @@ export default ({ handleSubmit, disabled }) => {
 
   return (
     <form onSubmit={handleSubmitLocal} className={style.form} autoComplete='on'>
-      <ShareTextfield
+      <Textfield
         onChange={handleChange}
+        type="email"
+        autoComplete="email"
+        error=""
       />
-      {/* <TextField
-        id='outlined-email-input'
-        label='Email'
-        className={style.input}
-        type='email'
-        name='email'
-        autoComplete='email'  
-        margin='dense'
-        value={state.value}
-        onChange={handleChange}
-        variant='outlined'
-        inputProps={{ style: { textAlign: 'center' } }}
-        hintProps={{ style: { textAlign: 'center' } }}
-      /> */}
       <input disabled={!state.isMail || disabled} className={style.submit} onSubmit={handleSubmitLocal} type='submit' value='Login' />
     </form>
   )

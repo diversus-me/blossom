@@ -1,9 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 
@@ -16,10 +14,10 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     textAlign: 'center',
     padding: 'none'
-  },
+  }
 }));
 
-export default function ShareTextfield({ onChange }) {
+export default function Textfield({ onChange, type, error, autoComplete }) {
   const [labelWidth, setLabelWidth] = React.useState(0);
   const [email, setEmail] = React.useState('');
   const labelRef = React.useRef(null);
@@ -37,7 +35,7 @@ export default function ShareTextfield({ onChange }) {
   return (
     <div className={classes.container}>
       <FormControl
-        // error={true}
+        error={error} // If the error string have some message the textfields turns red.
         margin='dense'
         className={classes.formControl}
         fullWidth
@@ -47,15 +45,16 @@ export default function ShareTextfield({ onChange }) {
           Email
         </InputLabel>
         <OutlinedInput
-          autoComplete='email'
+          autoComplete={autoComplete}
           fullWidth
           id="component-outlined"
           value={email}
-          type="email"
+          type={type}
           onChange={handleChange}
           labelWidth={labelWidth}
+          autoFocus
         />
-        {/* <FormHelperText>Hello World</FormHelperText> */}
+        <FormHelperText>{error}</FormHelperText>
       </FormControl>
     </div >
   );
