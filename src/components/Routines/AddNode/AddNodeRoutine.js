@@ -7,6 +7,7 @@ import AWS3 from '@uppy/aws-s3'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
+import { fetchAsync } from '../../../state/helpers'
 
 import WebRecorder from '../WebRecorder'
 import FlavorSelector from './FlavorSelector'
@@ -33,7 +34,7 @@ const uppy = Uppy({
 //   ]
 // })
 uppy.use(AWS3, {
-  companionUrl: process.env.REACT_APP_SERVER_URL
+  companionUrl: process.env.REACT_APP_SERVER_URL + '/uppy'
 })
 // const uppy = Uppy({ autoProceed: false })
 // uppy.use(AWS3, {
@@ -74,6 +75,7 @@ class AddNodeRoutine extends React.Component {
 
   componentWillUnmount () {
     this.props.nodeGetsPositioned(false)
+    uppy.reset()
   }
 
   nextPhase = () => {
@@ -97,8 +99,36 @@ class AddNodeRoutine extends React.Component {
     }
   }
 
-  recorderFinished = (videoFile) => {
+  recorderFinished = async (videoFile) => {
     this.videoFile = videoFile
+
+    try {
+      const videoID = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/requestUppy`,
+        {
+          credentials: 'include',
+          method: 'GET'
+        })
+      const response = await videoID.json()
+
+      uppy.addFile(videoFile)
+      uppy.setMeta({ videoID: response.videoID })
+
+      uppy.upload().then((result) => {
+        console.info('Successful uploads:', result.successful)
+
+        if (result.failed.length > 0) {
+          console.error('Errors:')
+          result.failed.forEach((file) => {
+            console.error(file.error)
+          })
+        }
+      })
+
+      console.log('finisshed')
+      this.nextPhase()
+    } catch (errors) {
+      console.log(errors)
+    }
     // fetch(
     //   this.state.uploadUrl,
     //   {
@@ -112,21 +142,6 @@ class AddNodeRoutine extends React.Component {
     //   }
     // ).then((response) => { console.log(response) })
     // .catch((error) => { console.log(error) })
-    uppy.addFile(videoFile)
-
-    uppy.upload().then((result) => {
-      console.info('Successful uploads:', result.successful)
-
-      if (result.failed.length > 0) {
-        console.error('Errors:')
-        result.failed.forEach((file) => {
-          console.error(file.error)
-        })
-      }
-    })
-
-    console.log('finisshed')
-    this.nextPhase()
   }
 
   flavorSelected = (flavor) => {

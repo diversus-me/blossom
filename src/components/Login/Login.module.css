@@ -1,5 +1,5 @@
 .backgroundContainer {
-    background-image: url('/images/flowers1_small.jpg');
+    background-image: url('/images/bg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -8,14 +8,18 @@
     position: absolute;
     top: 0;
     z-index: -1;
-    opacity: 0.5;
 }
 
 
 .container {
     position: absolute;
     width: 100%;
-    top: 20%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(7, 10, 31, 0.3);
 }
 
 .icon {
@@ -36,33 +40,18 @@
 .form {
     display: inline-block;
     width: 100%;
-    margin-top: 100px;
 }
 
 .input {
-    display: block;
-    margin: 10px auto;
-    padding: 5px;
-    font-size: 18px;
-    width: 70%;
-    max-width: 400px;
-    border: none;
-    background: none;
-    text-align: center;
-    font-size: 1em;
-    border-bottom: 1px solid #242843;
-    /* font-weight: bold; */
-}
-
-.input:focus {
-    outline: none;
+    width: 100%;
 }
 
 .submit {
+    width: 100%;
     display: block;
-    margin: 30px auto;
+    margin: 20px auto;
     padding: 10px 60px;
-    border-radius: 50px;
+    border-radius: 5px;
     font-size: 0.8em;
     font-weight: light;
     color: white;
@@ -87,4 +76,55 @@
 
 .submit:focus {
     outline: none;
+}
+
+.description {
+    width: 100%;
+      display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section {
+    padding: 10%;
+}
+
+.descriptionText {
+    color: rgb(212, 211, 211);
+    font-size: 14px;
+    line-height: 1.5em;
+}
+
+.heading {
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 1.4em;
+    margin-bottom: 25px;
+}
+
+.descriptionHeading {
+    color: white;
+}
+
+.info {
+    text-align: center;    
+}
+
+.img {
+    width: 50px;
+}
+
+.infoText {
+    color : gray;
+}
+
+.thankyou {
+    margin : 30px 0 20px;
+}
+
+.paper {
+    padding: 50px 30px;
+    margin: auto;
+    border-radius: '20px';
+    max-width: 250px;
 }

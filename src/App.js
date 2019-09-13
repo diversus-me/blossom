@@ -19,7 +19,7 @@ import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
-import style from './App.module.css'
+// import style from './App.module.css'
 
 class App extends Component {
   state = {

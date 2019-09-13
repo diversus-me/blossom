@@ -91,9 +91,7 @@ class WebRecorder extends React.Component {
       this.recorder.stop()
     })
 
-    stopped.then(() => {
-      return this.getVideo()
-    })
+    stopped.then(() => this.getVideo())
       .then((file) => {
         this.videoFile = file
         this.webcamPreview.srcObject = undefined

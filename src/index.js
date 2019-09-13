@@ -4,8 +4,8 @@ import { Provider } from 'react-redux'
 import { Router } from 'react-router-dom'
 import history from './history'
 import './index.css'
-
-// import * as serviceWorker from './serviceWorker'
+import { ThemeProvider } from '@material-ui/styles';
+import theme from './theme';
 import configureStore from './state/configureStore'
 
 import App from './App'
@@ -13,11 +13,13 @@ import App from './App'
 const store = configureStore()
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
-  </Provider>,
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Router history={history}>
+        <App />
+      </Router>
+    </Provider>
+  </ThemeProvider>,
   document.getElementById('root')
 )
 
