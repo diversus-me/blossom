@@ -16,6 +16,7 @@
     "@uppy/webcam": "^1.1.0",
     "classnames": "^2.2.6",
     "d3": "^5.9.2",
+    "get-blob-duration": "^1.1.0",
     "get-video-id": "^3.1.1",
     "gsap": "^2.1.2",
     "moment": "^2.24.0",

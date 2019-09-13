@@ -12,24 +12,10 @@ import Input from './Input'
 import Info from './Info'
 
 class Login extends React.Component {
-  constructor (props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.state = {
-      value: ''
-    }
-  }
-
   handleSubmit = (value) => {
     const { session } = this.props
     if (!session.loginLinkLoading && !session.loginLinkSuccess) {
       this.props.requestLoginLink(value)
-      this.setState({
-        isInfoMessage: true,
-        message: 'error'
-      })
-    } else {
-
     }
   }
 
@@ -52,7 +38,7 @@ class Login extends React.Component {
                 ) : (
                   <Input
                     handleSubmit={this.handleSubmit}
-                    error={session.loginLinkFailed}
+                    error={(session.loginLinkFailed) ? 'Please try again.' : undefined}
                     disabled={session.loginLinkLoading}
                   />
                 )
