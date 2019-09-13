@@ -18,6 +18,7 @@ import Login from './components/Login/Login'
 import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
+import Home from './components/Home/Home';
 
 // import style from './App.module.css'
 
@@ -26,7 +27,7 @@ class App extends Component {
     flowerOverlayVisible: false
   }
 
-  componentDidMount () {
+  componentDidMount() {
     window.addEventListener('resize', this.props.resize)
     toast.configure({
       position: 'top-right',
@@ -47,7 +48,7 @@ class App extends Component {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     window.removeEventListener('resize', this.props.resize)
   }
 
@@ -57,7 +58,7 @@ class App extends Component {
     })
   }
 
-  render () {
+  render() {
     const { session } = this.props
     const { flowerOverlayVisible } = this.state
     return (
@@ -66,6 +67,7 @@ class App extends Component {
           <Switch location={location}>
             <Route path='/' exact component={Navigation} />
             <Route path='/admin' exact component={AdminArea} />
+            <Route path='/home' exact component={Home} />
             <Route
               path='/login'
               exact
@@ -73,25 +75,25 @@ class App extends Component {
                 <Login />
               } />
           </Switch>
-          <Hub />
+          {/* <Hub /> */}
           {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
-          <FlowerView
-            id={location.pathname.slice(8)}
-          />
+            <FlowerView
+              id={location.pathname.slice(8)}
+            />
           }
           {!session.authenticated && location.pathname.slice(8) && false &&
-          <h2 style={{
-            textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
-          }}>
+            <h2 style={{
+              textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
+            }}>
               Please log in to see content.
           </h2>
           }
           {session.authenticated &&
-          <Route path='/' exact render={() =>
-            <FloatingButton
-              onClickCallback={this.toggleAddFlowerOverlay}
-            />
-          } />
+            <Route path='/' exact render={() =>
+              <FloatingButton
+                onClickCallback={this.toggleAddFlowerOverlay}
+              />
+            } />
           }
           <Overlay
             visibility={flowerOverlayVisible}
@@ -105,7 +107,7 @@ class App extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   const { session } = state
   return { session }
 }
