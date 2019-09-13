@@ -4,10 +4,12 @@ import style from './Login.module.css'
 export default function Description () {
   return (
     <div className={style.description}>
-      <h2 className={style.descriptionHeading}>Welcome to DIVERSUS.</h2>
+      <h2 className={style.descriptionHeading}>Reclaim Your Mind!</h2>
       <p className={style.descriptionText}>
-        The quick brown fox jumps over the lazy dog
-        DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex!
+      We deserve to know exactly what's going on. Anyone can contribute to
+      making our information more complete. Everyone can benefit - individually
+      and as a society. The truth has many faces, but only one core.
+        <p>Welcome to <b>DIVERSUS</b>.</p>
       </p>
     </div>
   )
