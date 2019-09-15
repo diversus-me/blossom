@@ -18,7 +18,7 @@ import Login from './components/Login/Login'
 import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
-import Home from './components/Home/Home';
+import Home from './components/Home/Home'
 
 // import style from './App.module.css'
 
@@ -27,7 +27,7 @@ class App extends Component {
     flowerOverlayVisible: false
   }
 
-  componentDidMount() {
+  componentDidMount () {
     window.addEventListener('resize', this.props.resize)
     toast.configure({
       position: 'top-right',
@@ -48,7 +48,7 @@ class App extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('resize', this.props.resize)
   }
 
@@ -58,7 +58,7 @@ class App extends Component {
     })
   }
 
-  render() {
+  render () {
     const { session } = this.props
     const { flowerOverlayVisible } = this.state
     return (
@@ -86,7 +86,7 @@ class App extends Component {
               textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
             }}>
               Please log in to see content.
-          </h2>
+            </h2>
           }
           {session.authenticated &&
             <Route path='/' exact render={() =>
@@ -107,7 +107,7 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const { session } = state
   return { session }
 }

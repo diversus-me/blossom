@@ -1,15 +1,15 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add'
+import ArrowRight from '@material-ui/icons/KeyboardArrowRight'
 
 const useStyles = makeStyles(theme => ({
   fab: {
-    margin: theme.spacing(1),
     position: 'absolute',
-    bottom: theme.spacing(3),
-    right: theme.spacing(5),
+    bottom: theme.spacing(30),
+    right: theme.spacing(0),
     backgroundColor: theme.palette.secondary.main
+
   },
   extendedIcon: {
     marginRight: theme.spacing(1)
@@ -19,13 +19,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function FloatingActionButtons() {
+export default function DrawerButtonRight () {
   const classes = useStyles()
 
   return (
     <div>
       <Fab aria-label='add' className={classes.fab}>
-        <AddIcon className={classes.button} />
+        <ArrowRight className={classes.button} />
       </Fab>
     </div>
   )

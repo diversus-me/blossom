@@ -1072,15 +1072,9 @@
     "@types/yargs" "^13.0.0"
 
 "@material-ui/core@latest":
-<<<<<<< HEAD
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.4.2.tgz#66a9423e533833d2867827e6fdf526adbdceb7c0"
-  integrity sha512-hnZ4SP/hWJ9sUoNMkStz/y/CL2c7j4JpVIB2py3+vpBFU9TgHL3noBk3Fr0gltRvvlYA9ekpiGsGZ2ukk1R7Eg==
-=======
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.4.1.tgz#cc9b8e417ced1ab3145fdeda41a6aee657d3524b"
   integrity sha512-LotIIGv8EDMj6mwXobsMF4WlCe+PtMjrXa34U2B0xFMdZLrNYwdOHFgkAIaE0m/ibMXTobNKWqhc5bhXLxvXoQ==
->>>>>>> 6e655ce3ac42035762a928a9c8b24007db0e0d8b
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/styles" "^4.4.1"
@@ -1099,7 +1093,6 @@
     react-transition-group "^4.0.0"
     warning "^4.0.1"
 
-<<<<<<< HEAD
 "@material-ui/icons@^4.4.1":
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.4.1.tgz#a09d53275a5d73a77ee621f91c005a1793432df7"
@@ -1107,8 +1100,6 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
-=======
->>>>>>> 6e655ce3ac42035762a928a9c8b24007db0e0d8b
 "@material-ui/styles@^4.4.1":
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.4.1.tgz#a53fb39e373636bd2c296a78c54afecb80f68446"

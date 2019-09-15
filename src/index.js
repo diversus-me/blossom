@@ -4,8 +4,8 @@ import { Provider } from 'react-redux'
 import { Router } from 'react-router-dom'
 import history from './history'
 import './index.css'
-import { ThemeProvider } from '@material-ui/styles';
-import theme from './theme';
+import { ThemeProvider } from '@material-ui/styles'
+import theme from './theme'
 import configureStore from './state/configureStore'
 
 import App from './App'
