@@ -10,6 +10,7 @@ import style from './Login.module.css'
 import Description from './Description'
 import Input from './Input'
 import Info from './Info'
+import Logo from '../UI/Logo'
 
 class Login extends React.Component {
   handleSubmit = (value) => {
@@ -32,7 +33,9 @@ class Login extends React.Component {
               <Paper
                 className={style.paper}
                 children={[
-                  <div className={style.heading}>diversus</div>,
+                  <div className={style.heading}>
+                    <Logo />
+                  </div>,
                   (session.loginLinkSuccess) ? (
                     <Info />
                   ) : (

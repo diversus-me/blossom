@@ -38,12 +38,13 @@ class Navbar extends React.Component {
           />
         </div>
         <div className={style.iconContainer}>
-          <IconButton aria-label='show 17 new notifications'>
-            <Badge badgeContent={17} color='error'>
+          <IconButton disabled aria-label='show 17 new notifications'>
+            <Badge badgeContent={0} color='error'>
               <NotificationsIcon />
             </Badge>
           </IconButton>
           <IconButton
+            disabled
             edge='end'
             aria-label='account of current user'
             aria-haspopup='true'

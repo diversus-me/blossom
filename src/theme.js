@@ -20,6 +20,11 @@ const theme = createMuiTheme({
     background: {
       default: '#fff'
     }
+  },
+  breakpoints: {
+    values: {
+      sm: 700
+    }
   }
 })
 

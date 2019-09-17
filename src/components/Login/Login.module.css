@@ -76,6 +76,8 @@
 
 .description {
     width: 100%;
+    max-width: 320px;
+    margin: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -18,7 +18,6 @@ class Navigation extends React.Component {
   }
 
   render () {
-    console.log(style.linkContainer)
     const { flowerList } = this.props
     return [
       <div key='mainNavigation' className={style.container}>
