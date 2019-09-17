@@ -103,15 +103,19 @@ class AddNodeRoutine extends React.Component {
     this.videoFile = videoFile
 
     try {
-      const videoID = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/requestUppy`,
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/requestUppy`,
         {
           credentials: 'include',
           method: 'GET'
         })
-      const response = await videoID.json()
+      const json = await response.json()
 
-      uppy.addFile(videoFile)
-      uppy.setMeta({ videoID: response.videoID })
+      console.log(videoFile.fileExtension)
+
+      uppy.addFile({
+        ...videoFile,
+        name: `${this.props.session.id}.${json.videoID}.${videoFile.fileExtension}`
+      })
 
       uppy.upload().then((result) => {
         console.info('Successful uploads:', result.successful)
@@ -306,8 +310,8 @@ AddNodeRoutine.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const { dimensions } = state
-  return { dimensions }
+  const { dimensions, session } = state
+  return { dimensions, session }
 }
 
 const mapDispatchToProps = {
