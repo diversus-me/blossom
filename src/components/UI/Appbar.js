@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function Appbar() {
+export default function Appbar () {
   const classes = useStyles()
 
   const menuId = 'primary-search-account-menu'
@@ -51,20 +51,21 @@ export default function Appbar() {
     <div className={classes.grow}>
       <AppBar
         position='static'
-        color="inherit"
+        color='inherit'
         className={classes.icon}
       >
         <Toolbar>
           <Typography className={classes.title} variant='h6' noWrap>
             diversus
           </Typography>
+          <h2>diversus</h2>
           <div className={classes.grow} />
           <div>
             <IconButton aria-label='show 4 new mails' className={classes.icon}>
               <SearchIcon />
             </IconButton>
             <IconButton aria-label='show 17 new notifications' className={classes.icon}>
-              <Badge badgeContent={17} color='secondary'>
+              <Badge badgeContent={17} color='error'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>

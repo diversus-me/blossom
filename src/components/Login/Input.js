@@ -32,14 +32,24 @@ export default ({ handleSubmit, disabled, error }) => {
   }
 
   return (
-    <form onSubmit={handleSubmitLocal} className={style.form} autoComplete='on'>
+    <form
+      onSubmit={handleSubmitLocal}
+      className={style.form}
+      autoComplete='on'
+    >
       <Textfield
         onChange={handleChange}
         type='email'
         autoComplete='email'
         error={(!state.didChange) ? error : undefined}
       />
-      <input disabled={!state.isMail || disabled} className={style.submit} onSubmit={handleSubmitLocal} type='submit' value='Login' />
+      <input
+        disabled={!state.isMail || disabled}
+        className={style.submit}
+        onSubmit={handleSubmitLocal}
+        type='submit'
+        value='Login'
+      />
     </form>
   )
 }

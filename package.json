@@ -48,6 +48,7 @@
     "start": "REACT_APP_SERVER_URL=http://localhost:8081 react-scripts start",
     "build": "REACT_APP_SERVER_URL=https://api.diversus.me react-scripts build",
     "test": "react-scripts test",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "eject": "react-scripts eject",
     "lint": "standard --fix"
   },

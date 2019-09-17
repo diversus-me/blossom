@@ -11,8 +11,11 @@ const theme = createMuiTheme({
       main: '#333333',
       light: '#666666'
     },
+    notification: {
+      main: '#FC1A45'
+    },
     error: {
-      main: red.A400
+      main: '#FC1A45'
     },
     background: {
       default: '#fff'
