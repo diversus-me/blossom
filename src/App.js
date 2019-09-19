@@ -15,10 +15,8 @@ import Overlay from './components/UI/Overlay'
 // import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
-import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
-import Home from './components/Home/Home'
 
 // import style from './App.module.css'
 
@@ -65,29 +63,21 @@ class App extends Component {
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
-            <Route path='/' exact component={Navigation} />
             <Route path='/admin' exact component={AdminArea} />
-            <Route path='/home' exact component={Home} />
             <Route
               path='/login'
               exact
-              render={() =>
-                <Login />
-              } />
+              render={() => <Login />} />
+            <Route render={() =>
+              <Navigation>
+                {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
+                <FlowerView
+                  id={location.pathname.slice(8)}
+                />
+                }
+              </Navigation>
+            } />
           </Switch>
-          {/* <Hub /> */}
-          {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
-            <FlowerView
-              id={location.pathname.slice(8)}
-            />
-          }
-          {!session.authenticated && location.pathname.slice(8) && false &&
-            <h2 style={{
-              textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
-            }}>
-              Please log in to see content.
-            </h2>
-          }
           {session.authenticated &&
             <Route path='/' exact render={() =>
               <FloatingButton
