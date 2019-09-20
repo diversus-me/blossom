@@ -20,7 +20,7 @@ class FlowerItem extends React.Component {
   }
 
   toggleEdit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     this.setState({
       editFlowerVisibility: !this.state.editFlowerVisibility
     })
@@ -28,7 +28,7 @@ class FlowerItem extends React.Component {
 
   delete = (e) => {
     const { title, id } = this.props
-    e.preventDefault()
+    e.preventDefault();
     if (window.confirm(`Are you sure you want to delete ${title}?`)) {
       fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/flower`,
@@ -56,7 +56,7 @@ class FlowerItem extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const { title, id, videoId, description, created, user, session } = this.props
     const { editFlowerVisibility } = this.state
     return (
@@ -69,38 +69,38 @@ class FlowerItem extends React.Component {
         </div>
         <div className={classnames(style.block, style.left)}>
           <div className={style.title}>{title}</div>
-          <div className={style.dateContainer}>
-            <MdDateRange size={'20px'} color='grey' />
-            <span className={style.date}>{moment(created).fromNow()}</span>
+          <div className={style.petalContainer}>
+            {"1,123 petals"}
           </div>
-          <div className={style.user}>
-            <RandomUserImage round />
+          <div className={style.bottomContainer}>
             <div className={classnames(style.username)}>{user.name}</div>
+            <div className={classnames(style.date)}>{moment(created).format("LL")}</div>
+            <div className={classnames(style.views)}>{"1,234 views"}</div>
           </div>
           {session.authenticated && (session.role === 'admin' || session.id === user.id) &&
-          [
-            <div
-              key='edit'
-              className={classnames(style.edit)}
-              onClick={this.toggleEdit}
-            >
-              <MdEdit color='grey' />
-            </div>,
-            <div
-              key='delete'
-              className={classnames(style.delete)}
-              onClick={this.delete}
-            >
-              <MdClear color='grey' size='1.1em' />
-            </div>,
-            <Overlay key='editOverlay' visibility={editFlowerVisibility} onOuterClick={this.toggleEdit}>
-              <EditFlowerFrom
-                title={title}
-                description={description}
-                id={id}
-              />
-            </Overlay>
-          ]
+            [
+              <div
+                key='edit'
+                className={classnames(style.edit)}
+                onClick={this.toggleEdit}
+              >
+                <MdEdit color='grey' />
+              </div>,
+              <div
+                key='delete'
+                className={classnames(style.delete)}
+                onClick={this.delete}
+              >
+                <MdClear color='grey' size='1.1em' />
+              </div>,
+              <Overlay key='editOverlay' visibility={editFlowerVisibility} onOuterClick={this.toggleEdit}>
+                <EditFlowerFrom
+                  title={title}
+                  description={description}
+                  id={id}
+                />
+              </Overlay>
+            ]
           }
         </div>
       </div>
@@ -121,7 +121,7 @@ FlowerItem.propTypes = {
   id: propTypes.number.isRequired
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   const { session } = state
   return { session }
 }
