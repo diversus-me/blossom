@@ -74,7 +74,7 @@ class FlowerItem extends React.Component {
           </div>
           <div className={style.bottomContainer}>
             <div className={classnames(style.username)}>{user.name}</div>
-            <div className={classnames(style.date)}>{moment(created).format('LL')}</div>
+            <div className={classnames(style.date)}>{moment(created).fromNow()}</div>
             <div className={classnames(style.views)}>{'1,234 views'}</div>
           </div>
           {session.authenticated && (session.role === 'admin' || session.id === user.id) &&
