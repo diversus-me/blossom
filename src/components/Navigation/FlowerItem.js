@@ -3,12 +3,11 @@ import propTypes from 'prop-types'
 import classnames from 'classnames'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { MdEdit, MdClear, MdDateRange } from 'react-icons/md'
+import { MdEdit, MdClear } from 'react-icons/md'
 import { toast } from 'react-toastify'
 
 import { listFlowers } from '../../state/flowerList/actions'
 
-import RandomUserImage from '../Dummies/RandomUserImage'
 import Overlay from '../UI/Overlay'
 import EditFlowerFrom from '../Forms/EditFlowerForm'
 
