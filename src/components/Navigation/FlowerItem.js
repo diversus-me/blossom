@@ -20,7 +20,7 @@ class FlowerItem extends React.Component {
   }
 
   toggleEdit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     this.setState({
       editFlowerVisibility: !this.state.editFlowerVisibility
     })
@@ -28,7 +28,7 @@ class FlowerItem extends React.Component {
 
   delete = (e) => {
     const { title, id } = this.props
-    e.preventDefault();
+    e.preventDefault()
     if (window.confirm(`Are you sure you want to delete ${title}?`)) {
       fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/flower`,
@@ -56,7 +56,7 @@ class FlowerItem extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { title, id, videoId, description, created, user, session } = this.props
     const { editFlowerVisibility } = this.state
     return (
@@ -70,12 +70,12 @@ class FlowerItem extends React.Component {
         <div className={classnames(style.block, style.left)}>
           <div className={style.title}>{title}</div>
           <div className={style.petalContainer}>
-            {"1,123 petals"}
+            {'1,123 petals'}
           </div>
           <div className={style.bottomContainer}>
             <div className={classnames(style.username)}>{user.name}</div>
-            <div className={classnames(style.date)}>{moment(created).format("LL")}</div>
-            <div className={classnames(style.views)}>{"1,234 views"}</div>
+            <div className={classnames(style.date)}>{moment(created).format('LL')}</div>
+            <div className={classnames(style.views)}>{'1,234 views'}</div>
           </div>
           {session.authenticated && (session.role === 'admin' || session.id === user.id) &&
             [
@@ -121,7 +121,7 @@ FlowerItem.propTypes = {
   id: propTypes.number.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const { session } = state
   return { session }
 }
