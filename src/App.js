@@ -19,6 +19,8 @@ import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
+import SeedInfo from './components/FlowerUI/SeedInfo'
+
 // import style from './App.module.css'
 
 class App extends Component {
@@ -66,6 +68,7 @@ class App extends Component {
           <Switch location={location}>
             <Route path='/' exact component={Navigation} />
             <Route path='/admin' exact component={AdminArea} />
+            <Route path='/home' exact component={SeedInfo} />
             <Route
               path='/login'
               exact
