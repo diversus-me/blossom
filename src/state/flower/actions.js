@@ -1,5 +1,5 @@
-import history from '../../history'
 import queryString from 'query-string'
+import { history } from '../configureStore'
 
 export const SELECT_PETAL = 'SELECT_PETAL'
 
@@ -16,8 +16,9 @@ export function selectPetal (petal) {
     }
   }
   return {
-    type: SELECT_PETAL,
-    id,
-    petal
+    type: 'test'
+    // type: SELECT_PETAL,
+    // id,
+    // petal
   }
 }

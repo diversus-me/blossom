@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom' // eslint-disable-line no-unused-vars
+import { withRouter, Route, Switch } from 'react-router' // eslint-disable-line no-unused-vars
 import { toast } from 'react-toastify'
 import queryString from 'query-string'
+
+import { history } from './state/configureStore'
 
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -67,7 +68,8 @@ class App extends Component {
             <Route
               path='/login'
               exact
-              render={() => <Login />} />
+              render={() => <Login />}
+            />
             <Route render={() =>
               <Navigation>
                 {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&

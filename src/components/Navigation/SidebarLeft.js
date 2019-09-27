@@ -31,7 +31,7 @@ class SidebarLeft extends React.Component {
         <div
           className={style.content}
           style={{
-            transform: `translateX(${(open) ? (half) ? dimensions.width - SIDEBAR_WIDTH : 0 : dimensions.width - SIDEBAR_WIDTH}px)`
+            transform: `translateX(${(open) ? (half) ? dimensions.width - SIDEBAR_WIDTH : 20 : dimensions.width - SIDEBAR_WIDTH}px)`
           }}
         >
           {children}

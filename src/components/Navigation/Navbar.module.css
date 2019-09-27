@@ -1,6 +1,6 @@
 .bar {
   position: absolute;
-  height: 80px;
+  height: 60px;
   width: 100%;
   box-shadow: 0 3px 15px rgba(36,40,67,0.1);
   display: flex;
@@ -20,4 +20,14 @@
   margin-right: 40px;
   display: flex;
   align-items: center;
+}
+
+@media (max-width:600px) {
+  .logoContainer {
+    margin-left: 20px;
+  }
+
+  .iconContainer {
+    margin-right: 20px;
+  }
 }

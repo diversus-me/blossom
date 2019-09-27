@@ -33,7 +33,7 @@ class Navbar extends React.Component {
       <div className={style.bar}>
         <div className={style.logoContainer}>
           <Logo
-            height={25}
+            height={20}
             short={this.state.short}
           />
         </div>

@@ -3,7 +3,9 @@ import { SET_NODE_POSITION, ADD_NODE_ROUTINE_RUNNING,
 
 const initialState = {
   addNodeRoutineRunning: false,
-  addedNodePosition: 0
+  addedNodePosition: 0,
+  selectedFlower: ''
+
 }
 
 export default function globalsReducer (state = initialState, action) {

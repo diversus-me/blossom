@@ -2,22 +2,24 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { Router } from 'react-router-dom'
-import history from './history'
-import './index.css'
 import { ThemeProvider } from '@material-ui/styles'
-import theme from './theme'
-import configureStore from './state/configureStore'
+import { ConnectedRouter } from 'connected-react-router'
 
+import theme from './theme'
+import configureStore, { history } from './state/configureStore'
 import App from './App'
+import './index.css'
 
 const store = configureStore()
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <Router history={history}>
-        <App />
-      </Router>
+      <ConnectedRouter history={history}>
+        <Router history={history}>
+          <App />
+        </Router>
+      </ConnectedRouter>
     </Provider>
   </ThemeProvider>,
   document.getElementById('root')

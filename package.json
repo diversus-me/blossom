@@ -15,6 +15,7 @@
     "@uppy/store-redux": "^1.1.0",
     "@uppy/webcam": "^1.1.0",
     "classnames": "^2.2.6",
+    "connected-react-router": "^6.5.2",
     "d3": "^5.9.2",
     "get-blob-duration": "^1.1.0",
     "get-video-id": "^3.1.1",
