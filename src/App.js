@@ -17,6 +17,8 @@ import Login from './components/Login/Login'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
+import SeedInfo from './components/FlowerUI/SeedInfo'
+
 // import style from './App.module.css'
 
 const MOBILE_BREAKPOINT = 1200
@@ -91,6 +93,7 @@ class App extends Component {
         <div>
           <Switch location={location}>
             <Route path='/admin' exact component={AdminArea} />
+            <Route path='/home' exact component={SeedInfo} />
             <Route
               path='/login'
               exact
