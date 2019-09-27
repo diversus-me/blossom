@@ -1,5 +1,5 @@
 import queryString from 'query-string'
-import { history } from '../configureStore'
+import { history } from '../state/configureStore'
 
 export function selectPetal (petal) {
   const parsed = queryString.parse(history.location.search)

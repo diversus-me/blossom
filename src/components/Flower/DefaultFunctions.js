@@ -90,8 +90,6 @@ export function createPetalTree (data, rootRadius, centerX, centerY) {
     const radius = getPetalSize(currentNode.relevance, rootRadius, 0, 1000)
     const alpha = rad2deg(getAlphaRadial(rootRadius, radius))
 
-    console.log(workingData.relevance, rootRadius, 0, 1000)
-
     const nodeWithAngle = Object.assign({}, currentNode, {
       radius,
       radiusScale: radius / rootRadius,

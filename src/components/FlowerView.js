@@ -11,7 +11,7 @@ import 'react-tiny-fab/dist/styles.min.css'
 
 import { getFlowerData } from '../state/flowerData/actions'
 import { setNodeRoutineRunning } from '../state/globals/actions'
-import { selectPetal } from '../state/flower/actions'
+import { selectPetal } from './Functions'
 
 import FlowerRenderer from './Flower/FlowerRenderer'
 import Overlay from './UI/Overlay'
@@ -152,7 +152,7 @@ class FlowerView extends React.Component {
   }
 
   render () {
-    const { history, id, flowerData, session, selectPetal } = this.props
+    const { history, id, flowerData, session } = this.props
     const { editNodeVisibility, currentProgress, overlayVisible, currentTime, addNodePos } = this.state
     const data = flowerData.data[id]
 
@@ -319,7 +319,7 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = {
-  getFlowerData, setNodeRoutineRunning, selectPetal
+  getFlowerData, setNodeRoutineRunning
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FlowerView))

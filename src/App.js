@@ -4,8 +4,6 @@ import { withRouter, Route, Switch } from 'react-router' // eslint-disable-line 
 import { toast } from 'react-toastify'
 import queryString from 'query-string'
 
-import { history } from './state/configureStore'
-
 import 'react-toastify/dist/ReactToastify.css'
 
 import { login } from './state/session/actions'
@@ -21,9 +19,31 @@ import FlowerView from './components/FlowerView'
 
 // import style from './App.module.css'
 
+const MOBILE_BREAKPOINT = 1200
+
 class App extends Component {
+  static getDerivedStateFromProps (props, state) {
+    const { dimensions, globals } = props
+    const { selectedFlower } = globals
+    if (state.selectedFlower !== selectedFlower) {
+      let sideBarOpen = true
+      if (dimensions.width < MOBILE_BREAKPOINT) { // Close the Sidebar on mobile
+        sideBarOpen = false
+      }
+      return {
+        sideBarOpen,
+        selectedFlower
+      }
+    }
+    return {
+      selectedFlower
+    }
+  }
+
   state = {
-    flowerOverlayVisible: false
+    flowerOverlayVisible: false,
+    sideBarOpen: (this.props.dimensions.width > MOBILE_BREAKPOINT),
+    selectedFlower: this.props.globals.selectedFlower
   }
 
   componentDidMount () {
@@ -51,6 +71,12 @@ class App extends Component {
     window.removeEventListener('resize', this.props.resize)
   }
 
+  toggleSideBar = () => {
+    this.setState({
+      sideBarOpen: !this.state.sideBarOpen
+    })
+  }
+
   toggleAddFlowerOverlay = () => {
     this.setState({
       flowerOverlayVisible: !this.state.flowerOverlayVisible
@@ -58,8 +84,8 @@ class App extends Component {
   }
 
   render () {
-    const { session } = this.props
-    const { flowerOverlayVisible } = this.state
+    const { session, globals } = this.props
+    const { flowerOverlayVisible, sideBarOpen } = this.state
     return (
       <Route render={({ location }) => (
         <div>
@@ -71,10 +97,13 @@ class App extends Component {
               render={() => <Login />}
             />
             <Route render={() =>
-              <Navigation>
-                {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
+              <Navigation
+                sideBarOpen={sideBarOpen}
+                toggleSideBar={this.toggleSideBar}
+              >
+                {globals.selectedFlower && false &&
                 <FlowerView
-                  id={location.pathname.slice(8)}
+                  id={globals.selectedFlower}
                 />
                 }
               </Navigation>
@@ -100,8 +129,8 @@ class App extends Component {
 }
 
 function mapStateToProps (state) {
-  const { session } = state
-  return { session }
+  const { session, globals, dimensions } = state
+  return { session, globals, dimensions }
 }
 
 const mapDispatchToProps = {

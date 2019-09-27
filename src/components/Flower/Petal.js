@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { IoIosGlasses } from 'react-icons/io'
 import { withRouter } from 'react-router'
 
-import { selectPetal } from '../../state/flower/actions'
+import { selectPetal } from '../Functions'
 
 import { getFlavor } from '../Defaults'
 import VideoPlayer from '../VideoPlayer/VideoPlayer'
@@ -60,7 +60,7 @@ class Petal extends React.Component {
   }
 
   handleClick = (event) => {
-    const { id, selectPetal, isRootNode, node } = this.props
+    const { id, isRootNode, node } = this.props
     if (event.altKey && !isRootNode) {
       this.props.history.push(`/flower/${id}`)
     } else {
@@ -173,8 +173,4 @@ function mapStateToProps (state) {
   return { globals, flower }
 }
 
-const mapDispatchToProps = {
-  selectPetal
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Petal))
+export default connect(mapStateToProps)(withRouter(Petal))

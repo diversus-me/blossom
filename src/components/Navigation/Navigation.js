@@ -43,10 +43,13 @@ class Navigation extends React.Component {
   }
 
   render () {
-    const { flowerList, children } = this.props
+    const { flowerList, children, sideBarOpen, toggleSideBar, globals } = this.props
     const { value } = this.state
     return [
-      <SidebarLeft>
+      <SidebarLeft
+        sideBarOpen={sideBarOpen}
+        toggleSideBar={toggleSideBar}
+      >
         <AppBar position='static' color='default' style={{ width: '320px' }}>
           <Tabs
             value={value}
@@ -74,6 +77,7 @@ class Navigation extends React.Component {
                   created={new Date(flower.created)}
                   user={flower.user}
                   id={flower.id}
+                  isSelected={flower.node.id.toString() === globals.selectedFlower}
                 />
               </Link>
             )
@@ -90,8 +94,8 @@ class Navigation extends React.Component {
 }
 
 function mapStateToProps (state) {
-  const { flowerList, settings, dispatch } = state
-  return { flowerList, settings, dispatch }
+  const { flowerList, settings, dispatch, globals } = state
+  return { flowerList, settings, dispatch, globals }
 }
 
 const mapDispatchToProps = {

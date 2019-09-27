@@ -8,6 +8,7 @@
   box-shadow: 0 10px 15px rgba(36,40,67,0.1);
   transition: transform 300ms ease-out;
   background: white;
+  z-index: 999;
 }
 
 .animate {
@@ -35,6 +36,7 @@
   bottom: 80px;
   position: absolute;
   cursor: pointer;
+  z-index: 999;
 }
 
 .handleArrow {

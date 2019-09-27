@@ -56,10 +56,11 @@ class FlowerItem extends React.Component {
   }
 
   render () {
-    const { title, id, videoId, description, created, user, session } = this.props
+    const { title, id, videoId, description, created, user, session, isSelected } = this.props
     const { editFlowerVisibility } = this.state
+
     return (
-      <div className={style.container}>
+      <div className={style.container} style={{ background: (isSelected) ? 'grey' : 'white' }}>
         <div className={style.right}>
           <div
             style={{ backgroundImage: `url(https://img.youtube.com/vi/${videoId}/sddefault.jpg)` }}
