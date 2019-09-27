@@ -101,7 +101,7 @@ class App extends Component {
                 sideBarOpen={sideBarOpen}
                 toggleSideBar={this.toggleSideBar}
               >
-                {globals.selectedFlower && false &&
+                {globals.selectedFlower &&
                 <FlowerView
                   id={globals.selectedFlower}
                 />
