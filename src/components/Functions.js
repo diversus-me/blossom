@@ -1,7 +1,5 @@
 import queryString from 'query-string'
-import { history } from '../configureStore'
-
-export const SELECT_PETAL = 'SELECT_PETAL'
+import { history } from '../state/configureStore'
 
 export function selectPetal (petal) {
   const parsed = queryString.parse(history.location.search)
@@ -14,11 +12,5 @@ export function selectPetal (petal) {
     } else {
       history.push({ search: '' })
     }
-  }
-  return {
-    type: 'test'
-    // type: SELECT_PETAL,
-    // id,
-    // petal
   }
 }

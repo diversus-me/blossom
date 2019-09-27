@@ -5,11 +5,36 @@ import { Link } from 'react-router-dom'
 import { listFlowers } from '../../state/flowerList/actions'
 
 import style from './Navigation.module.css'
-
+import AppBar from '@material-ui/core/AppBar'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import FlowerItem from './FlowerItem'
-import Searchbar from './Searchbar'
+// import Searchbar from './Searchbar'
+import Navbar from '../Navigation/Navbar'
+// import Typography from '@material-ui/core/Typography'
+import SidebarLeft from '../Navigation/SidebarLeft'
+// import Box from '@material-ui/core/Box'
+
+function TabPanel (props) {
+  const { children, value, index } = props
+
+  return (
+    <div style={{ visibility: (value === index) ? 'visible' : 'hidden' }}>{children}</div>
+  )
+}
+
+function a11yProps (index) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`
+  }
+}
 
 class Navigation extends React.Component {
+  state = {
+    value: 0
+  }
+
   componentDidMount () {
     const { loading, finished } = this.props.flowerList
     if (!loading && !finished) {
@@ -18,12 +43,27 @@ class Navigation extends React.Component {
   }
 
   render () {
-    console.log(style.linkContainer)
-    const { flowerList } = this.props
+    const { flowerList, children, sideBarOpen, toggleSideBar, globals } = this.props
+    const { value } = this.state
     return [
-      <div key='mainNavigation' className={style.container}>
-        <Searchbar />
-        <div className={style.content}>
+      <SidebarLeft
+        sideBarOpen={sideBarOpen}
+        toggleSideBar={toggleSideBar}
+      >
+        <AppBar position='static' color='default' style={{ width: '320px' }}>
+          <Tabs
+            value={value}
+            onChange={(event, newValue) => { this.setState({ value: newValue }) }}
+            indicatorColor='secondary'
+            textColor='primary'
+            variant='scrollable'
+            aria-label='flower tabs'
+          >
+            <Tab label='All' {...a11yProps(0)} />
+            <Tab label='My Flowers' {...a11yProps(1)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
           {flowerList.finished && !flowerList.error && flowerList.list.map((flower) => {
             return (
               <Link
@@ -37,21 +77,25 @@ class Navigation extends React.Component {
                   created={new Date(flower.created)}
                   user={flower.user}
                   id={flower.id}
+                  isSelected={flower.node.id.toString() === globals.selectedFlower}
                 />
               </Link>
             )
           })}
-        </div>
-      </div>,
-      <div key='topGradient' className={style.topGradient} />,
-      <div key='bottomGradient' className={style.bottomGradient} />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+        Item Two
+        </TabPanel>
+      </SidebarLeft>,
+      <Navbar />,
+      <div>{children}</div>
     ]
   }
 }
 
 function mapStateToProps (state) {
-  const { flowerList, settings, dispatch } = state
-  return { flowerList, settings, dispatch }
+  const { flowerList, settings, dispatch, globals } = state
+  return { flowerList, settings, dispatch, globals }
 }
 
 const mapDispatchToProps = {

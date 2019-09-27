@@ -10,6 +10,7 @@ import style from './Login.module.css'
 import Description from './Description'
 import Input from './Input'
 import Info from './Info'
+import Logo from '../UI/Logo'
 
 class Login extends React.Component {
   handleSubmit = (value) => {
@@ -21,34 +22,36 @@ class Login extends React.Component {
 
   render () {
     const { session } = this.props
-    return [
-      <div className={style.backgroundContainer} />,
-      <div className={style.container}>
-        <Grid container className={style.mainGrid}>
-          <Grid item xs={12} sm={6} className={style.section}>
-            <Description />
-          </Grid>
-          <Grid item xs={12} sm={6} className={style.section}>
-            <Paper
-              className={style.paper}
-              children={[
-                <div className={style.heading}>diversus</div>,
-                (session.loginLinkSuccess) ? (
-                  <Info />
-                ) : (
-                  <Input
-                    handleSubmit={this.handleSubmit}
-                    error={(session.loginLinkFailed) ? 'Please try again.' : undefined}
-                    disabled={session.loginLinkLoading}
-                  />
-                )
+    return (
+      <div className={style.backgroundContainer}>
+        <div className={style.container}>
+          <Grid container className={style.mainGrid}>
+            <Grid item xs={12} sm={6} className={style.section}>
+              <Description />
+            </Grid>
+            <Grid item xs={12} sm={6} className={style.section}>
+              <Paper
+                className={style.paper}
+                children={[
+                  <div className={style.heading}>
+                    <Logo />
+                  </div>,
+                  (session.loginLinkSuccess) ? (
+                    <Info />
+                  ) : (
+                    <Input
+                      handleSubmit={this.handleSubmit}
+                      error={(session.loginLinkFailed) ? 'Please try again.' : undefined}
+                      disabled={session.loginLinkLoading}
+                    />
+                  )
 
-              ]} />
+                ]} />
+            </Grid>
           </Grid>
-        </Grid>
-
+        </div>
       </div>
-    ]
+    )
   }
 }
 

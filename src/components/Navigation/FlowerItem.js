@@ -3,12 +3,11 @@ import propTypes from 'prop-types'
 import classnames from 'classnames'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { MdEdit, MdClear, MdDateRange } from 'react-icons/md'
+import { MdEdit, MdClear } from 'react-icons/md'
 import { toast } from 'react-toastify'
 
 import { listFlowers } from '../../state/flowerList/actions'
 
-import RandomUserImage from '../Dummies/RandomUserImage'
 import Overlay from '../UI/Overlay'
 import EditFlowerFrom from '../Forms/EditFlowerForm'
 
@@ -57,10 +56,11 @@ class FlowerItem extends React.Component {
   }
 
   render () {
-    const { title, id, videoId, description, created, user, session } = this.props
+    const { title, id, videoId, description, created, user, session, isSelected } = this.props
     const { editFlowerVisibility } = this.state
+
     return (
-      <div className={style.container}>
+      <div className={style.container} style={{ background: (isSelected) ? 'grey' : 'white' }}>
         <div className={style.right}>
           <div
             style={{ backgroundImage: `url(https://img.youtube.com/vi/${videoId}/sddefault.jpg)` }}
@@ -69,38 +69,38 @@ class FlowerItem extends React.Component {
         </div>
         <div className={classnames(style.block, style.left)}>
           <div className={style.title}>{title}</div>
-          <div className={style.dateContainer}>
-            <MdDateRange size={'20px'} color='grey' />
-            <span className={style.date}>{moment(created).fromNow()}</span>
+          <div className={style.petalContainer}>
+            {'1,123 petals'}
           </div>
-          <div className={style.user}>
-            <RandomUserImage round />
+          <div className={style.bottomContainer}>
             <div className={classnames(style.username)}>{user.name}</div>
+            <div className={classnames(style.date)}>{moment(created).fromNow()}</div>
+            <div className={classnames(style.views)}>{'1,234 views'}</div>
           </div>
           {session.authenticated && (session.role === 'admin' || session.id === user.id) &&
-          [
-            <div
-              key='edit'
-              className={classnames(style.edit)}
-              onClick={this.toggleEdit}
-            >
-              <MdEdit color='grey' />
-            </div>,
-            <div
-              key='delete'
-              className={classnames(style.delete)}
-              onClick={this.delete}
-            >
-              <MdClear color='grey' size='1.1em' />
-            </div>,
-            <Overlay key='editOverlay' visibility={editFlowerVisibility} onOuterClick={this.toggleEdit}>
-              <EditFlowerFrom
-                title={title}
-                description={description}
-                id={id}
-              />
-            </Overlay>
-          ]
+            [
+              <div
+                key='edit'
+                className={classnames(style.edit)}
+                onClick={this.toggleEdit}
+              >
+                <MdEdit color='grey' />
+              </div>,
+              <div
+                key='delete'
+                className={classnames(style.delete)}
+                onClick={this.delete}
+              >
+                <MdClear color='grey' size='1.1em' />
+              </div>,
+              <Overlay key='editOverlay' visibility={editFlowerVisibility} onOuterClick={this.toggleEdit}>
+                <EditFlowerFrom
+                  title={title}
+                  description={description}
+                  id={id}
+                />
+              </Overlay>
+            ]
           }
         </div>
       </div>

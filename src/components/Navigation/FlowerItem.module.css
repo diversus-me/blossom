@@ -1,13 +1,11 @@
 .container {
     display: flex;
-    /* flex: 2 1 auto; */
-    /* min-width: 300px; */
+    min-width: 300px;
     height: 150px;
-    margin: 10px 10px;
     position: relative;
     background: white;
-    border-radius: 15px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    border-radius: 0px;
+    max-width: 320px;
 }
 
 .block {
@@ -15,7 +13,7 @@
 }
 
 .left {
-    width: 65%;
+    width: 70%;
 }
 
 .edit {
@@ -31,7 +29,7 @@
 }
 
 .right {
-    width: 35%;
+    width: 30%;
     margin-left: 20px;
 }
 
@@ -53,7 +51,7 @@
     font-size: 0.9em;
     font-weight: bold;
     margin-top: 20px;
-    padding: 0 20px;
+    padding: 0 10px;
     max-height: 2.4em;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -65,32 +63,37 @@
     margin-left: 10px;
 }
 
-.dateContainer {
+.petalContainer {
     /* right: 0;
     bottom: 0px;
     position: absolute; */
-    padding: 0 20px;
+    padding: 0 10px;
     font-size: 0.8em;
     margin: 15px 0 5px 0;
     display: table;
 }
 
 .date {
-    padding-left: 15px;
-    display: table-cell;
-    vertical-align: middle;
+    padding-left: 5px;
+    font-size: 0.8em;
+    color : grey;
 }
 
-.user {
+.bottomContainer {
     /* position: absolute; */
     /* bottom: 0; */
-    width: 20px;
+    /* width: 20px; */
     display: flex;
-    align-items: center;
-    padding: 0 20px;
+    padding: 20px 10px;
 }
 
 .username {
     font-size: 0.8em;
-    padding-left: 15px;
+}
+
+.views {
+    font-size: 0.8em;
+    padding-left: 5px;
+    margin-left:auto; 
+    margin-right:0;
 }

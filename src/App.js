@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom' // eslint-disable-line no-unused-vars
+import { withRouter, Route, Switch } from 'react-router' // eslint-disable-line no-unused-vars
 import { toast } from 'react-toastify'
 import queryString from 'query-string'
 
@@ -15,7 +14,6 @@ import Overlay from './components/UI/Overlay'
 // import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
-import Hub from './components/User/Hub'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
 
@@ -23,9 +21,31 @@ import SeedInfo from './components/FlowerUI/SeedInfo'
 
 // import style from './App.module.css'
 
+const MOBILE_BREAKPOINT = 1200
+
 class App extends Component {
+  static getDerivedStateFromProps (props, state) {
+    const { dimensions, globals } = props
+    const { selectedFlower } = globals
+    if (state.selectedFlower !== selectedFlower) {
+      let sideBarOpen = true
+      if (dimensions.width < MOBILE_BREAKPOINT) { // Close the Sidebar on mobile
+        sideBarOpen = false
+      }
+      return {
+        sideBarOpen,
+        selectedFlower
+      }
+    }
+    return {
+      selectedFlower
+    }
+  }
+
   state = {
-    flowerOverlayVisible: false
+    flowerOverlayVisible: false,
+    sideBarOpen: (this.props.dimensions.width > MOBILE_BREAKPOINT),
+    selectedFlower: this.props.globals.selectedFlower
   }
 
   componentDidMount () {
@@ -53,6 +73,12 @@ class App extends Component {
     window.removeEventListener('resize', this.props.resize)
   }
 
+  toggleSideBar = () => {
+    this.setState({
+      sideBarOpen: !this.state.sideBarOpen
+    })
+  }
+
   toggleAddFlowerOverlay = () => {
     this.setState({
       flowerOverlayVisible: !this.state.flowerOverlayVisible
@@ -60,41 +86,38 @@ class App extends Component {
   }
 
   render () {
-    const { session } = this.props
-    const { flowerOverlayVisible } = this.state
+    const { session, globals } = this.props
+    const { flowerOverlayVisible, sideBarOpen } = this.state
     return (
       <Route render={({ location }) => (
         <div>
           <Switch location={location}>
-            <Route path='/' exact component={Navigation} />
             <Route path='/admin' exact component={AdminArea} />
             <Route path='/home' exact component={SeedInfo} />
             <Route
               path='/login'
               exact
-              render={() =>
-                <Login />
-              } />
-          </Switch>
-          <Hub />
-          {location.pathname.startsWith('/flower') && location.pathname.slice(8) &&
-          <FlowerView
-            id={location.pathname.slice(8)}
-          />
-          }
-          {!session.authenticated && location.pathname.slice(8) && false &&
-          <h2 style={{
-            textAlign: 'center', top: '40%', position: 'absolute', width: '100%'
-          }}>
-              Please log in to see content.
-          </h2>
-          }
-          {session.authenticated &&
-          <Route path='/' exact render={() =>
-            <FloatingButton
-              onClickCallback={this.toggleAddFlowerOverlay}
+              render={() => <Login />}
             />
-          } />
+            <Route render={() =>
+              <Navigation
+                sideBarOpen={sideBarOpen}
+                toggleSideBar={this.toggleSideBar}
+              >
+                {globals.selectedFlower &&
+                <FlowerView
+                  id={globals.selectedFlower}
+                />
+                }
+              </Navigation>
+            } />
+          </Switch>
+          {session.authenticated &&
+            <Route path='/' exact render={() =>
+              <FloatingButton
+                onClickCallback={this.toggleAddFlowerOverlay}
+              />
+            } />
           }
           <Overlay
             visibility={flowerOverlayVisible}
@@ -109,8 +132,8 @@ class App extends Component {
 }
 
 function mapStateToProps (state) {
-  const { session } = state
-  return { session }
+  const { session, globals, dimensions } = state
+  return { session, globals, dimensions }
 }
 
 const mapDispatchToProps = {

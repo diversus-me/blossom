@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 
 import style from './Forms.module.css'
 import { getFlowerData } from '../../state/flowerData/actions'
-import TimeField from 'react-simple-timefield'
+// import TimeField from 'react-simple-timefield'
 import moment from 'moment'
 
 function toString (time) {
@@ -183,7 +183,7 @@ class AddNodeForm extends React.Component {
         <form onSubmit={this.handleSubmit} className={style.form}>
           <input className={style.input} type='text' placeholder='Add a title' value={titleValue} onChange={e => { this.handleChange(e, 'title') }} />
           {/* <input className={style.input} type='text' placeholder='Provide Youtube Link' value={youtubeLinkValue} onChange={e => { this.handleChange(e, 'link') }} /> */}
-          <div>
+          {/* <div>
             <span className={style.text}>SourceIn: </span>
             <TimeField
               value={sourceInValue}
@@ -214,7 +214,7 @@ class AddNodeForm extends React.Component {
               onChange={e => this.handleChange(e, 'targetOut')}
               showSeconds
             />
-          </div>
+          </div> */}
           {/* <input className={style.input} type='number' placeholder='sourceIn' value={sourceInValue} onChange={e => this.handleChange(e, 'sourceIn')} disabled={(!validLink)} /> */}
           {/* <input className={style.input} type='number' placeholder='sourceout' value={sourceOutValue} onChange={e => this.handleChange(e, 'sourceOut')} disabled={(!validLink)} /> */}
           <select
