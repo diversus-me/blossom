@@ -34,7 +34,10 @@ class Login extends React.Component {
                 className={style.paper}
                 children={[
                   <div className={style.heading}>
-                    <Logo />
+                    <Logo
+                      shortenAtWidthOf={400}
+                      center
+                    />
                   </div>,
                   (session.loginLinkSuccess) ? (
                     <Info />

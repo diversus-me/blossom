@@ -2,10 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { MdKeyboardArrowRight } from 'react-icons/md'
-
+import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../Defaults'
 import style from './SidebarLeft.module.css'
-
-const SIDEBAR_WIDTH = 320
 
 class SidebarLeft extends React.Component {
   static getDerivedStateFromProps (props) {
@@ -27,13 +25,17 @@ class SidebarLeft extends React.Component {
         key='sideBarContainer'
         className={style.sidebarContainer}
         style={{
-          transform: `translateX(${position}px)`
+          transform: `translateX(${position}px)`,
+          height: `calc(100% - ${NAVBAR_HEIGHT}px)`,
+          marginTop: `${NAVBAR_HEIGHT}px`
         }}
       >
         <div
           className={style.content}
           style={{
-            transform: `translateX(${(sideBarOpen) ? (!full) ? dimensions.width - SIDEBAR_WIDTH : 20 : dimensions.width - SIDEBAR_WIDTH}px)`
+            transform: `translateX(${(sideBarOpen)
+              ? (!full) ? dimensions.width - SIDEBAR_WIDTH : 20
+              : dimensions.width - SIDEBAR_WIDTH}px)`
           }}
         >
           {children}

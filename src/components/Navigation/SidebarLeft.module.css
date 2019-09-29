@@ -1,18 +1,10 @@
 .sidebarContainer {
   width: 100%;
-  height: calc(100% - 60px);
-  margin-top: 60px;
   overflow: scroll;
-  /* background: black; */
   position: absolute;
   box-shadow: 0 10px 15px rgba(36,40,67,0.1);
   transition: transform 300ms ease-out;
   background: white;
-  z-index: 999;
-}
-
-.animate {
-  transition: translate 300ms ease-in-out;
 }
 
 .button {

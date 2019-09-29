@@ -6,35 +6,18 @@ import Badge from '@material-ui/core/Badge'
 
 import Logo from '../UI/Logo'
 
+import { NAVBAR_HEIGHT } from '../Defaults'
+
 import style from './Navbar.module.css'
 
 class Navbar extends React.Component {
-  mediaQuery = window.matchMedia('(max-width: 600px)')
-  state = {
-    short: this.mediaQuery.matches
-  }
-
-  componentDidMount () {
-    this.mediaQuery.addListener(this.queryChanged)
-  }
-
-  componentWillUnmount () {
-    this.mediaQuery.removeListener(this.queryChanged)
-  }
-
-  queryChanged = (e) => {
-    this.setState({
-      short: e.matches
-    })
-  }
-
   render () {
     return (
-      <div className={style.bar}>
+      <div className={style.bar} style={{ height: NAVBAR_HEIGHT }}>
         <div className={style.logoContainer}>
           <Logo
             height={20}
-            short={this.state.short}
+            shortenAtWidthOf={600}
           />
         </div>
         <div className={style.iconContainer}>

@@ -9,11 +9,8 @@ import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import FlowerItem from './FlowerItem'
-// import Searchbar from './Searchbar'
 import Navbar from '../Navigation/Navbar'
-// import Typography from '@material-ui/core/Typography'
 import SidebarLeft from '../Navigation/SidebarLeft'
-// import Box from '@material-ui/core/Box'
 
 function TabPanel (props) {
   const { children, value, index } = props
