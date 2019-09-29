@@ -6,7 +6,7 @@ import Badge from '@material-ui/core/Badge'
 
 import Logo from '../UI/Logo'
 
-import { NAVBAR_HEIGHT } from '../Defaults'
+import { NAVBAR_HEIGHT } from '../../Defaults'
 
 import style from './Navbar.module.css'
 

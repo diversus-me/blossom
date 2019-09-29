@@ -7,7 +7,7 @@ import { withRouter } from 'react-router'
 
 import { selectPetal } from '../Functions'
 
-import { getFlavor } from '../Defaults'
+import { getFlavor } from '../../Defaults'
 import VideoPlayer from '../VideoPlayer/VideoPlayer'
 
 import style from './Petal.module.css'

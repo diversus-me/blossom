@@ -2,10 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { MdKeyboardArrowRight } from 'react-icons/md'
-import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../Defaults'
+import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
 import style from './SidebarLeft.module.css'
 
 class SidebarLeft extends React.Component {
+  state = {
+    full: false
+  }
+
   static getDerivedStateFromProps (props) {
     return {
       full: !props.globals.selectedFlower
@@ -62,9 +66,17 @@ class SidebarLeft extends React.Component {
           style={{
             transform: `rotate(${(sideBarOpen) ? 180 : 0}deg)`
           }}
-          toggleSideBar={toggleSideBar}
         />
-      </div>
+      </div>,
+      <div
+        key='outerClickContainer'
+        className={style.outerClickContainer}
+        onClick={toggleSideBar}
+        style={{
+          opacity: (!dimensions.safeToMove && sideBarOpen) ? 0.9 : 0,
+          pointerEvents: (!dimensions.safeToMove && sideBarOpen) ? 'all' : 'none'
+        }}
+      />
     ]
   }
 }

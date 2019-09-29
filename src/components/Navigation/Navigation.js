@@ -44,6 +44,7 @@ class Navigation extends React.Component {
     const { value } = this.state
     return [
       <SidebarLeft
+        key='sidebarLeft'
         sideBarOpen={sideBarOpen}
         toggleSideBar={toggleSideBar}
       >
@@ -84,8 +85,10 @@ class Navigation extends React.Component {
         Item Two
         </TabPanel>
       </SidebarLeft>,
-      <Navbar />,
-      <div>{children}</div>
+      <Navbar key='navbar' />,
+      <div key='children'>
+        { children }
+      </div>
     ]
   }
 }
