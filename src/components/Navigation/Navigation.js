@@ -9,11 +9,8 @@ import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import FlowerItem from './FlowerItem'
-// import Searchbar from './Searchbar'
 import Navbar from '../Navigation/Navbar'
-// import Typography from '@material-ui/core/Typography'
 import SidebarLeft from '../Navigation/SidebarLeft'
-// import Box from '@material-ui/core/Box'
 
 function TabPanel (props) {
   const { children, value, index } = props
@@ -47,6 +44,7 @@ class Navigation extends React.Component {
     const { value } = this.state
     return [
       <SidebarLeft
+        key='sidebarLeft'
         sideBarOpen={sideBarOpen}
         toggleSideBar={toggleSideBar}
       >
@@ -87,8 +85,10 @@ class Navigation extends React.Component {
         Item Two
         </TabPanel>
       </SidebarLeft>,
-      <Navbar />,
-      <div>{children}</div>
+      <Navbar key='navbar' />,
+      <div key='children'>
+        { children }
+      </div>
     ]
   }
 }

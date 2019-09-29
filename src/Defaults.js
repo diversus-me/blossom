@@ -11,6 +11,9 @@ export const LOST_PETAL_DOWN_SCALE_FACTOR = 1
 export const MAGNIFY_SPEED = 600
 export const UNMAGNIFY_SPEED = 800
 
+export const NAVBAR_HEIGHT = 60
+export const SIDEBAR_WIDTH = 320
+
 export const FLAVORS = [
   {
     name: 'Neutral',

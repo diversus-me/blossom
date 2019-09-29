@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Victor from 'victor'
 
-import { DOWN_SCALE_FACTOR, MAGNIFY_SPEED } from '../Defaults'
+import { DOWN_SCALE_FACTOR, MAGNIFY_SPEED } from '../../Defaults'
 import { createRootNode, createCircles, deg2rad } from './DefaultFunctions'
+import { selectPetal } from '../Functions'
 
 import Axes from './Axes'
 import Petal from './Petal'
@@ -312,6 +313,11 @@ class FlowerRenderer extends React.Component {
 
     return [
       <div
+        key='flowerOuterClickContainer'
+        className={style.outerClickContainer}
+        onClick={() => { selectPetal() }}
+      />,
+      <div
         ref={'petals'}
         key={'petals'}
         style={{
@@ -321,9 +327,9 @@ class FlowerRenderer extends React.Component {
           transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`
         }}
       >
-        <Axes
+        {/* <Axes
           key={'axes'}
-        />
+        /> */}
         {divNodes.map((node, i) =>
           <div
             key={node.id}

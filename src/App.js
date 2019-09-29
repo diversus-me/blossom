@@ -107,6 +107,7 @@ class App extends Component {
                 {globals.selectedFlower &&
                 <FlowerView
                   id={globals.selectedFlower}
+                  sideBarOpen={sideBarOpen}
                 />
                 }
               </Navigation>
