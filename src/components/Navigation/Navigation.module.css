@@ -1,11 +1,11 @@
 .container {
-    background: #f5f7fb;
-    width: 100%;
-    top: 0;
-    position: absolute;
-    box-sizing: border-box;
-    padding: 10px;
-    min-height: 100%;
+  background: #f5f7fb;
+  width: 100%;
+  top: 0;
+  position: absolute;
+  box-sizing: border-box;
+  padding: 10px;
+  min-height: 100%;
 }
 
 .linkContainer {
@@ -15,35 +15,65 @@
   max-width: 450px;
 }
 
+.search {
+  position: "relative";
+  width: "100%";
+}
+
+.searchIcon {
+  height: "100%";
+  position: "absolute";
+  pointer-events: "none";
+  display: "flex";
+  align-items: "center";
+  justify-content: "center";
+}
+
+.inputRoot {
+  color: "inherit";
+}
+
+.inputInput {
+  width: "100%";
+}
+
 .content {
-    margin-top: 100px;
-    /* padding: 10px; */
-    width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-content: space-around;
-    min-height: 100%;
-    margin-bottom: 100px;
-    /* text-align: center; */
+  margin-top: 100px;
+  /* padding: 10px; */
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-content: space-around;
+  min-height: 100%;
+  margin-bottom: 100px;
+  /* text-align: center; */
 }
 
 .topGradient {
-    position: fixed;
-    pointer-events: none;
-    width: 100%;
-    height: 100px;
-    background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 35%);
-  }
-  
-  .bottomGradient {
-    position: fixed;
-    pointer-events: none;
-    width: 100%;
-    height: 100px;
-    bottom: -2px;
-    background: linear-gradient(0deg, rgba(255,255,255,1) 55%, rgba(255,255,255,0) 100%);
-  }
+  position: fixed;
+  pointer-events: none;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 35%
+  );
+}
+
+.bottomGradient {
+  position: fixed;
+  pointer-events: none;
+  width: 100%;
+  height: 100px;
+  bottom: -2px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 55%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
 
 /* .header {
     top: 0;
