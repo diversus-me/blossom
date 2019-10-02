@@ -28,7 +28,7 @@ class App extends Component {
     const { dimensions, globals } = props
     const { selectedFlower } = globals
     if (state.selectedFlower !== selectedFlower) {
-      let sideBarOpen = true
+      let sideBarOpen = state.sideBarOpen
       if (dimensions.width < MOBILE_BREAKPOINT) { // Close the Sidebar on mobile
         sideBarOpen = false
       }

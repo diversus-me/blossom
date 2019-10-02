@@ -6,7 +6,6 @@ import flowerList from './flowerList/reducer'
 import session from './session/reducer'
 import dimensions from './dimensions/reducer'
 import { connectGlobals } from './globals/reducer'
-import flower from './flower/reducer'
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -14,6 +13,5 @@ export default (history) => combineReducers({
   flowerData,
   session,
   dimensions,
-  globals: connectGlobals(history),
-  flower
+  globals: connectGlobals(history)
 })

@@ -2,10 +2,6 @@ import { GET_FLOWER_ERROR, GET_FLOWER_LOADING, GET_FLOWER_SUCCESS,
   ADD_NODE_LOADING, ADD_NODE_SUCCESS, ADD_NODE_ERROR } from './actions'
 import { toast } from 'react-toastify'
 
-const initialState = {
-  data: {}
-}
-
 function getColor (type) {
   switch (type) {
     case 'neutral':
@@ -64,90 +60,72 @@ function parseData (data, connections) {
   }
 }
 
-export default function flowerData (state = initialState, action) {
+export default function flowerData (state = {}, action) {
   switch (action.type) {
     case ADD_NODE_LOADING: {
-      const data = Object.assign({}, state.data)
-      data[action.id] = {
-        ...data[action.id],
-        addNodeLoading: true,
-        addNodeFinished: false,
-        addNodeFailed: false
-      }
-      return {
-        ...state,
-        data
-      }
+      return Object.assign({}, state, {
+        [action.id]: {
+          ...state[action.id],
+          addNodeLoading: true,
+          addNodeFinished: false,
+          addNodeFailed: false
+        }
+      })
     }
     case ADD_NODE_SUCCESS: {
       toast.success('Node successfully added.')
-      const data = Object.assign({}, state.data)
-      data[action.id] = {
-        ...data[action.id],
-        addNodeLoading: false,
-        addNodeFinished: true,
-        addNodeFailed: false
-      }
-      return {
-        ...state,
-        data
-      }
+      return Object.assign({}, state, {
+        [action.id]: {
+          ...state[action.id],
+          addNodeLoading: false,
+          addNodeFinished: true,
+          addNodeFailed: false
+        }
+      })
     }
     case ADD_NODE_ERROR: {
       toast.error('Node could not be added.')
-      const data = Object.assign({}, state.data)
-      data[action.id] = {
-        ...data[action.id],
-        addNodeLoading: false,
-        addNodeFinished: true,
-        addNodeFailed: true
-      }
-      return {
-        ...state,
-        data
-      }
+      return Object.assign({}, state, {
+        [action.id]: {
+          ...state[action.id],
+          addNodeLoading: false,
+          addNodeFinished: true,
+          addNodeFailed: true
+        }
+      })
     }
     case GET_FLOWER_LOADING: {
-      const data = Object.assign({}, state.data)
-      data[action.id] = {
-        ...data[action.id],
-        loading: true,
-        finished: false,
-        failed: false
-      }
-      return {
-        ...state,
-        data
-      }
+      return Object.assign({}, state, {
+        [action.id]: {
+          ...state[action.id],
+          loading: true,
+          finished: false,
+          failed: false
+        }
+      })
     }
     case GET_FLOWER_SUCCESS: {
-      const data = Object.assign({}, state.data)
       const parsed = parseData(action.data, action.connections)
-      data[action.id] = {
-        ...data[action.id],
-        data: parsed,
-        loading: false,
-        finished: true,
-        failed: false
-      }
-      return {
-        ...state,
-        data
-      }
+      return Object.assign({}, state, {
+        [action.id]: {
+          ...state[action.id],
+          ...parsed,
+          loading: false,
+          finished: true,
+          failed: false
+        }
+      })
     }
     case GET_FLOWER_ERROR: {
       toast.error('Flower could not be loaded.')
-      const data = Object.assign({}, state.data)
-      data[action.id] = {
-        ...data[action.id],
-        loading: false,
-        finished: true,
-        failed: true
-      }
-      return {
-        ...state,
-        data
-      }
+      return Object.assign({}, state, {
+        [action.id]: {
+          ...state[action.id],
+          loading: false,
+          finished: true,
+          failed: true
+        }
+      })
     }
     default:
       return state

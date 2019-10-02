@@ -1,8 +1,7 @@
+import queryString from 'query-string'
 import { SET_NODE_POSITION, ADD_NODE_ROUTINE_RUNNING,
   GETS_POSITIONED } from './actions'
 import { LOCATION_CHANGE } from 'connected-react-router/esm/actions'
-
-import queryString from 'query-string'
 
 function getFlowerAndPetalFromLocation (location) {
   let selectedFlower = ''

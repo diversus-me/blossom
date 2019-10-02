@@ -39,14 +39,14 @@ class FlowerRenderer extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const { selectedPetalID, data, received, dimensions } = this.props
+    const { selectedPetalID, data, receivedAt, dimensions } = this.props
 
     const isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || document.fullScreen
     if (!this.preventRebuild && !isFullscreen &&
       (data.length !== prevProps.data.length ||
         dimensions.width !== prevProps.dimensions.width ||
         dimensions.height !== prevProps.dimensions.height ||
-        received !== prevProps.received)) {
+        receivedAt !== prevProps.receivedAt)) {
       this.rebuild()
     } else {
       if (selectedPetalID !== prevProps.selectedPetalID) {

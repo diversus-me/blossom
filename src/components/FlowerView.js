@@ -41,14 +41,14 @@ class FlowerView extends React.Component {
   }
 
   shouldComponentUpdate (nextProps) {
-    const { history, id, flowerData: { data } } = nextProps
+    const { history, id, flowerData } = nextProps
     let selectedPetalID = queryString.parse(history.location.search).s
     if (selectedPetalID) {
       selectedPetalID = parseInt(selectedPetalID)
     }
 
-    if (selectedPetalID && data[id] && data[id].data &&
-      !data[id].data.connections.find(connection => connection.id === selectedPetalID)) {
+    if (selectedPetalID && flowerData[id] && flowerData[id] &&
+      !flowerData[id].connections.find(connection => connection.id === selectedPetalID)) {
       history.push({ search: '' })
       this.setState({
         selectedPetalID: ''
@@ -58,17 +58,17 @@ class FlowerView extends React.Component {
   }
 
   componentDidMount () {
-    const { id, flowerData: { data } } = this.props
+    const { id, flowerData } = this.props
 
-    if (!data[id]) {
+    if (!flowerData[id]) {
       this.props.getFlowerData(id)
     }
   }
 
   componentDidUpdate () {
-    const { id, flowerData: { data } } = this.props
+    const { id, flowerData } = this.props
 
-    if (!data[id]) {
+    if (!flowerData[id]) {
       this.props.getFlowerData(id)
     }
   }
@@ -149,7 +149,7 @@ class FlowerView extends React.Component {
   render () {
     const { history, id, flowerData, session, dimensions, sideBarOpen } = this.props
     const { editNodeVisibility, currentProgress, overlayVisible, currentTime, addNodePos } = this.state
-    const data = flowerData.data[id]
+    const data = flowerData[id]
 
     let selectedPetalID = queryString.parse(history.location.search).s
     if (selectedPetalID) {
@@ -157,8 +157,8 @@ class FlowerView extends React.Component {
     }
 
     let selectedPetal
-    if (data && data.data) {
-      selectedPetal = data.data.connections.find(connection => connection.id === selectedPetalID)
+    if (data && data.finished) {
+      selectedPetal = data.connections.find(connection => connection.id === selectedPetalID)
     }
 
     return (
@@ -170,7 +170,7 @@ class FlowerView extends React.Component {
           width: dimensions.width
         }}
       >
-        {session.authenticated && data && data.data && selectedPetalID && selectedPetalID !== data.data.id &&
+        {session.authenticated && data && selectedPetalID && selectedPetalID !== data.id &&
            (session.role === 'admin' || session.id === selectedPetal.user.id) &&
           [
             <div
@@ -193,7 +193,7 @@ class FlowerView extends React.Component {
                 <EditNodeFrom
                   flowerID={id}
                   id={selectedPetal.targetNode.id}
-                  rootDuration={data.data.video.duration}
+                  rootDuration={data.video.duration}
                   currentTime={currentTime}
                   visibility={editNodeVisibility}
                   sourceIn={selectedPetal.sourceIn}
@@ -207,10 +207,10 @@ class FlowerView extends React.Component {
             </Overlay>
           ]
         }
-        {session.authenticated && data && data.data && data.data.connections && overlayVisible &&
+        {session.authenticated && data && data.connections && overlayVisible &&
           <AddNodeRoutine
             id={id}
-            rootDuration={data.data.video.duration}
+            rootDuration={data.video.duration}
             currentTime={currentTime}
             currentProgress={currentProgress}
             setHandles={this.setHandles}
@@ -284,17 +284,15 @@ class FlowerView extends React.Component {
               ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
               : 'translateX(0)'
           }}>
-          {data && data.data && data.data.connections &&
+          {data && data.connections &&
             <FlowerRenderer
-              data={data.data.connections}
-              received={data.data.received}
-              rootNode={data.data.id}
-              rootVideo={data.data.video}
+              data={data.connections}
+              receivedAt={data.received}
+              rootNode={data.id}
+              rootVideo={data.video}
               setCurrentTime={this.setCurrentTime}
               selectedPetalID={selectedPetalID}
-              min={data.data.min}
-              max={data.data.max}
-              sorted={data.data.sorted}
+              sorted={data.sorted}
               hidePetals={overlayVisible}
               addNodePos={addNodePos}
             />
@@ -306,7 +304,8 @@ class FlowerView extends React.Component {
 }
 
 FlowerView.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  sideBarOpen: PropTypes.bool.isRequired
 }
 
 function mapStateToProps (state) {
