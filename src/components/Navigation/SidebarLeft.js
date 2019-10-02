@@ -1,33 +1,37 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react'
+import { connect } from 'react-redux'
 
-import { MdKeyboardArrowRight } from "react-icons/md";
-
-import style from "./SidebarLeft.module.css";
-
-const SIDEBAR_WIDTH = 320;
+import { MdKeyboardArrowRight } from 'react-icons/md'
+import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
+import style from './SidebarLeft.module.css'
 
 class SidebarLeft extends React.Component {
-  static getDerivedStateFromProps(props) {
-    return {
-      full: !props.globals.selectedFlower
-    };
+  state = {
+    full: false
   }
 
-  render() {
-    const { full } = this.state;
-    const { dimensions, children, sideBarOpen, toggleSideBar } = this.props;
-    let position = full ? 0 : -dimensions.width;
+  static getDerivedStateFromProps (props) {
+    return {
+      full: !props.globals.selectedFlower
+    }
+  }
+
+  render () {
+    const { full } = this.state
+    const { dimensions, children, sideBarOpen, toggleSideBar } = this.props
+    let position = full ? 0 : -dimensions.width
     if (sideBarOpen && !full) {
-      position += SIDEBAR_WIDTH;
+      position += SIDEBAR_WIDTH
     }
 
     return [
       <div
-        key="sideBarContainer"
+        key='sideBarContainer'
         className={style.sidebarContainer}
         style={{
-          transform: `translateX(${position}px)`
+          transform: `translateX(${position}px)`,
+          height: `calc(100% - ${NAVBAR_HEIGHT}px)`,
+          marginTop: `${NAVBAR_HEIGHT}px`
         }}
       >
         <div
@@ -46,7 +50,7 @@ class SidebarLeft extends React.Component {
         </div>
       </div>,
       <div
-        key="sideBarHandle"
+        key='sideBarHandle'
         className={style.handleContainer}
         style={{
           left: dimensions.width,
@@ -54,24 +58,32 @@ class SidebarLeft extends React.Component {
         }}
         onClick={toggleSideBar}
       >
-        <img className={style.handle} src="/Handle.svg" />
+        <img className={style.handle} src='/Handle.svg' />
         <MdKeyboardArrowRight
           className={style.handleArrow}
-          color="white"
+          color='white'
           size={30}
           style={{
             transform: `rotate(${sideBarOpen ? 180 : 0}deg)`
           }}
-          toggleSideBar={toggleSideBar}
         />
-      </div>
-    ];
+      </div>,
+      <div
+        key='outerClickContainer'
+        className={style.outerClickContainer}
+        onClick={toggleSideBar}
+        style={{
+          opacity: (!dimensions.safeToMove && sideBarOpen) ? 0.9 : 0,
+          pointerEvents: (!dimensions.safeToMove && sideBarOpen) ? 'all' : 'none'
+        }}
+      />
+    ]
   }
 }
 
-function mapStateToProps(state) {
-  const { dimensions, globals } = state;
-  return { dimensions, globals };
+function mapStateToProps (state) {
+  const { dimensions, globals } = state
+  return { dimensions, globals }
 }
 
-export default connect(mapStateToProps)(SidebarLeft);
+export default connect(mapStateToProps)(SidebarLeft)

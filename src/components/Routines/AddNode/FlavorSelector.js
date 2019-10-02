@@ -1,5 +1,5 @@
 import React from 'react'
-import { FLAVORS } from '../../Defaults'
+import { FLAVORS } from '../../../Defaults'
 import { getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 
 import style from './FlavorSelector.module.css'

@@ -27,3 +27,8 @@
 .now {
     animation: shake 2s cubic-bezier(.36,.07,.19,.97) both;
 }
+
+.outerClickContainer {
+  width: 100%;
+  height: 100%;
+}
