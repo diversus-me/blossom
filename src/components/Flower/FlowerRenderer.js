@@ -7,7 +7,6 @@ import { DOWN_SCALE_FACTOR, MAGNIFY_SPEED } from '../../Defaults'
 import { createRootNode, createCircles, deg2rad } from './DefaultFunctions'
 import { selectPetal } from '../Functions'
 
-import Axes from './Axes'
 import Petal from './Petal'
 
 import style from './FlowerRenderer.module.css'
@@ -338,8 +337,7 @@ class FlowerRenderer extends React.Component {
             style={{
               transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`,
               visibility: (((node.id !== rootNode) && globals.addNodeRoutineRunning) ||
-              ((node.id === rootNode) && !globals.nodeGetsPositioned && globals.addNodeRoutineRunning)) ? 'hidden' : 'visible',
-              zIndex: ((node.id === selectedPetalID) || node.id === rootNode) ? 1 : ''
+              ((node.id === rootNode) && !globals.nodeGetsPositioned && globals.addNodeRoutineRunning)) ? 'hidden' : 'visible'
             }}
           >
             <Petal

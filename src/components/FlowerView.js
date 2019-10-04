@@ -316,5 +316,5 @@ function mapStateToProps (state) {
 const mapDispatchToProps = {
   getFlowerData, setNodeRoutineRunning
 }
- 
+
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FlowerView))

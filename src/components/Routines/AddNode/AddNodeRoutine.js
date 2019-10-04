@@ -114,7 +114,7 @@ class AddNodeRoutine extends React.Component {
 
       uppy.addFile({
         ...videoFile,
-        name: `${this.props.session.id}.${json.videoID}.${videoFile.fileExtension}`
+        name: `${json.videoID}.${videoFile.fileExtension}`
       })
 
       uppy.upload().then((result) => {
@@ -236,7 +236,8 @@ class AddNodeRoutine extends React.Component {
           transform: `translate(${translateX}px, ${translateY}px)`,
           transition: (animationsFinished) ? 'none' : 'transform 400ms ease-out',
           position: 'absolute',
-          top: 0
+          top: 0,
+          zIndex: 2
         }}
       >
         <div
