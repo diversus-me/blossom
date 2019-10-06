@@ -72,6 +72,7 @@ class Navigation extends React.Component {
             textColor='secondary'
             variant='scrollable'
             aria-label='flower tabs'
+            className = {style.tabIndicator}
           >
             <Tab label='All' {...a11yProps(0)} />
             <Tab label='My Flowers' {...a11yProps(1)} />

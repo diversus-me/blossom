@@ -37,6 +37,14 @@
   width: "100%";
 }
 
+.tabIndicator {
+  color: red;
+}
+
+.PrivateTabIndicator-colorSecondary-63 {
+  background-color: red !important;
+}
+
 .content {
   margin-top: 100px;
   /* padding: 10px; */
