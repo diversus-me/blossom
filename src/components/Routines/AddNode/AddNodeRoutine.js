@@ -7,7 +7,6 @@ import AWS3 from '@uppy/aws-s3'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
-import { fetchAsync } from '../../../state/helpers'
 
 import WebRecorder from '../WebRecorder'
 import FlavorSelector from './FlavorSelector'
@@ -28,20 +27,9 @@ const uppy = Uppy({
   autoProceed: true
 })
 
-// uppy.use(Webcam, {
-//   modes: [
-//     'video-audio'
-//   ]
-// })
 uppy.use(AWS3, {
   companionUrl: process.env.REACT_APP_SERVER_URL + '/uppy'
 })
-// const uppy = Uppy({ autoProceed: false })
-// uppy.use(AWS3, {
-//   limit: 2,
-//   timeout: 60000,
-//   companionUrl: process.env.REACT_APP_SERVER_URL
-// })
 
 class AddNodeRoutine extends React.Component {
   constructor (props) {
@@ -109,8 +97,6 @@ class AddNodeRoutine extends React.Component {
           method: 'GET'
         })
       const json = await response.json()
-
-      console.log(videoFile.fileExtension)
 
       uppy.addFile({
         ...videoFile,

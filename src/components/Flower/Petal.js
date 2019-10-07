@@ -151,7 +151,7 @@ class Petal extends React.Component {
 
 Petal.defaultProps = {
   isSelectedPetal: false,
-  color: 'red',
+  color: '#222642',
   zoom: 1,
   isRootNode: false
 }
