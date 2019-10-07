@@ -1,99 +1,93 @@
 .container {
-    display: flex;
-    min-width: 300px;
-    height: 150px;
-    position: relative;
-    background: white;
-    border-radius: 0px;
-    max-width: 320px;
+  display: flex;
+  min-width: 300px;
+  height: 130px;
+  position: relative;
+  background: white;
+  border-radius: 0px;
+  max-width: 320px;
 }
 
 .block {
-    display: inline-block;
+  display: inline-block;
 }
 
 .left {
-    width: 70%;
+  width: 70%;
 }
 
 .edit {
-    position: absolute;
-    bottom: 11px;
-    right: 30px;
+  position: absolute;
+  bottom: 11px;
+  right: 30px;
 }
 
 .delete {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 .right {
-    width: 30%;
-    margin-left: 20px;
+  width: 30%;
+  margin-left: 20px;
 }
 
 .image {
-    width: 80%;
-    /* max-width: 100px; */
-    padding-top: 80%;
-    background: #DDD;
-    border-radius: 50%;
-    background-size: 180%;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    top: 50%;
-    position: relative;
-    transform: translateY(-50%);
+  width: 80%;
+  /* max-width: 100px; */
+  padding-top: 80%;
+  background: #ddd;
+  border-radius: 50%;
+  background-size: 180%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
 }
 
 .title {
-    font-size: 0.9em;
-    font-weight: bold;
-    margin-top: 20px;
-    padding: 0 10px;
-    max-height: 2.4em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.text {
-    font-size: 0.8em;
-    margin: 0;
-    margin-left: 10px;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 0 10px;
+  height: 2.7em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .petalContainer {
-    /* right: 0;
-    bottom: 0px;
-    position: absolute; */
-    padding: 0 10px;
-    font-size: 0.8em;
-    margin: 15px 0 5px 0;
-    display: table;
+  padding: 0 10px;
+  font-size: 0.8em;
+  margin: 5px 0 5px 0;
+  display: table;
 }
 
-.date {
-    padding-left: 5px;
-    font-size: 0.8em;
-    color : grey;
+.middleContainer {
+  display: flex;
+  padding: 5px 10px 0px 10px;
 }
 
 .bottomContainer {
-    /* position: absolute; */
-    /* bottom: 0; */
-    /* width: 20px; */
-    display: flex;
-    padding: 20px 10px;
+  display: flex;
+  padding: 8px 10px;
 }
 
-.username {
-    font-size: 0.8em;
+.middleContainerText {
+  font-size: 0.7em;
 }
 
-.views {
-    font-size: 0.8em;
-    padding-left: 5px;
-    margin-left:auto; 
-    margin-right:0;
+.bottomContainerText {
+  font-size: 0.8em;
+}
+
+.itemPadding {
+  padding-left: 10px;
+}
+
+.icon {
+  width: 10px !important;
+  height: 10px !important;
+  color: red;
 }
