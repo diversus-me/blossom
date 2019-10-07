@@ -2,38 +2,35 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { IoIosCheckmark } from 'react-icons/io'
-import Uppy from '@uppy/core'
-import AWS3 from '@uppy/aws-s3'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
+import { NODE_TYPES } from '../../../state/globals/defaults'
 
 import WebRecorder from '../WebRecorder'
+import VideoLinker from '../VideoLinker'
 import FlavorSelector from './FlavorSelector'
 import FloatingButton from '../../UI/FloatingButton'
 
 import style from './AddNodeRoutine.module.css'
 
 const PHASES = [
-  { name: 'RECORD_VIDEO', title: 'Record a video.' },
   { name: 'SELECT_FLAVOR', title: 'Select a flavor.' },
   { name: 'ADD_META', title: 'Provide additional information.' },
   { name: 'POSITION', title: 'Position your answer.' }
 ]
 
-const uppy = Uppy({
-  meta: { type: 'avatar' },
-  restrictions: { maxNumberOfFiles: 1 },
-  autoProceed: true
-})
-
-uppy.use(AWS3, {
-  companionUrl: process.env.REACT_APP_SERVER_URL + '/uppy'
-})
-
 class AddNodeRoutine extends React.Component {
   constructor (props) {
     super(props)
+    if (props.globals.addNodeType === NODE_TYPES.RECORD_NODE) {
+      PHASES.unshift({ name: 'RECORD_VIDEO', title: 'Record a video.' })
+    } else if (props.globals.addNodeType === NODE_TYPES.LINK_NODE) {
+      PHASES.unshift({ name: 'LINK_VIDEO', title: 'Provide a video link.' })
+    } else if (props.globals.addNodeType === NODE_TYPES.UPLOAD_NODE) {
+      PHASES.unshift({ name: 'UPLOAD_VIDEO', title: 'Please select a video you want to upload.' })
+    }
+
     this.state = {
       angle: (props.currentTime / props.rootDuration) * 360,
       seeking: false,
@@ -63,7 +60,6 @@ class AddNodeRoutine extends React.Component {
 
   componentWillUnmount () {
     this.props.nodeGetsPositioned(false)
-    uppy.reset()
   }
 
   nextPhase = () => {
@@ -97,22 +93,6 @@ class AddNodeRoutine extends React.Component {
           method: 'GET'
         })
       const json = await response.json()
-
-      uppy.addFile({
-        ...videoFile,
-        name: `${json.videoID}.${videoFile.fileExtension}`
-      })
-
-      uppy.upload().then((result) => {
-        console.info('Successful uploads:', result.successful)
-
-        if (result.failed.length > 0) {
-          console.error('Errors:')
-          result.failed.forEach((file) => {
-            console.error(file.error)
-          })
-        }
-      })
 
       console.log('finisshed')
       this.nextPhase()
@@ -180,7 +160,7 @@ class AddNodeRoutine extends React.Component {
 
   render () {
     const { desiredValue, phase, animationsFinished } = this.state
-    const { currentProgress, dimensions } = this.props
+    const { currentProgress, dimensions, globals } = this.props
     const angle = ((desiredValue !== -1) ? desiredValue : currentProgress) * 360
 
     let translateX
@@ -240,12 +220,19 @@ class AddNodeRoutine extends React.Component {
           onMouseLeave={(phase === 3) ? this.onScrubEnd : () => {}}
           ref={(ref) => { this.container = ref }}
         >
+          {globals.addNodeType === NODE_TYPES.RECORD_NODE &&
           <WebRecorder
             size={dimensions.rootSize}
             recorderFinished={this.recorderFinished}
             color={'grey'}
             showControls={phase === 1 || phase === 2}
           />
+          }
+          {globals.addNodeType === NODE_TYPES.LINK_NODE &&
+          <VideoLinker
+
+          />
+          }
         </div>
         {phase === 1 &&
           <FlavorSelector
@@ -297,8 +284,8 @@ AddNodeRoutine.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const { dimensions, session } = state
-  return { dimensions, session }
+  const { dimensions, session, globals } = state
+  return { dimensions, session, globals }
 }
 
 const mapDispatchToProps = {

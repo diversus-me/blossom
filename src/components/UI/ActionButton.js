@@ -30,9 +30,7 @@ function ActionButton (props) {
         }}
         className={style.bigBG}
         onClick={() => {
-          if (clicked) {
-            setShowOptions(false)
-          } else {
+          if (!clicked) {
             setClicked(true)
             setShowOptions(true)
           }
@@ -74,9 +72,9 @@ function ActionButton (props) {
         color={'white'}
         className={style.icon}
         style={{
-          transform: `translate(${(showOptions) ? '-80px, 0' : '0, 0'})`,
-          opacity: (showOptions) ? 1 : 0,
-          pointerEvents: (showOptions) ? 'all' : 'none'
+          transform: `translate(${(clicked && showOptions) ? '-80px, 0' : '0, 0'})`,
+          opacity: (clicked && showOptions) ? 1 : 0,
+          pointerEvents: (clicked && showOptions) ? 'all' : 'none'
         }}
         onClick={() => {
           setShowOptions(false)
@@ -88,9 +86,9 @@ function ActionButton (props) {
         color={'white'}
         className={style.icon}
         style={{
-          transform: `translate(${(showOptions) ? '-60px, -60px' : '0, 0'})`,
-          opacity: (showOptions) ? 1 : 0,
-          pointerEvents: (showOptions) ? 'all' : 'none'
+          transform: `translate(${(clicked && showOptions) ? '-60px, -60px' : '0, 0'})`,
+          opacity: (clicked && showOptions) ? 1 : 0,
+          pointerEvents: (clicked && showOptions) ? 'all' : 'none'
         }}
         onClick={() => {
           setShowOptions(false)
@@ -99,16 +97,16 @@ function ActionButton (props) {
       />
       <MdFileUpload
         size={size - SPACING}
-        color={'white'}
+        color={'grey'}
         className={style.icon}
         style={{
-          transform: `translate(${(showOptions) ? '0px, -80px' : '0, 0'})`,
-          opacity: (showOptions) ? 1 : 0,
-          pointerEvents: (showOptions) ? 'all' : 'none'
+          transform: `translate(${(clicked && showOptions) ? '0px, -80px' : '0, 0'})`,
+          opacity: (clicked && showOptions) ? 1 : 0,
+          pointerEvents: (clicked && showOptions) ? 'none' : 'none'
         }}
         onClick={() => {
-          setShowOptions(false)
-          startNodeRoutine(NODE_TYPES.UPLOAD_NODE)
+          // setShowOptions(false)
+          // startNodeRoutine(NODE_TYPES.UPLOAD_NODE)
         }}
       />
     </div>,
