@@ -9,6 +9,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import AccountCircle from '@material-ui/icons/AccountCircleSharp'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 
+
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: '#fff'

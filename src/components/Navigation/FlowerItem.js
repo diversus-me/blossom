@@ -5,7 +5,8 @@ import moment from "moment";
 import { connect } from "react-redux";
 import { MdEdit, MdClear } from "react-icons/md";
 import { toast } from "react-toastify";
-
+import Eye from "@material-ui/icons/RemoveRedEyeOutlined";
+import Circle from "@material-ui/icons/PanoramaFishEye";
 import { listFlowers } from "../../state/flowerList/actions";
 
 import Overlay from "../UI/Overlay";
@@ -81,13 +82,33 @@ class FlowerItem extends React.Component {
         </div>
         <div className={classnames(style.block, style.left)}>
           <div className={style.title}>{title}</div>
-          <div className={style.petalContainer}>{"1,123 petals"}</div>
+          {/* <div className={style.petalContainer}></div> */}
+          <div className={style.middleContainer}>
+            <div className={classnames(style.middleContainerText)}>
+              <Circle className={classnames(style.icon)} /> 1234
+            </div>
+            <div
+              className={classnames(
+                style.middleContainerText,
+                style.itemPadding
+              )}
+            >
+              {" "}
+              <Eye className={classnames(style.icon)} /> 1234
+            </div>
+          </div>
           <div className={style.bottomContainer}>
-            <div className={classnames(style.username)}>{user.name}</div>
-            <div className={classnames(style.date)}>
+            <div className={classnames(style.bottomContainerText)}>
+              {user.name}
+            </div>
+            <div
+              className={classnames(
+                style.bottomContainerText,
+                style.itemPadding
+              )}
+            >
               {moment(created).fromNow()}
             </div>
-            {/* <div className={classnames(style.views)}>{'1,234 views'}</div> */}
           </div>
           {session.authenticated &&
             (session.role === "admin" || session.id === user.id) && [

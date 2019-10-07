@@ -1,7 +1,7 @@
 .container {
   display: flex;
   min-width: 300px;
-  height: 150px;
+  height: 130px;
   position: relative;
   background: white;
   border-radius: 0px;
@@ -52,47 +52,42 @@
   font-weight: bold;
   margin-top: 20px;
   padding: 0 10px;
-  max-height: 2.4em;
+  height: 2.7em;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.text {
-  font-size: 0.8em;
-  margin: 0;
-  margin-left: 10px;
-}
-
 .petalContainer {
-  /* right: 0;
-    bottom: 0px;
-    position: absolute; */
   padding: 0 10px;
   font-size: 0.8em;
-  margin: 15px 0 5px 0;
+  margin: 5px 0 5px 0;
   display: table;
 }
 
-.date {
-  padding-left: 10px;
-  font-size: 0.8em;
+.middleContainer {
+  display: flex;
+  padding: 5px 10px 0px 10px;
 }
 
 .bottomContainer {
-  /* position: absolute; */
-  /* bottom: 0; */
-  /* width: 20px; */
   display: flex;
-  padding: 20px 10px;
+  padding: 8px 10px;
 }
 
-.username {
+.middleContainerText {
+  font-size: 0.7em;
+}
+
+.bottomContainerText {
   font-size: 0.8em;
 }
 
-.views {
-  font-size: 0.8em;
-  padding-left: 5px;
-  margin-left: auto;
-  margin-right: 0;
+.itemPadding {
+  padding-left: 10px;
+}
+
+.icon {
+  width: 10px !important;
+  height: 10px !important;
+  color: red;
 }
