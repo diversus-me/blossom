@@ -69,7 +69,6 @@ class Navigation extends React.Component {
               this.setState({ value: newValue });
             }}
             indicatorColor="secondary"
-            // textColor="secondary"
             variant="scrollable"
             aria-label="flower tabs"
           >
