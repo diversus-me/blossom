@@ -1,11 +1,7 @@
 .button {
     padding: 10px;
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    border-radius: 99999px;
-    justify-content: center;
-    align-items: center;
+    position: absolute;
+    border-radius: 50%;
     display: inline-flex;
     transition: transform 100ms ease;
 }
@@ -15,5 +11,5 @@
 }
 
 .button:active {
-    transform: scale(0.9);
+    transform: scale(1);
 }

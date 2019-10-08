@@ -1,0 +1,44 @@
+.button {
+  width: 80px;
+  height: 40px;
+  padding: 0 40px;
+  border: 2px #222642 solid;
+  background: white;
+  color: #222642;
+  margin: 30px auto;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 100ms ease-out;
+  cursor: pointer;
+}
+
+.text {
+  height: 20px;
+  font-weight: bold;
+  user-select: none;
+}
+
+.button:hover {
+  background: #222642;
+  color: white;
+}
+
+.button:active {
+  transform: scale(0.9);
+}
+
+.deactivated {
+  color: grey;
+  border: 2px grey solid;
+}
+
+.deactivated:hover {
+  background: white;
+  color: grey;
+}
+
+.deactivated:active {
+  transform: scale(1);
+}

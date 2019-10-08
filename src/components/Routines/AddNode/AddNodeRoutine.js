@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { IoIosCheckmark } from 'react-icons/io'
+import { MdChevronRight, MdChevronLeft } from 'react-icons/md'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
@@ -11,6 +11,7 @@ import WebRecorder from '../WebRecorder'
 import VideoLinker from '../VideoLinker'
 import FlavorSelector from './FlavorSelector'
 import FloatingButton from '../../UI/FloatingButton'
+import VideoPlayer from '../../VideoPlayer/VideoPlayer'
 
 import style from './AddNodeRoutine.module.css'
 
@@ -36,6 +37,7 @@ class AddNodeRoutine extends React.Component {
       seeking: false,
       desiredValue: -1,
       uploadUrl: '',
+      videoLink: '',
       phase: 0,
       animationsFinished: false
     }
@@ -122,6 +124,13 @@ class AddNodeRoutine extends React.Component {
     })
   }
 
+  linkGiven = (videoLink) => {
+    this.nextPhase()
+    this.setState({
+      videoLink
+    })
+  }
+
   metaInformationSet = () => {
     this.nextPhase()
     this.props.nodeGetsPositioned(true)
@@ -159,7 +168,7 @@ class AddNodeRoutine extends React.Component {
   }
 
   render () {
-    const { desiredValue, phase, animationsFinished } = this.state
+    const { desiredValue, phase, animationsFinished, videoLink } = this.state
     const { currentProgress, dimensions, globals } = this.props
     const angle = ((desiredValue !== -1) ? desiredValue : currentProgress) * 360
 
@@ -202,8 +211,7 @@ class AddNodeRoutine extends React.Component {
           transform: `translate(${translateX}px, ${translateY}px)`,
           transition: (animationsFinished) ? 'none' : 'transform 400ms ease-out',
           position: 'absolute',
-          top: 0,
-          zIndex: 2
+          top: 0
         }}
       >
         <div
@@ -228,10 +236,22 @@ class AddNodeRoutine extends React.Component {
             showControls={phase === 1 || phase === 2}
           />
           }
-          {globals.addNodeType === NODE_TYPES.LINK_NODE &&
+          {phase === 0 && globals.addNodeType === NODE_TYPES.LINK_NODE &&
           <VideoLinker
-
+            finished={this.linkGiven}
           />
+          }
+          {phase > 0 && globals.addNodeType === NODE_TYPES.LINK_NODE &&
+            <VideoPlayer
+              url={videoLink}
+              color={'#222642'}
+              r={dimensions.rootRadius}
+              isSelectedPetal={(phase !== 3)}
+              // isPetal
+              wasSelected
+              hideControls={(phase === 3)}
+              shouldUpdate={(phase !== 3)}
+            />
           }
         </div>
         {phase === 1 &&
@@ -253,13 +273,16 @@ class AddNodeRoutine extends React.Component {
         <FloatingButton
           // className={style.icon}
           style={{
-            right: '75px',
-            background: 'green'
+            left: '50%',
+            bottom: '25px',
+            border: '2px solid #222642',
+            marginLeft: '-35px',
+            background: '#222642'
           }}
           onClick={() => { this.nextPhase() }}
         >
-          <IoIosCheckmark
-            size={25}
+          <MdChevronRight
+            size={30}
             color={'white'}
           />
           {/* Next Step */}
