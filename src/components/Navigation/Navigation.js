@@ -69,13 +69,12 @@ class Navigation extends React.Component {
               this.setState({ value: newValue })
             }}
             indicatorColor='secondary'
-            textColor='secondary'
             variant='scrollable'
             aria-label='flower tabs'
-            className = {style.tabIndicator}
           >
-            <Tab label='All' {...a11yProps(0)} />
-            <Tab label='My Flowers' {...a11yProps(1)} />
+            <Tab style={{ textTransform: 'none' }} label='All' {...a11yProps(0)} />
+            <Tab style={{ textTransform: 'none' }} label='Popular' {...a11yProps(1)} />
+            <Tab style={{ textTransform: 'none' }} label='My Flowers' {...a11yProps(1)} />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
@@ -108,9 +107,7 @@ class Navigation extends React.Component {
         </TabPanel>
       </SidebarLeft>,
       <Navbar key='navbar' />,
-      <div key='children'>
-        { children }
-      </div>
+      <div key='children'>{children}</div>
     ]
   }
 }
