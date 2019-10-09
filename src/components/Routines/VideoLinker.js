@@ -27,7 +27,7 @@ export default (props) => {
     console.log(id)
     if (id) {
       fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/videoLength/?videolink=${value}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/videoMeta/?videolink=${value}`,
         {
           credentials: 'include',
           method: 'GET'
