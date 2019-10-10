@@ -1,63 +1,53 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { MdChevronRight, MdChevronLeft } from 'react-icons/md'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
 import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
 import { NODE_TYPES } from '../../../state/globals/defaults'
 
-import WebRecorder from '../WebRecorder'
 import VideoLinker from '../VideoLinker'
 import FlavorSelector from './FlavorSelector'
-import FloatingButton from '../../UI/FloatingButton'
 import VideoPlayer from '../../VideoPlayer/VideoPlayer'
 
 import style from './AddNodeRoutine.module.css'
 
-const PHASES = [
-  { name: 'SELECT_FLAVOR', title: 'Select a flavor.' },
-  { name: 'ADD_META', title: 'Provide additional information.' },
-  { name: 'POSITION', title: 'Position your answer.' }
-]
-
 class AddNodeRoutine extends React.Component {
   constructor (props) {
     super(props)
+    this.PHASES = [
+      { name: 'SELECT_FLAVOR', title: 'Select a flavor.' },
+      { name: 'ADD_META', title: 'Provide additional information.' },
+      { name: 'POSITION', title: 'Position your answer.' }
+    ]
+
     if (props.globals.addNodeType === NODE_TYPES.RECORD_NODE) {
-      PHASES.unshift({ name: 'RECORD_VIDEO', title: 'Record a video.' })
+      this.PHASES.unshift({ name: 'RECORD_VIDEO', title: 'Record a video.' })
     } else if (props.globals.addNodeType === NODE_TYPES.LINK_NODE) {
-      PHASES.unshift({ name: 'LINK_VIDEO', title: 'Provide a video link.' })
+      this.PHASES.unshift({ name: 'LINK_VIDEO', title: 'Provide a video link.' })
     } else if (props.globals.addNodeType === NODE_TYPES.UPLOAD_NODE) {
-      PHASES.unshift({ name: 'UPLOAD_VIDEO', title: 'Please select a video you want to upload.' })
+      this.PHASES.unshift({ name: 'UPLOAD_VIDEO', title: 'Please select a video you want to upload.' })
     }
 
     this.state = {
       angle: (props.currentTime / props.rootDuration) * 360,
       seeking: false,
       desiredValue: -1,
+      phase: 0,
+      animationsFinished: false,
       uploadUrl: '',
       videoLink: '',
-      phase: 0,
-      animationsFinished: false
+      title: '',
+      description: '',
+      currentTime: props.currentTime,
+      currentProgress: props.currentProgress,
+      sourceIn: '00:00:00',
+      sourceOut: '00:00:00',
+      targetIn: '00:00:00',
+      targetOut: '00:00:00',
+      flavor: 'neutral',
+      validInput: false
     }
-
-    // fetch(
-    //   `${process.env.REACT_APP_SERVER_URL}/api/uploadLink`,
-    //   {
-    //     method: 'GET'
-    //   })
-    //   .then((res) => {
-    //     if (res.ok) {
-    //       return res.json()
-    //     } else {
-    //       throw new Error()
-    //     }
-    //   })
-    //   .then((json) => {
-    //     this.setState({ uploadUrl: json.url })
-    //   })
-    //   .catch((error) => { console.log(error) })
   }
 
   componentWillUnmount () {
@@ -83,37 +73,6 @@ class AddNodeRoutine extends React.Component {
         phase: nextPhase
       })
     }
-  }
-
-  recorderFinished = async (videoFile) => {
-    this.videoFile = videoFile
-
-    try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/requestUppy`,
-        {
-          credentials: 'include',
-          method: 'GET'
-        })
-      const json = await response.json()
-
-      console.log('finisshed')
-      this.nextPhase()
-    } catch (errors) {
-      console.log(errors)
-    }
-    // fetch(
-    //   this.state.uploadUrl,
-    //   {
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-Type': videoFile.type,
-    //       headers: { 'Content-Type': 'video/*', 'x-amz-acl': 'public-read' },
-    //       'Access-Control-Request-Headers': 'content-type'
-    //     },
-    //     file: videoFile
-    //   }
-    // ).then((response) => { console.log(response) })
-    // .catch((error) => { console.log(error) })
   }
 
   flavorSelected = (flavor) => {
@@ -194,6 +153,8 @@ class AddNodeRoutine extends React.Component {
 
     let titlePositionY = (translateY - dimensions.rootSize) * 0.7
 
+    // console.log(phase, this.PHASES)
+
     return [
       <div
         className={style.phase}
@@ -203,7 +164,7 @@ class AddNodeRoutine extends React.Component {
           transform: (phase !== 3) ? `translateY(${(titlePositionY > 25) ? titlePositionY : 25}px)` : ''
         }}
       >
-        <h2 className={style.phaseTitle}>{PHASES[phase].title}</h2>
+        <h2 className={style.phaseTitle}>{this.PHASES[phase].title}</h2>
       </div>,
       <div
         key='container'
@@ -228,19 +189,6 @@ class AddNodeRoutine extends React.Component {
           onMouseLeave={(phase === 3) ? this.onScrubEnd : () => {}}
           ref={(ref) => { this.container = ref }}
         >
-          {globals.addNodeType === NODE_TYPES.RECORD_NODE &&
-          <WebRecorder
-            size={dimensions.rootSize}
-            recorderFinished={this.recorderFinished}
-            color={'grey'}
-            showControls={phase === 1 || phase === 2}
-          />
-          }
-          {phase === 0 && globals.addNodeType === NODE_TYPES.LINK_NODE &&
-          <VideoLinker
-            finished={this.linkGiven}
-          />
-          }
           {phase > 0 && globals.addNodeType === NODE_TYPES.LINK_NODE &&
             <VideoPlayer
               url={videoLink}
@@ -261,6 +209,11 @@ class AddNodeRoutine extends React.Component {
             angle={angle}
           />
         }
+        {phase === 0 && globals.addNodeType === NODE_TYPES.LINK_NODE &&
+        <VideoLinker
+          finished={this.linkGiven}
+        />
+        }
       </div>,
       <div>
         {phase === 2 &&
@@ -268,25 +221,6 @@ class AddNodeRoutine extends React.Component {
           <input className={style.title} type='text' placeholder='Add a Title' />
           <textarea className={style.description} type='text' cols='40' rows='5' placeholder='Add a Description' />
         </div>
-        }
-        {true &&
-        <FloatingButton
-          // className={style.icon}
-          style={{
-            left: '50%',
-            bottom: '25px',
-            border: '2px solid #222642',
-            marginLeft: '-35px',
-            background: '#222642'
-          }}
-          onClick={() => { this.nextPhase() }}
-        >
-          <MdChevronRight
-            size={30}
-            color={'white'}
-          />
-          {/* Next Step */}
-        </FloatingButton>
         }
       </div>
     ]

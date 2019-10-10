@@ -5,7 +5,6 @@ import { withRouter } from 'react-router'
 import { MdEdit, MdClear } from 'react-icons/md'
 import queryString from 'query-string'
 import { toast } from 'react-toastify'
-// import { Fab, Action } from 'react-tiny-fab'
 import 'react-tiny-fab/dist/styles.min.css'
 
 import { getFlowerData } from '../state/flowerData/actions'
@@ -15,7 +14,7 @@ import FlowerRenderer from './Flower/FlowerRenderer'
 import Overlay from './UI/Overlay'
 import EditNodeFrom from './Forms/EditNodeForm'
 import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
-import ActionButton from './UI/ActionButton'
+import ActionButtonSimple from './UI/ActionButtonSimple'
 
 import style from './FlowerView.module.css'
 
@@ -217,7 +216,7 @@ class FlowerView extends React.Component {
         }
         <div>
           {session.authenticated &&
-            <ActionButton
+            <ActionButtonSimple
               size={45}
             />
           }

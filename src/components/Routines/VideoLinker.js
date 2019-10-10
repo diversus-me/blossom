@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import getVideoId from 'get-video-id'
-import { MdOndemandVideo } from 'react-icons/md'
+import { MdOndemandVideo, MdChevronRight } from 'react-icons/md'
 
 import Button from '../UI/Button'
+import FloatingButton from '../UI/FloatingButton'
 
 import style from './VideoLinker.module.css'
 
@@ -24,7 +25,6 @@ export default (props) => {
 
   const onSubmit = () => {
     const { id } = getVideoId(value)
-    console.log(id)
     if (id) {
       fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/videoMeta/?videolink=${value}`,
@@ -50,7 +50,7 @@ export default (props) => {
     }
   }
 
-  return (
+  return [
     <div className={style.container}>
       <input
         className={style.input}
@@ -72,6 +72,22 @@ export default (props) => {
         deactivated={!isLink}
         onClick={onSubmit}
       />
-    </div>
-  )
+    </div>,
+    <FloatingButton
+      // className={style.icon}
+      style={{
+        left: '50%',
+        bottom: '25px',
+        border: '2px solid #222642',
+        marginLeft: '-35px',
+        background: '#222642'
+      }}
+      onClick={() => { this.nextPhase() }}
+    >
+      <MdChevronRight
+        size={30}
+        color={'white'}
+      />
+    </FloatingButton>
+  ]
 }
