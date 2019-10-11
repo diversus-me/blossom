@@ -1,13 +1,15 @@
-import React from 'react'
+import React from "react";
 
-import Navbar from '../Navigation/Navbar'
-import SidebarLeft from '../Navigation/SidebarLeft'
+import Navbar from "../Navigation/Navbar";
+import SeedInfo from "./SeedInfo";
+import PetalInfo from "./PetalInfo";
 
-export default function Home () {
+export default function Home() {
   return (
     <div>
-      <SidebarLeft />
       <Navbar />
+      <SeedInfo />
+      <PetalInfo />
     </div>
-  )
+  );
 }

@@ -1,0 +1,16 @@
+.container {
+  position: relative;
+  height: 75vh;
+  margin: 0em 1.5em;
+}
+
+.container span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.heading {
+  color: rgba(255, 0, 0, 0.808);
+  font-size: 1.2em;
+}
