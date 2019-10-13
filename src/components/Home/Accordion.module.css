@@ -13,8 +13,9 @@
   transform: translateY(0);
   opacity: 1;
 }
+
 .accordionTitle {
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
   color: #666;
   padding: 0.5em 1.5em;
