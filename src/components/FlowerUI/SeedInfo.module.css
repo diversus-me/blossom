@@ -1,3 +1,9 @@
 .title {
   font-size: 40px;
 }
+
+.accordion {
+  max-width: 500px;
+  position: relative;
+  z-index: 3;
+}

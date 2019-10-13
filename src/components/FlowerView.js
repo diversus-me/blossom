@@ -14,6 +14,8 @@ import FlowerRenderer from './Flower/FlowerRenderer'
 import Overlay from './UI/Overlay'
 import EditNodeFrom from './Forms/EditNodeForm'
 import AddNode2 from './Routines/AddNode/AddNode2'
+import SeedInfo from './FlowerUI/SeedInfo'
+import PetalInfo from './FlowerUI/PetalInfo'
 import ActionButtonSimple from './UI/ActionButtonSimple'
 
 import style from './FlowerView.module.css'
@@ -42,7 +44,7 @@ class FlowerView extends React.Component {
       selectedPetalID = parseInt(selectedPetalID)
     }
 
-    if (selectedPetalID && flowerData[id] && flowerData[id] &&
+    if (selectedPetalID && flowerData[id] && flowerData[id].connections &&
       !flowerData[id].connections.find(connection => connection.id === selectedPetalID)) {
       history.push({ search: '' })
       this.setState({
@@ -173,6 +175,36 @@ class FlowerView extends React.Component {
             sorted={data.sorted}
             hidePetals={addNodeRoutineRunning}
             addNodePos={addNodePos}
+          />
+          }
+        </div>
+        <div
+          className={style.metaContainer}
+          style={{
+            display: (addNodeRoutineRunning) ? 'none' : 'block',
+            transform: (dimensions.safeToMove && sideBarOpen)
+              ? `translateX(${Math.floor(SIDEBAR_WIDTH)}px)`
+              : 'translateX(0)'
+          }}>
+          {data && data.connections &&
+          <SeedInfo
+            className={style.seedInfo}
+            title={data.title}
+            description={data.description}
+            petals={data.connections.length}
+            user={data.user.name}
+            created={data.created}
+          />
+          }
+          {data && data.connections && selectedPetal &&
+          <PetalInfo
+            className={style.petalInfo}
+            title={selectedPetal.title}
+            description={selectedPetal.description}
+            petals={0}
+            user={selectedPetal.user.name}
+            created={selectedPetal.created}
+            flavor={selectedPetal.flavor}
           />
           }
         </div>

@@ -1,9 +1,20 @@
 import React from 'react'
-
 import style from './SeedInfo.module.css'
+import Accordion from './Accordion'
 
-export default function SeedInfo () {
+const SeedInfo = (props) => {
   return (
-    <h1 className={style.title}>This is a title</h1>
+    <div className={props.className}>
+      <Accordion
+        title={props.title}
+        description={props.description}
+        user={props.user}
+        created={props.created}
+        petals={props.petals}
+        className={style.accordion}
+      />
+    </div>
   )
 }
+
+export default SeedInfo

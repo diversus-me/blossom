@@ -1,13 +1,15 @@
 import React from 'react'
 
 import Navbar from '../Navigation/Navbar'
-import SidebarLeft from '../Navigation/SidebarLeft'
+// import SeedInfo from "./SeedInfo";
+// import PetalInfo from "./PetalInfo";
 
 export default function Home () {
   return (
     <div>
-      <SidebarLeft />
       <Navbar />
+      {/* <SeedInfo />
+      <PetalInfo /> */}
     </div>
   )
 }

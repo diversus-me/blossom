@@ -1,9 +1,22 @@
 import React from 'react'
-
 import style from './PetalInfo.module.css'
+import Accordion from './Accordion'
 
-export default function Petalinfo () {
+const PetalInfo = (props) => {
   return (
-    <h1 className={style.title}>This is a title</h1>
+    <div className={props.className}>
+      <Accordion
+        title={props.title}
+        flavor={props.flavor}
+        description={props.description}
+        user={props.user}
+        created={props.created}
+        petals={props.petals}
+        className={style.accordion}
+        petal
+      />
+    </div>
   )
 }
+
+export default PetalInfo

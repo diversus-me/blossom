@@ -1,0 +1,89 @@
+.accordionItem {
+  transition: transform 200ms ease-out,
+              opacity 150ms ease-out;
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+}
+
+.collapsed {
+  transform: translateY(-25px);
+  opacity: 0;
+}
+
+.accordionTitle {
+  font-weight: bold;
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #222642;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  pointer-events: all;
+}
+
+.accordionArrow {
+  transition: transform 150ms ease-out;
+  display: inline-block;
+  position: relative;
+  margin-left: 10px;
+}
+
+.accordionContent {
+  padding: 1em 0;
+}
+
+.line {
+  color: rgb(238, 238, 238);
+}
+
+.viewsPetals {
+  padding: 1em 0 0;
+}
+
+.views {
+  color: grey;
+}
+
+.petals {
+  padding-left: 10px;
+}
+
+.icon {
+  width: 12px !important;
+  height: 12px !important;
+  color: red;
+}
+
+.bottomContainer {
+  padding: 1em 0 0em;
+  display: flex;
+}
+
+.bottomContainerText {
+  font-size: 0.8em;
+}
+
+.date {
+  padding-left: 20px;
+  color: rgb(27, 26, 26);
+}
+
+.outerClickContainer {
+  position: fixed;
+  transform: translate(0);
+  z-index: 2;
+  top: 0px;
+  left: 0;
+  background: white;
+  transition: opacity 150ms ease-out;
+}
+
+.flavor {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+  cursor: pointer;
+}
