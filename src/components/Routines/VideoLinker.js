@@ -1,33 +1,18 @@
 import React, { useState } from 'react'
 import getVideoId from 'get-video-id'
-import { MdOndemandVideo, MdChevronRight } from 'react-icons/md'
-
-import Button from '../UI/Button'
-import FloatingButton from '../UI/FloatingButton'
+import { MdOndemandVideo } from 'react-icons/md'
 
 import style from './VideoLinker.module.css'
 
 export default (props) => {
-  const [value, setValue] = useState('')
-  const [isLink, setIsLink] = useState(false)
   const [showError, setShowError] = useState(false)
 
-  const onChange = (e) => {
-    setValue(e.target.value)
-    setShowError(false)
-    const { id, service } = getVideoId(e.target.value)
+  const checkInput = (input) => {
+    const { setValidInput, setTitle, setDuration } = props
+    const { id, service } = getVideoId(input)
     if (id && service === 'youtube') {
-      setIsLink(true)
-    } else {
-      setIsLink(false)
-    }
-  }
-
-  const onSubmit = () => {
-    const { id } = getVideoId(value)
-    if (id) {
       fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/videoMeta/?videolink=${value}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/videoMeta/?videolink=${input}`,
         {
           credentials: 'include',
           method: 'GET'
@@ -40,14 +25,28 @@ export default (props) => {
           }
         })
         .then((json) => {
-          if (json.duration) {
-            props.finished(value, json.duration)
+          console.log(json)
+          if (json.duration && json.title) {
+            setValidInput(true)
+            setDuration(json.duration)
+            setTitle(json.title)
           } else {
             throw new Error()
           }
         })
-        .catch(() => { setShowError(true) })
+        .catch(() => {
+          setValidInput(false)
+          setShowError(true)
+        })
+      return true
     }
+    return false
+  }
+
+  const onChange = (e) => {
+    props.setVideoLink(e.target.value)
+    setShowError(false)
+    checkInput(e.target.value, props.setValidInput, setShowError)
   }
 
   return [
@@ -56,7 +55,7 @@ export default (props) => {
         className={style.input}
         placeholder='Paste video link here'
         onChange={onChange}
-        value={value}
+        value={props.videoLink}
         type='text'
         style={{ color: (showError) ? 'red' : '' }}
       />
@@ -67,27 +66,6 @@ export default (props) => {
       <div className={style.error}>
         {(showError) ? 'The video you requested is invalid' : ''}
       </div>
-      <Button
-        text={'Done'}
-        deactivated={!isLink}
-        onClick={onSubmit}
-      />
-    </div>,
-    <FloatingButton
-      // className={style.icon}
-      style={{
-        left: '50%',
-        bottom: '25px',
-        border: '2px solid #222642',
-        marginLeft: '-35px',
-        background: '#222642'
-      }}
-      onClick={() => { this.nextPhase() }}
-    >
-      <MdChevronRight
-        size={30}
-        color={'white'}
-      />
-    </FloatingButton>
+    </div>
   ]
 }

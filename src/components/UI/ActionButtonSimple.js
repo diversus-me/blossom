@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { MdAdd } from 'react-icons/md'
 
@@ -10,8 +10,8 @@ import style from './ActionButton.module.css'
 const SPACING = 20
 
 function ActionButton (props) {
-  const { size, startNodeRoutine, stopNodeRoutine } = props
-  const [clicked, setClicked] = useState(false)
+  const { size, startNodeRoutine, stopNodeRoutine, globals } = props
+
   return [
     <div
       key='button'
@@ -28,7 +28,6 @@ function ActionButton (props) {
         }}
         className={style.bigBG}
         onClick={() => {
-          setClicked(true)
           startNodeRoutine(NODE_TYPES.LINK_NODE)
         }}
       />
@@ -36,18 +35,17 @@ function ActionButton (props) {
         style={{
           width: `${size}px`,
           height: `${size}px`,
-          transform: `scale(${(clicked) ? 1 : 0})`
+          transform: `scale(${(globals.addNodeRoutineRunning) ? 1 : 0})`
         }}
         className={style.smallBG}
         onClick={() => {
-          setClicked(false)
           stopNodeRoutine()
         }
         }
       />
       <MdAdd
         style={{
-          transform: `rotate(${(clicked) ? 45 : 0}deg)`
+          transform: `rotate(${(globals.addNodeRoutineRunning) ? 45 : 0}deg)`
         }}
         size={size - SPACING}
         color={'white'}
@@ -55,8 +53,8 @@ function ActionButton (props) {
       />
       <MdAdd
         style={{
-          transform: `rotate(${(clicked) ? 45 : 0}deg)`,
-          opacity: (clicked) ? 1 : 0
+          transform: `rotate(${(globals.addNodeRoutineRunning) ? 45 : 0}deg)`,
+          opacity: (globals.addNodeRoutineRunning) ? 1 : 0
         }}
         size={size - SPACING}
         color={'#222642'}

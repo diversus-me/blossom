@@ -1,6 +1,12 @@
 import queryString from 'query-string'
-import { SET_NODE_POSITION, START_ADD_NODE_ROUTINE,
-  STOP_ADD_NODE_ROUTINE, GETS_POSITIONED } from './actions'
+import {
+  SET_NODE_POSITION,
+  START_ADD_NODE_ROUTINE,
+  STOP_ADD_NODE_ROUTINE,
+  GETS_POSITIONED,
+  SET_ROOT_DURATION,
+  SET_PETAL_DURATION
+} from './actions'
 import { LOCATION_CHANGE } from 'connected-react-router/esm/actions'
 
 function getFlowerAndPetalFromLocation (location) {
@@ -21,7 +27,9 @@ export function connectGlobals (history) {
     addNodeType: '',
     addedNodePosition: 0,
     selectedFlower,
-    selectedPetal
+    selectedPetal,
+    rootDuration: 0,
+    petalDuration: 0
   }
 
   return (state = initialState, action) => {
@@ -54,6 +62,16 @@ export function connectGlobals (history) {
         return {
           ...state,
           nodeGetsPositioned: action.nodeGetsPositioned
+        }
+      case SET_ROOT_DURATION:
+        return {
+          ...state,
+          rootDuration: action.duration
+        }
+      case SET_PETAL_DURATION:
+        return {
+          ...state,
+          petalDuration: action.duration
         }
       default:
         return state

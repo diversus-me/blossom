@@ -13,7 +13,7 @@ import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../Defaults'
 import FlowerRenderer from './Flower/FlowerRenderer'
 import Overlay from './UI/Overlay'
 import EditNodeFrom from './Forms/EditNodeForm'
-import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
+import AddNode2 from './Routines/AddNode/AddNode2'
 import ActionButtonSimple from './UI/ActionButtonSimple'
 
 import style from './FlowerView.module.css'
@@ -26,8 +26,6 @@ class FlowerView extends React.Component {
 
     this.state = {
       selectedPetalID: parseInt(parsedQuery.s),
-      currentTime: 0,
-      currentProgress: 0,
       editNodeVisibility: false,
       showHandles: false,
       addNodeType: ''
@@ -125,7 +123,7 @@ class FlowerView extends React.Component {
   render () {
     const { history, id, flowerData, session, dimensions, sideBarOpen,
       globals: { addNodeRoutineRunning } } = this.props
-    const { editNodeVisibility, currentProgress, currentTime, addNodePos } = this.state
+    const { editNodeVisibility, currentTime, addNodePos } = this.state
     const data = flowerData[id]
 
     let selectedPetalID = queryString.parse(history.location.search).s
@@ -154,6 +152,16 @@ class FlowerView extends React.Component {
               ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
               : 'translateX(0)'
           }}>
+          {session.authenticated && data && data.connections && addNodeRoutineRunning &&
+          <AddNode2
+            id={id}
+            rootDuration={data.video.duration}
+            currentTime={this.currentTime}
+            currentProgress={this.currentProgress}
+            setHandles={this.setHandles}
+            sideBarOpen={sideBarOpen}
+          />
+          }
           {data && data.connections &&
           <FlowerRenderer
             data={data.connections}
@@ -204,15 +212,6 @@ class FlowerView extends React.Component {
               }
             </Overlay>
           ]
-        }
-        {session.authenticated && data && data.connections && addNodeRoutineRunning &&
-          <AddNodeRoutine
-            id={id}
-            rootDuration={data.video.duration}
-            currentTime={currentTime}
-            currentProgress={currentProgress}
-            setHandles={this.setHandles}
-          />
         }
         <div>
           {session.authenticated &&

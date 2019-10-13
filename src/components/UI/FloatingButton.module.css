@@ -1,7 +1,6 @@
 .button {
     padding: 10px;
     position: absolute;
-    border-radius: 50%;
     display: inline-flex;
     transition: transform 100ms ease;
 }
@@ -12,4 +11,8 @@
 
 .button:active {
     transform: scale(1);
+}
+
+.deactivated {
+    transform: scale(1) !important;
 }

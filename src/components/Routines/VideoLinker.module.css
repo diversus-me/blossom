@@ -1,7 +1,7 @@
 .container {
-  width: 100%;
-  position: absolute;
-  margin: 10px 0px;
+  width: 70%;
+  position: relative;
+  margin: 10px auto;
   z-index: 1;
   max-width: 500px;
 }
@@ -16,6 +16,7 @@
   border-radius: 40px;
   /* padding: 0 15px; */
   padding-left: 50px;
+  margin-left: -25px;
 }
 
 .input:focus {
@@ -25,21 +26,9 @@
 .icon {
   position: absolute;
   color: red;
-  left: 15px;
+  left: -10px;
   top: 10px;
 }
-
-@media(max-width: 800px) {
-  .input {
-    margin-left: -20%;
-    width: 120%;
-  }
-
-  .icon {
-    margin-left: -20%;
-  }
-}
-
 .error {
   height: 1em;
   margin: 5px 0;
