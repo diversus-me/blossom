@@ -216,14 +216,14 @@ class FlowerView extends React.Component {
               className={style.editPetal}
               onClick={this.toggleEditNode}
             >
-              <MdEdit color='grey' size='25px' />
+              <MdEdit color='grey' size='20px' />
             </div>,
             <div
               key='delete'
               className={style.deletePetal}
               onClick={this.delete}
             >
-              <MdClear color='grey' size='30px' />
+              <MdClear color='grey' size='25px' />
             </div>,
             <Overlay key='editOverlay' visibility={editNodeVisibility} onOuterClick={this.toggleEditNode}>
               {
