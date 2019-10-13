@@ -1,6 +1,12 @@
 import queryString from 'query-string'
-import { SET_NODE_POSITION, ADD_NODE_ROUTINE_RUNNING,
-  GETS_POSITIONED } from './actions'
+import {
+  SET_NODE_POSITION,
+  START_ADD_NODE_ROUTINE,
+  STOP_ADD_NODE_ROUTINE,
+  GETS_POSITIONED,
+  SET_ROOT_DURATION,
+  SET_PETAL_DURATION
+} from './actions'
 import { LOCATION_CHANGE } from 'connected-react-router/esm/actions'
 
 function getFlowerAndPetalFromLocation (location) {
@@ -18,9 +24,12 @@ export function connectGlobals (history) {
   const { selectedFlower, selectedPetal } = getFlowerAndPetalFromLocation(history.location)
   const initialState = {
     addNodeRoutineRunning: false,
+    addNodeType: '',
     addedNodePosition: 0,
     selectedFlower,
-    selectedPetal
+    selectedPetal,
+    rootDuration: 0,
+    petalDuration: 0
   }
 
   return (state = initialState, action) => {
@@ -38,15 +47,31 @@ export function connectGlobals (history) {
           ...state,
           addedNodePosition: action.position
         }
-      case ADD_NODE_ROUTINE_RUNNING:
+      case START_ADD_NODE_ROUTINE:
         return {
           ...state,
-          addNodeRoutineRunning: action.running
+          addNodeType: action.addNodeType,
+          addNodeRoutineRunning: true
+        }
+      case STOP_ADD_NODE_ROUTINE:
+        return {
+          ...state,
+          addNodeRoutineRunning: false
         }
       case GETS_POSITIONED:
         return {
           ...state,
           nodeGetsPositioned: action.nodeGetsPositioned
+        }
+      case SET_ROOT_DURATION:
+        return {
+          ...state,
+          rootDuration: action.duration
+        }
+      case SET_PETAL_DURATION:
+        return {
+          ...state,
+          petalDuration: action.duration
         }
       default:
         return state

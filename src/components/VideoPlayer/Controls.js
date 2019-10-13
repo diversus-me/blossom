@@ -30,7 +30,8 @@ function Controls (props) {
       className={classNames(style.play, (playing) ? style.playClicked : '')}
       size={`${r * 0.7}px`}
       fill={color}
-      stroke='black'
+      stroke='white'
+      // strokeWidth='0.3px'
       style={{
         margin: `-${r * 0.35}px 0 0 -${r * 0.35}px`
       }}

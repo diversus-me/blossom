@@ -4,7 +4,7 @@
   position: absolute;
   z-index: 11;
   box-shadow: 0 10px 15px rgba(36,40,67,0.1);
-  transition: transform 300ms ease-out;
+  transition: transform 200ms ease-out;
   background: white;
   top: 0;
 }
@@ -15,7 +15,7 @@
   position: absolute;
   z-index: 10;
   background: white;
-  transition: opacity 300ms ease-out;
+  transition: opacity 200ms ease-out;
 }
 
 .button {
@@ -29,12 +29,12 @@
 
 .content {
   position: absolute;
-  transition: transform 300ms ease-out;
+  transition: transform 200ms ease-out;
 }
 
 .handleContainer {
   user-select: none;
-  transition: transform 300ms ease-out;
+  transition: transform 200ms ease-out;
   width: 40px;
   bottom: 80px;
   position: absolute;
@@ -46,5 +46,5 @@
   position: absolute;
   top: 62px;
   left: 5px;
-  transition: transform 300ms ease-in-out;
+  transition: transform 200ms ease-in-out;
 }

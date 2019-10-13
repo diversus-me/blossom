@@ -337,7 +337,8 @@ class FlowerRenderer extends React.Component {
             style={{
               transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`,
               visibility: (((node.id !== rootNode) && globals.addNodeRoutineRunning) ||
-              ((node.id === rootNode) && !globals.nodeGetsPositioned && globals.addNodeRoutineRunning)) ? 'hidden' : 'visible'
+              ((node.id === rootNode) && !globals.nodeGetsPositioned && globals.addNodeRoutineRunning)) ? 'hidden' : 'visible',
+              zIndex: (node.id === rootNode) ? '5' : ''
             }}
           >
             <Petal

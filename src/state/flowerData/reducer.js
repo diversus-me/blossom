@@ -1,5 +1,5 @@
 import { GET_FLOWER_ERROR, GET_FLOWER_LOADING, GET_FLOWER_SUCCESS,
-  ADD_NODE_LOADING, ADD_NODE_SUCCESS, ADD_NODE_ERROR } from './actions'
+  ADD_NODE_LOADING, ADD_NODE_SUCCESS, ADD_NODE_ERROR, RESET_ADD_NODE } from './actions'
 import { toast } from 'react-toastify'
 
 function getColor (type) {
@@ -62,6 +62,16 @@ function parseData (data, connections) {
 
 export default function flowerData (state = {}, action) {
   switch (action.type) {
+    case RESET_ADD_NODE: {
+      return Object.assign({}, state, {
+        [action.id]: {
+          ...state[action.id],
+          addNodeLoading: false,
+          addNodeFinished: false,
+          addNodeFailed: false
+        }
+      })
+    }
     case ADD_NODE_LOADING: {
       return Object.assign({}, state, {
         [action.id]: {

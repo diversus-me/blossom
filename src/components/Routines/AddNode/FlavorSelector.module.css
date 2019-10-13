@@ -1,29 +1,41 @@
 .container {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
 }
 
 .icon {
-    transform: translate(-50%, -50%);
+    position: relative;
+    /* top: 50%;
+    left: 50%; */
+    /* transform: translate(-50%, -50%); */
     border-radius: 50%;
     opacity: 0;
     animation: transitionIn 500ms ease-out forwards;
 }
 
-.icon > svg {
+.iconContainer {
+    transform-origin: 50% 50%;
     transform: scale(1);
-    transition: transform 200ms ease-out;
+    transition: transform 150ms ease-out;
+    user-select: none;
 }
 
-.icon:hover > svg {
-    transform: scale(1.2);
-    transition: transform 200ms ease-out;
+.iconContainer:hover {
+    transform: scale(1.1);
 }
 
-.icon:active > svg {
-    transform: scale(0.9);
-    transition: transform 100ms ease-out;
+.iconContainer:active {
+    transform: scale(1);
+}
+
+.title {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    position: absolute;
+    width: 100%;
+    padding-bottom: 5px;
 }
 
 @keyframes transitionIn {
