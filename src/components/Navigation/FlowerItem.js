@@ -85,7 +85,7 @@ class FlowerItem extends React.Component {
           {/* <div className={style.petalContainer}></div> */}
           <div className={style.middleContainer}>
             <div className={classnames(style.middleContainerText)}>
-              <Circle className={classnames(style.icon)} /> 1234
+              <Circle className={classnames(style.icon)} /> 0
             </div>
             <div
               className={classnames(
@@ -94,7 +94,7 @@ class FlowerItem extends React.Component {
               )}
             >
               {' '}
-              <Eye className={classnames(style.icon)} /> 1234
+              <Eye className={classnames(style.icon)} /> 0
             </div>
           </div>
           <div className={style.bottomContainer}>

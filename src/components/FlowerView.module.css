@@ -32,3 +32,33 @@
     right: 70px;
     cursor: pointer;
 }
+
+.metaContainer {
+    height: 100%;
+    pointer-events: none;
+}
+
+.seedInfo {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    pointer-events: none;
+}
+
+.petalInfo {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    pointer-events: none;
+}
+
+@media (max-width:600px) {
+    .seedInfo {
+      left: 15px;
+      top: 15px;
+    }
+    
+    .petalInfo {
+        left: 15px;
+    }
+  }
