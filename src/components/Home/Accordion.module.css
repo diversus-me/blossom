@@ -2,15 +2,16 @@
   margin-top: 0.5em;
 }
 .accordionItem {
-  overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
-  height: auto;
-  max-height: 9999px;
+  transition: transform 200ms ease-out,
+              opacity 150ms ease-out;
+  transform: translateY(-25px);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .collapsed {
-  max-height: 0;
-  transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
+  transform: translateY(0);
+  opacity: 1;
 }
 .accordionTitle {
   font-weight: 600;
@@ -20,6 +21,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  pointer-events: all;
 }
 
 .accordionContent {

@@ -1,11 +1,11 @@
-import React from "react";
-import style from "./Accordion.module.css";
-import Eye from "@material-ui/icons/RemoveRedEyeOutlined";
-import Circle from "@material-ui/icons/PanoramaFishEye";
-import classnames from "classnames";
+import React from 'react'
+import style from './Accordion.module.css'
+import Eye from '@material-ui/icons/RemoveRedEyeOutlined'
+import Circle from '@material-ui/icons/PanoramaFishEye'
+import classnames from 'classnames'
 
-export default function Accordion({ title, children }) {
-  const [isOpen, setOpen] = React.useState(false);
+export default function Accordion ({ title, children }) {
+  const [isOpen, setOpen] = React.useState(false)
   return (
     <div className={style.accordionWrapper}>
       <div className={style.accordionTitle} onClick={() => setOpen(!isOpen)}>
@@ -14,7 +14,7 @@ export default function Accordion({ title, children }) {
       <div
         className={classnames(
           style.accordionItem,
-          !isOpen ? style.collapsed : ""
+          !isOpen ? style.collapsed : ''
         )}
       >
         <div className={style.viewsPetals}>
@@ -37,5 +37,5 @@ export default function Accordion({ title, children }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
