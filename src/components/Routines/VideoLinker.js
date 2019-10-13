@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import getVideoId from 'get-video-id'
 import { MdOndemandVideo } from 'react-icons/md'
 
 import style from './VideoLinker.module.css'
 
-export default (props) => {
+export default ({
+  setValidInput, setVideoLink, setTitle, setDuration, videoLink
+}) => {
   const [showError, setShowError] = useState(false)
 
   const checkInput = (input) => {
-    const { setValidInput, setTitle, setDuration } = props
     const { id, service } = getVideoId(input)
     if (id && service === 'youtube') {
       fetch(
@@ -43,10 +44,14 @@ export default (props) => {
     return false
   }
 
+  useEffect(() => {
+    setValidInput(checkInput(videoLink))
+  }, [])
+
   const onChange = (e) => {
-    props.setVideoLink(e.target.value)
+    setVideoLink(e.target.value)
     setShowError(false)
-    checkInput(e.target.value, props.setValidInput, setShowError)
+    checkInput(e.target.value, setValidInput, setShowError)
   }
 
   return [
@@ -55,7 +60,7 @@ export default (props) => {
         className={style.input}
         placeholder='Paste video link here'
         onChange={onChange}
-        value={props.videoLink}
+        value={videoLink}
         type='text'
         style={{ color: (showError) ? 'red' : '' }}
       />

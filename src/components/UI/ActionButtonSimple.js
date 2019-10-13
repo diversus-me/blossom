@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { MdAdd } from 'react-icons/md'
 
-import { startNodeRoutine, stopNodeRoutine } from '../../state/globals/actions'
+import { startAddNodeRoutine, stopAddNodeRoutine, stopEditNodeRoutine } from '../../state/globals/actions'
 import { NODE_TYPES } from '../../state/globals/defaults'
 
 import style from './ActionButton.module.css'
@@ -10,7 +10,9 @@ import style from './ActionButton.module.css'
 const SPACING = 20
 
 function ActionButton (props) {
-  const { size, startNodeRoutine, stopNodeRoutine, globals } = props
+  const { size, startAddNodeRoutine, stopAddNodeRoutine, stopEditNodeRoutine, globals } = props
+
+  const nodeRoutineRunning = (globals.addNodeRoutineRunning || globals.editNodeRoutineRunning)
 
   return [
     <div
@@ -28,24 +30,28 @@ function ActionButton (props) {
         }}
         className={style.bigBG}
         onClick={() => {
-          startNodeRoutine(NODE_TYPES.LINK_NODE)
+          startAddNodeRoutine(NODE_TYPES.LINK_NODE)
         }}
       />
       <div
         style={{
           width: `${size}px`,
           height: `${size}px`,
-          transform: `scale(${(globals.addNodeRoutineRunning) ? 1 : 0})`
+          transform: `scale(${(nodeRoutineRunning) ? 1 : 0})`
         }}
         className={style.smallBG}
         onClick={() => {
-          stopNodeRoutine()
+          if (globals.editNodeRoutineRunning) {
+            stopEditNodeRoutine()
+          } else if (globals.addNodeRoutineRunning) {
+            stopAddNodeRoutine()
+          }
         }
         }
       />
       <MdAdd
         style={{
-          transform: `rotate(${(globals.addNodeRoutineRunning) ? 45 : 0}deg)`
+          transform: `rotate(${(nodeRoutineRunning) ? 45 : 0}deg)`
         }}
         size={size - SPACING}
         color={'white'}
@@ -53,8 +59,8 @@ function ActionButton (props) {
       />
       <MdAdd
         style={{
-          transform: `rotate(${(globals.addNodeRoutineRunning) ? 45 : 0}deg)`,
-          opacity: (globals.addNodeRoutineRunning) ? 1 : 0
+          transform: `rotate(${(nodeRoutineRunning) ? 45 : 0}deg)`,
+          opacity: (nodeRoutineRunning) ? 1 : 0
         }}
         size={size - SPACING}
         color={'#222642'}
@@ -71,7 +77,7 @@ function mapStateToProps (state) {
   }
 }
 const mapDispatchToProps = {
-  startNodeRoutine, stopNodeRoutine
+  startAddNodeRoutine, stopAddNodeRoutine, stopEditNodeRoutine
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionButton)

@@ -20,15 +20,15 @@
 .editPetal {
     position: absolute;
     bottom: 33px;
-    right: 125px;
+    right: 130px;
     cursor: pointer;
 }
 
 .deletePetal {
     position: absolute;
     z-index: 2;
-    bottom: 30px;
-    right: 85px;
+    bottom: 33px;
+    right: 95px;
     cursor: pointer;
 }
 

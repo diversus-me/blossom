@@ -1,52 +1,88 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { MdChevronRight } from 'react-icons/md'
 
 import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
-import { setNewNodePosition, nodeGetsPositioned } from '../../../state/globals/actions'
-import { NODE_TYPES } from '../../../state/globals/defaults'
+// import { NODE_TYPES } from '../../../state/globals/defaults'
+import { FLAVORS, SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../../Defaults'
+
+import { setNewNodePosition, nodeGetsPositioned, stopAddNodeRoutine,
+  addNode, editNode, resetAddNode, stopEditNodeRoutine, resetEditNode } from '../../../state/globals/actions'
 
 import VideoLinker from '../VideoLinker'
 import FlavorSelector from './FlavorSelector'
 import VideoPlayer from '../../VideoPlayer/VideoPlayer'
+import TitleInput from './TitleInput'
+
+import FloatingButton from '../../UI/FloatingButton'
 
 import style from './AddNodeRoutine.module.css'
 
 class AddNodeRoutine extends React.Component {
   constructor (props) {
     super(props)
+    const { globals, flowerData, currentTime, currentProgress } = props
+
     this.PHASES = [
+      { name: 'LINK_VIDEO', title: 'Provide a video link.' },
       { name: 'SELECT_FLAVOR', title: 'Select a flavor.' },
       { name: 'ADD_META', title: 'Provide additional information.' },
       { name: 'POSITION', title: 'Position your answer.' }
     ]
 
-    if (props.globals.addNodeType === NODE_TYPES.RECORD_NODE) {
-      this.PHASES.unshift({ name: 'RECORD_VIDEO', title: 'Record a video.' })
-    } else if (props.globals.addNodeType === NODE_TYPES.LINK_NODE) {
-      this.PHASES.unshift({ name: 'LINK_VIDEO', title: 'Provide a video link.' })
-    } else if (props.globals.addNodeType === NODE_TYPES.UPLOAD_NODE) {
-      this.PHASES.unshift({ name: 'UPLOAD_VIDEO', title: 'Please select a video you want to upload.' })
-    }
+    // if (globals.addNodeType === NODE_TYPES.RECORD_NODE) {
+    //   this.PHASES.unshift({ name: 'RECORD_VIDEO', title: 'Record a video.' })
+    // } else if (globals.addNodeType === NODE_TYPES.LINK_NODE) {
+    //   this.PHASES.unshift({ name: 'LINK_VIDEO', title: 'Provide a video link.' })
+    // } else if (globals.addNodeType === NODE_TYPES.UPLOAD_NODE) {
+    //   this.PHASES.unshift({ name: 'UPLOAD_VIDEO', title: 'Please select a video you want to upload.' })
+    // }
+
+    const rootDuration = flowerData[globals.selectedFlower].video.duration
+    const selectedPetal = (globals.editNodeRoutineRunning && globals.selectedPetal)
+      ? flowerData[globals.selectedFlower].connections.find(
+        (connection) => connection.id === parseInt(globals.selectedPetal))
+      : undefined
 
     this.state = {
-      angle: (props.currentTime / props.rootDuration) * 360,
+      angle: currentProgress * 360,
       seeking: false,
+      dragPointX: 0,
+      dragPointY: 0,
       desiredValue: -1,
       phase: 0,
       animationsFinished: false,
-      uploadUrl: '',
-      videoLink: '',
-      title: '',
+      videoLink: (selectedPetal) ? `https://www.youtube.com/watch?v=${selectedPetal.targetNode.video.url}` : '',
+      duration: (selectedPetal) ? selectedPetal.targetNode.video.duration : 0,
+      title: (selectedPetal) ? selectedPetal.title : '',
       description: '',
-      currentTime: props.currentTime,
-      currentProgress: props.currentProgress,
-      sourceIn: '00:00:00',
-      sourceOut: '00:00:00',
-      targetIn: '00:00:00',
-      targetOut: '00:00:00',
-      flavor: 'neutral',
-      validInput: false
+      currentTime: (selectedPetal) ? selectedPetal.sourceIn : currentTime,
+      currentProgress: (selectedPetal) ? Math.floor(selectedPetal.sourceIn / rootDuration) : currentProgress,
+      rootDuration,
+      sourceIn: (selectedPetal) ? selectedPetal.sourceIn : 0,
+      sourceOut: (selectedPetal) ? selectedPetal.sourceOut : 0,
+      targetIn: (selectedPetal) ? selectedPetal.targetIn : 0,
+      targetOut: (selectedPetal) ? selectedPetal.targetOut : 0,
+      flavor: (selectedPetal) ? selectedPetal.flavor : 'neutral',
+      isValidInput: false,
+      selectedPetal
+    }
+
+    if (globals.addNodeRoutineRunning) {
+      props.resetAddNode(globals.selectedFlower)
+    } else if (globals.editNodeRoutineRunning) {
+      props.resetEditNode(globals.selectedFlower)
+    }
+  }
+
+  componentDidUpdate () {
+    const { globals } = this.props
+    const { phase } = this.state
+    if (phase === 3 && globals.addNodeRoutineRunning && globals.addNodeStatus.finished) {
+      this.props.stopAddNodeRoutine()
+    } else if (phase === 3 && globals.editNodeRoutineRunning && globals.editNodeStatus.finished) {
+      this.props.stopEditNodeRoutine()
     }
   }
 
@@ -75,38 +111,35 @@ class AddNodeRoutine extends React.Component {
     }
   }
 
-  flavorSelected = (flavor) => {
-    this.flavor = flavor
-    this.nextPhase()
-    this.setState({
-      flavorSelected: true
-    })
+  setValidInput = (isValid) => {
+    if (isValid !== this.state.validInput) {
+      this.setState({ isValidInput: isValid })
+    }
   }
 
-  linkGiven = (videoLink) => {
-    this.nextPhase()
+  onScrubStart = e => {
+    const clientX = (e.touches) ? e.touches[0].clientX : e.clientX
+    const clientY = (e.touches) ? e.touches[0].clientY : e.clientY
+    const boundingBox = e.target.getBoundingClientRect()
     this.setState({
-      videoLink
-    })
-  }
-
-  metaInformationSet = () => {
-    this.nextPhase()
-    this.props.nodeGetsPositioned(true)
-  }
-
-  onScrubStart = (e) => {
-    this.setState({
-      seeking: true
+      seeking: true,
+      dragPointX: clientX - boundingBox.x - (boundingBox.width * 0.5),
+      dragPointY: clientY - boundingBox.y - (boundingBox.height * 0.5)
     })
   }
 
   onScrub = e => {
     if (this.state.seeking) {
-      const width = window.innerWidth
-      const height = window.innerHeight
-      const center = [Math.floor(width * 0.5), Math.floor(height * 0.5)]
-      const angle = getAngle(e.clientX, e.clientY, center[0], center[1])
+      const { dragPointX, dragPointY } = this.state
+      const { dimensions, sideBarOpen } = this.props
+      const clientX = (e.touches) ? e.touches[0].clientX : e.clientX
+      const clientY = (e.touches) ? e.touches[0].clientY : e.clientY
+      const angle = getAngle(
+        clientX - dragPointX,
+        clientY - dragPointY,
+        (sideBarOpen) ? dimensions.centerX + SIDEBAR_WIDTH * 0.5 : dimensions.centerX,
+        dimensions.centerY + NAVBAR_HEIGHT
+      )
       const progress = angle / 360
 
       this.currentScrub = progress
@@ -119,16 +152,44 @@ class AddNodeRoutine extends React.Component {
 
   onScrubEnd = e => {
     if (this.state.seeking) {
+      const { desiredValue, rootDuration } = this.state
       this.setState({
         seeking: false
       })
+      const sourceLink = Math.floor(desiredValue * rootDuration)
+      this.setState({ sourceIn: sourceLink, sourceOut: sourceLink })
       this.props.setNewNodePosition(this.state.desiredValue)
     }
   }
 
+  onSubmit = () => {
+    const { globals } = this.props
+    const { selectedPetal } = this.state
+    const {
+      title, description, flavor, targetIn,
+      targetOut, sourceIn, sourceOut, videoLink
+    } = this.state
+    const data = {
+      title,
+      description,
+      type: 'youtube',
+      link: videoLink,
+      sourceIn,
+      sourceOut,
+      targetIn,
+      targetOut,
+      flavor
+    }
+    if (globals.addNodeRoutineRunning) {
+      this.props.addNode(globals.selectedFlower, { ...data, id: globals.selectedFlower })
+    } else if (globals.editNodeRoutineRunning) {
+      this.props.editNode(globals.selectedFlower, { ...data, id: selectedPetal.targetNode.id })
+    }
+  }
+
   render () {
-    const { desiredValue, phase, animationsFinished, videoLink } = this.state
-    const { currentProgress, dimensions, globals } = this.props
+    const { desiredValue, phase, animationsFinished, flavor, videoLink, isValidInput, title, description, seeking } = this.state
+    const { currentProgress, dimensions, globals, flowerData } = this.props
     const angle = ((desiredValue !== -1) ? desiredValue : currentProgress) * 360
 
     let translateX
@@ -141,9 +202,9 @@ class AddNodeRoutine extends React.Component {
         scale = 0.8
         break
       case 3:
-        translateX = getCirclePosX(dimensions.rootRadius + (dimensions.rootRadius * 0.5), angle, dimensions.centerX)
-        translateY = getCirclePosY(dimensions.rootRadius + (dimensions.rootRadius * 0.5), angle, dimensions.centerY)
-        scale = 0.5
+        translateX = getCirclePosX(dimensions.rootRadius + (dimensions.rootRadius * 0.4), angle, dimensions.centerX)
+        translateY = getCirclePosY(dimensions.rootRadius + (dimensions.rootRadius * 0.4), angle, dimensions.centerY)
+        scale = 0.4
         break
       default:
         translateX = dimensions.centerX
@@ -151,28 +212,76 @@ class AddNodeRoutine extends React.Component {
         scale = 1
     }
 
-    let titlePositionY = (translateY - dimensions.rootSize) * 0.7
-
-    // console.log(phase, this.PHASES)
-
+    const currentRoutine = (globals.editNodeRoutineRunning) ? globals.editNodeStatus : globals.addNodeStatus
     return [
       <div
-        className={style.phase}
-        style={{
-          top: (phase === 3 && (angle > 45 && angle < 315)) ? '6%' : '',
-          bottom: (phase === 3 && (angle < 45 || angle > 315)) ? '6%' : '',
-          transform: (phase !== 3) ? `translateY(${(titlePositionY > 25) ? titlePositionY : 25}px)` : ''
-        }}
+        key='mainContainer'
+        className={style.container}
       >
         <h2 className={style.phaseTitle}>{this.PHASES[phase].title}</h2>
+        {phase === 0 &&
+        <VideoLinker
+          finished={this.linkGiven}
+          setValidInput={this.setValidInput}
+          videoLink={videoLink}
+          setVideoLink={(videoLink) => { this.setState({ videoLink }) }}
+          setTitle={(title) => { this.setState({ title }) }}
+          setDuration={(duration) => { this.setState({ duration, targetOut: duration }) }}
+        />
+        }
+        {phase === 1 &&
+        <FlavorSelector
+          selectFlavor={(flavor) => { this.setState({ flavor }) }}
+          selectedFlavor={flavor}
+          angle={0}
+        />
+        }
+        {phase === 2 &&
+          <TitleInput
+            title={title}
+            description={description}
+            setValidInput={this.setValidInput}
+            setTitle={(title) => { this.setState({ title }) }}
+            setDescription={(description) => { this.setState({ description }) }}
+          />
+        }
+        {phase !== 3 &&
+          <FloatingButton
+            className={style.next}
+            style={{
+              border: `2px solid ${(isValidInput) ? '#222642' : 'grey'}`,
+              background: (isValidInput) ? '#222642' : 'grey'
+            }}
+            onClick={this.nextPhase}
+            deactivated={!isValidInput}
+            round
+          >
+            <MdChevronRight
+              size={30}
+              color={'white'}
+            />
+          </FloatingButton>
+        }
+        {phase === 3 &&
+        <FloatingButton
+          className={style.next}
+          style={{
+            border: `2px solid ${(!currentRoutine.loading) ? '#222642' : 'grey'}`,
+            background: (!currentRoutine.loading) ? '#222642' : 'grey'
+          }}
+          onClick={this.onSubmit}
+          deactivated={currentRoutine.loading}
+        >
+          Add Petal
+        </FloatingButton>
+        }
       </div>,
       <div
-        key='container'
+        key='petalContainer'
+        className={style.petalContainer}
         style={{
           transform: `translate(${translateX}px, ${translateY}px)`,
-          transition: (animationsFinished) ? 'none' : 'transform 400ms ease-out',
-          position: 'absolute',
-          top: 0
+          transition: (animationsFinished) ? 'none' : 'transform 400ms ease-out'
         }}
       >
         <div
@@ -184,45 +293,63 @@ class AddNodeRoutine extends React.Component {
             height: `${dimensions.rootSize}px`
           }}
           onMouseDown={(phase === 3) ? this.onScrubStart : () => {}}
-          onMouseMove={this.onScrub}
-          onMouseUp={(phase === 3) ? this.onScrubEnd : () => {}}
-          onMouseLeave={(phase === 3) ? this.onScrubEnd : () => {}}
+          onTouchStart={(phase === 3) ? this.onScrubStart : () => {}}
+          onTouchMove={this.onScrub}
+          onTouchEnd={(phase === 3) ? this.onScrubEnd : () => {}}
           ref={(ref) => { this.container = ref }}
         >
-          {phase > 0 && globals.addNodeType === NODE_TYPES.LINK_NODE &&
-            <VideoPlayer
-              url={videoLink}
-              color={'#222642'}
-              r={dimensions.rootRadius}
-              isSelectedPetal={(phase !== 3)}
-              // isPetal
-              wasSelected
-              hideControls={(phase === 3)}
-              shouldUpdate={(phase !== 3)}
-            />
+          {((phase === 0 && isValidInput) || phase > 0) &&
+          <VideoPlayer
+            url={videoLink}
+            color={FLAVORS.find((elem) => elem.type === flavor).color}
+            r={dimensions.rootRadius}
+            isSelectedPetal={(phase !== 3)}
+            // isPetal
+            wasSelected
+            hideControls={(phase === 3)}
+            shouldUpdate={(phase !== 3)}
+          />
           }
         </div>
-        {phase === 1 &&
-          <FlavorSelector
-            size={dimensions.rootSize}
-            flavorSelected={this.flavorSelected}
-            angle={angle}
-          />
-        }
-        {phase === 0 && globals.addNodeType === NODE_TYPES.LINK_NODE &&
-        <VideoLinker
-          finished={this.linkGiven}
-        />
-        }
       </div>,
-      <div>
-        {phase === 2 &&
-        <div className={style.inputContainer} style={{ top: `${(dimensions.centerY * 1.2)}px` }}>
-          <input className={style.title} type='text' placeholder='Add a Title' />
-          <textarea className={style.description} type='text' cols='40' rows='5' placeholder='Add a Description' />
-        </div>
-        }
-      </div>
+      // <div
+      //   key='rootVideo'
+      //   className={style.petal}
+      //   style={{
+      //     transform: `translate(-50%, -50%)`,
+      //     width: `${dimensions.rootSize}px`,
+      //     height: `${dimensions.rootSize}px`,
+      //     zIndex: 5
+      //   }}
+      //   ref={(ref) => { this.container = ref }}
+      // >
+      //   {phase === 3 &&
+      //   <VideoPlayer
+      //     url={`https://www.youtube.com/watch?v=${flowerData[globals.selectedFlower].video.url}`}
+      //     r={dimensions.rootRadius}
+      //     isSelectedPetal
+      //     color={'blue'}
+      //     // isPetal
+      //     wasSelected
+      //     // hideControls={(phase === 3)}
+      //     shouldUpdate
+      //   />
+      //   }
+      // </div>,
+      <div
+        key='dragContainer'
+        onMouseMove={this.onScrub}
+        onMouseUp={(phase === 3) ? this.onScrubEnd : () => {}}
+        onMouseLeave={(phase === 3) ? this.onScrubEnd : () => {}}
+        style={{
+          position: 'absolute',
+          width: dimensions.width,
+          height: dimensions.height,
+          top: 0,
+          left: 0,
+          zIndex: 10,
+          pointerEvents: (seeking) ? 'all' : 'none'
+        }} />
     ]
   }
 }
@@ -241,12 +368,19 @@ AddNodeRoutine.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const { dimensions, session, globals } = state
-  return { dimensions, session, globals }
+  const { dimensions, session, globals, flowerData } = state
+  return { dimensions, session, globals, flowerData }
 }
 
 const mapDispatchToProps = {
-  nodeGetsPositioned, setNewNodePosition
+  nodeGetsPositioned,
+  setNewNodePosition,
+  addNode,
+  editNode,
+  resetAddNode,
+  resetEditNode,
+  stopAddNodeRoutine,
+  stopEditNodeRoutine
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNodeRoutine)

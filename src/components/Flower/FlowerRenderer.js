@@ -336,8 +336,8 @@ class FlowerRenderer extends React.Component {
             className={style.petal}
             style={{
               transition: `transform ${MAGNIFY_SPEED}ms cubic-bezier(.4,0,.2,1)`,
-              visibility: (((node.id !== rootNode) && globals.addNodeRoutineRunning) ||
-              ((node.id === rootNode) && !globals.nodeGetsPositioned && globals.addNodeRoutineRunning)) ? 'hidden' : 'visible',
+              visibility: (((node.id !== rootNode) && (globals.addNodeRoutineRunning || globals.editNodeRoutineRunning)) ||
+              ((node.id === rootNode) && !globals.nodeGetsPositioned && (globals.addNodeRoutineRunning || globals.editNodeRoutineRunning))) ? 'hidden' : 'visible',
               zIndex: (node.id === rootNode) ? '5' : ''
             }}
           >
@@ -352,8 +352,7 @@ class FlowerRenderer extends React.Component {
               color={node.color}
               setCurrentTime={this.setCurrentTime}
               video={(node.targetNode) ? node.targetNode.video : rootVideo}
-              petalHidden={globals.addNodeRoutineRunning}
-              current
+              petalHidden={globals.addNodeRoutineRunning || globals.editNodeRoutineRunning}
             />
           </div>
         )}
