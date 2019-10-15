@@ -192,8 +192,6 @@ class AddNodeRoutine extends React.Component {
     const { dimensions, globals, flowerData } = this.props
     const angle = ((desiredValue !== -1) ? desiredValue : currentProgress) * 360
 
-    console.log(currentProgress)
-
     let translateX
     let translateY
     let scale
