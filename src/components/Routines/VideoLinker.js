@@ -26,7 +26,6 @@ export default ({
           }
         })
         .then((json) => {
-          console.log(json)
           if (json.duration && json.title) {
             setValidInput(true)
             setDuration(json.duration)

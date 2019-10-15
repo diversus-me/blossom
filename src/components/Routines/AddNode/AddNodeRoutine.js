@@ -58,7 +58,7 @@ class AddNodeRoutine extends React.Component {
       title: (selectedPetal) ? selectedPetal.title : '',
       description: '',
       currentTime: (selectedPetal) ? selectedPetal.sourceIn : currentTime,
-      currentProgress: (selectedPetal) ? Math.floor(selectedPetal.sourceIn / rootDuration) : currentProgress,
+      currentProgress: (selectedPetal) ? selectedPetal.sourceIn / rootDuration : currentProgress,
       rootDuration,
       sourceIn: (selectedPetal) ? selectedPetal.sourceIn : 0,
       sourceOut: (selectedPetal) ? selectedPetal.sourceOut : 0,
@@ -142,8 +142,6 @@ class AddNodeRoutine extends React.Component {
       )
       const progress = angle / 360
 
-      this.currentScrub = progress
-
       this.setState({
         desiredValue: progress
       })
@@ -153,12 +151,13 @@ class AddNodeRoutine extends React.Component {
   onScrubEnd = e => {
     if (this.state.seeking) {
       const { desiredValue, rootDuration } = this.state
-      this.setState({
-        seeking: false
-      })
       const sourceLink = Math.floor(desiredValue * rootDuration)
-      this.setState({ sourceIn: sourceLink, sourceOut: sourceLink })
-      this.props.setNewNodePosition(this.state.desiredValue)
+      this.setState({
+        seeking: false,
+        sourceIn: sourceLink,
+        sourceOut: sourceLink,
+        currentProgress: desiredValue
+      })
     }
   }
 
@@ -188,9 +187,12 @@ class AddNodeRoutine extends React.Component {
   }
 
   render () {
-    const { desiredValue, phase, animationsFinished, flavor, videoLink, isValidInput, title, description, seeking } = this.state
-    const { currentProgress, dimensions, globals, flowerData } = this.props
+    const { desiredValue, phase, animationsFinished, flavor, videoLink,
+      isValidInput, title, description, seeking, currentProgress } = this.state
+    const { dimensions, globals, flowerData } = this.props
     const angle = ((desiredValue !== -1) ? desiredValue : currentProgress) * 360
+
+    console.log(currentProgress)
 
     let translateX
     let translateY
@@ -272,7 +274,7 @@ class AddNodeRoutine extends React.Component {
           onClick={this.onSubmit}
           deactivated={currentRoutine.loading}
         >
-          Add Petal
+          {(globals.addNodeRoutineRunning) ? 'Add Petal' : 'Edit Petal'}
         </FloatingButton>
         }
       </div>,
@@ -312,30 +314,32 @@ class AddNodeRoutine extends React.Component {
           }
         </div>
       </div>,
-      // <div
-      //   key='rootVideo'
-      //   className={style.petal}
-      //   style={{
-      //     transform: `translate(-50%, -50%)`,
-      //     width: `${dimensions.rootSize}px`,
-      //     height: `${dimensions.rootSize}px`,
-      //     zIndex: 5
-      //   }}
-      //   ref={(ref) => { this.container = ref }}
-      // >
-      //   {phase === 3 &&
-      //   <VideoPlayer
-      //     url={`https://www.youtube.com/watch?v=${flowerData[globals.selectedFlower].video.url}`}
-      //     r={dimensions.rootRadius}
-      //     isSelectedPetal
-      //     color={'blue'}
-      //     // isPetal
-      //     wasSelected
-      //     // hideControls={(phase === 3)}
-      //     shouldUpdate
-      //   />
-      //   }
-      // </div>,
+      <div
+        key='rootVideo'
+        className={style.petal}
+        style={{
+          transform: `translate(-50%, -50%)`,
+          width: `${dimensions.rootSize - 2}px`,
+          height: `${dimensions.rootSize - 2}px`,
+          zIndex: 5
+        }}
+        ref={(ref) => { this.container = ref }}
+      >
+        {phase === 3 &&
+        <VideoPlayer
+          url={`https://www.youtube.com/watch?v=${flowerData[globals.selectedFlower].video.url}`}
+          r={dimensions.rootRadius}
+          isSelectedPetal
+          color={'blue'}
+          progress={currentProgress}
+          shouldReceiveProgress
+          // isPetal
+          wasSelected
+          // hideControls={(phase === 3)}
+          shouldUpdate
+        />
+        }
+      </div>,
       <div
         key='dragContainer'
         onMouseMove={this.onScrub}
