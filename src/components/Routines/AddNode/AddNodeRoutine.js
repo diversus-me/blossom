@@ -25,7 +25,7 @@ class AddNodeRoutine extends React.Component {
     const { globals, flowerData, currentTime, currentProgress } = props
 
     this.PHASES = [
-      { name: 'LINK_VIDEO', title: 'Provide a video link.' },
+      { name: 'LINK_VIDEO', title: 'Provide a video link' },
       { name: 'SELECT_FLAVOR', title: 'Select a flavor.' },
       { name: 'ADD_META', title: 'Provide additional information.' },
       { name: 'POSITION', title: 'Position your answer.' }
@@ -319,7 +319,8 @@ class AddNodeRoutine extends React.Component {
           transform: `translate(-50%, -50%)`,
           width: `${dimensions.rootSize - 2}px`,
           height: `${dimensions.rootSize - 2}px`,
-          zIndex: 5
+          zIndex: 5,
+          pointerEvents: (phase !== 3) ? 'none' : 'all'
         }}
         ref={(ref) => { this.container = ref }}
       >
