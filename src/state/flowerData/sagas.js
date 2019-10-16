@@ -25,33 +25,6 @@ function * getNode (action) {
   }
 }
 
-function * addNode (action) {
-  try {
-    const response = yield fetchAsync(
-      () => fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/node`,
-        {
-          credentials: 'include',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(action.data)
-        }
-      ))
-    yield all([
-      put({ type: ADD_NODE_SUCCESS, data: response.data, id: action.id }),
-      put(getFlowerData(action.id))
-    ])
-  } catch (e) {
-    yield put({ type: ADD_NODE_ERROR, error: e.message, id: action.id })
-  }
-}
-
 export function * getFlowerSaga () {
   yield takeEvery(GET_FLOWER_LOADING, getNode)
-}
-
-export function * addNodeSaga () {
-  yield takeLatest(ADD_NODE_LOADING, addNode)
 }

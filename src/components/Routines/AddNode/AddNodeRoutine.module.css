@@ -1,62 +1,36 @@
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+}
+
+.next {
+  left: 50%;
+  bottom: 25px;
+  margin-left: -35px;
+  color: white;
+  font-weight: bold;
+  user-select: none;
+}
+
 .petal {
-    /* border-radius: 50%;
-    overflow: hidden;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform: translate3d(0, 0, 0); */
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
-.title {
-    display: block;
-    background: rgba(0, 0, 0, 0);
-    color: black;
-    font-size: 35px;
-    font-weight: bold;
-    border: none;
-    width: 50%;
-    margin: auto;
-    text-align: center;
-}
-
-.phase {
-    position: absolute;
-    width: 100%;
-    text-align: center;
+.petalContainer {
+  position: absolute;
+  top: 0;
 }
 
 .phaseTitle {
-    padding: 20px 30px;
-    transform: translateY(-50%);
-}
-
-.description {
-    display: block;
-    width: 50%;
-    margin: auto;
-    text-align: center;
-    font-size: 25px;
-    font-weight: bold;
-    background: rgba(0, 0, 0, 0);
-    color: black;
-    border: none;
-}
-
-.title::placeholder {
-    color: grey;
-}
-
-.description::placeholder {
-    color: grey;
-}
-
-.description:focus, .title:focus{
-    outline: none;
-}
-
-.inputContainer {
-    position: absolute;
-    margin: auto;
-    width: 100%;
-    /* left: 200px; */
-
+  margin: 50px 0 25px;
+  position: relative;
+  text-align: center;
+  user-select: none;
 }

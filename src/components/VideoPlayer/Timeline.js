@@ -61,9 +61,11 @@ class Timeline extends React.Component {
     if (seeking || seekingLeft || seekingRight) {
       const { r } = this.props
       const boundingBox = this.container.getBoundingClientRect()
+      const clientX = (e.touches) ? e.touches[0].clientX : e.clientX
+      const clientY = (e.touches) ? e.touches[0].clientY : e.clientY
       const centerX = boundingBox.left + r
       const centerY = boundingBox.top + r
-      const angle = getAngle(e.clientX, e.clientY, centerX, centerY)
+      const angle = getAngle(clientX, clientY, centerX, centerY)
       const progress = angle / 360
 
       const { showHandles } = this.props
@@ -211,6 +213,9 @@ class Timeline extends React.Component {
           onMouseDown={() => { this.onScrubStart('center') }}
           onMouseMove={this.onScrub}
           onMouseUp={this.onScrubEnd}
+          onTouchStart={() => { this.onScrubStart('center') }}
+          onTouchMove={this.onScrub}
+          onTouchEnd={this.onScrubEnd}
         >
           <div style={{
             transform: 'translate(-50%, -50%)',

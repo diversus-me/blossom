@@ -121,13 +121,12 @@ class Petal extends React.Component {
           color={color}
           url={getFullVideoURL(video.url, video.type)}
           setCurrentTime={setCurrentTime}
-          shouldUpdate={isSelectedPetal || isRootNode}
+          shouldUpdate={(isSelectedPetal || isRootNode) &&
+            (!globals.addNodeRoutineRunning || globals.editNodeRoutineRunning)}
           isPetal={!isRootNode}
           isSelectedPetal={isSelectedPetal}
           wasSelected={wasSelected}
           showHandles={globals.nodeGetsPositioneds}
-          progress={globals.addedNodePosition}
-          shouldReceiveProgress={globals.nodeGetsPositioned}
           autoplay
           isIFrame
           // hideControls={petalHidden}

@@ -8,12 +8,13 @@ import { toast } from 'react-toastify'
 import 'react-tiny-fab/dist/styles.min.css'
 
 import { getFlowerData } from '../state/flowerData/actions'
+import { startEditNodeRoutine } from '../state/globals/actions'
 import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../Defaults'
 
 import FlowerRenderer from './Flower/FlowerRenderer'
 import Overlay from './UI/Overlay'
 import EditNodeFrom from './Forms/EditNodeForm'
-import AddNode2 from './Routines/AddNode/AddNode2'
+import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
 import SeedInfo from './FlowerUI/SeedInfo'
 import PetalInfo from './FlowerUI/PetalInfo'
 import ActionButtonSimple from './UI/ActionButtonSimple'
@@ -79,11 +80,7 @@ class FlowerView extends React.Component {
   }
 
   delete = () => {
-    const { history, id } = this.props
-    let selectedPetalID = queryString.parse(history.location.search).s
-    if (selectedPetalID) {
-      selectedPetalID = parseInt(selectedPetalID)
-    }
+    const { flowerData, globals } = this.props
     if (window.confirm(`Are you sure you want to delete the selected Node?`)) {
       fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/node`,
@@ -93,7 +90,11 @@ class FlowerView extends React.Component {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ id: parseInt(selectedPetalID) })
+          body: JSON.stringify({
+            id: flowerData[globals.selectedFlower].connections
+              .find((connection) => connection.id === parseInt(globals.selectedPetal))
+              .targetNode.id
+          })
         })
         .then(response => {
           if (response.ok) {
@@ -104,7 +105,7 @@ class FlowerView extends React.Component {
         })
         .then(() => toast.success('Node successfully deleted'))
         // TODO: Why does reloading the flower instantly after deleting cause wrong responses?
-        .then(setTimeout(this.props.getFlowerData(id), 300))
+        .then(setTimeout(this.props.getFlowerData(globals.selectedFlower), 300))
         .catch(() => {
           toast.error('Node could not be deleted.')
         })
@@ -124,7 +125,7 @@ class FlowerView extends React.Component {
 
   render () {
     const { history, id, flowerData, session, dimensions, sideBarOpen,
-      globals: { addNodeRoutineRunning } } = this.props
+      globals: { addNodeRoutineRunning, editNodeRoutineRunning } } = this.props
     const { editNodeVisibility, currentTime, addNodePos } = this.state
     const data = flowerData[id]
 
@@ -137,6 +138,8 @@ class FlowerView extends React.Component {
     if (data && data.finished) {
       selectedPetal = data.connections.find(connection => connection.id === selectedPetalID)
     }
+
+    const nodeRoutineRunning = (addNodeRoutineRunning || editNodeRoutineRunning)
 
     return (
       <div
@@ -154,8 +157,8 @@ class FlowerView extends React.Component {
               ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
               : 'translateX(0)'
           }}>
-          {session.authenticated && data && data.connections && addNodeRoutineRunning &&
-          <AddNode2
+          {session.authenticated && data && data.connections && nodeRoutineRunning &&
+          <AddNodeRoutine
             id={id}
             rootDuration={data.video.duration}
             currentTime={this.currentTime}
@@ -173,7 +176,7 @@ class FlowerView extends React.Component {
             setCurrentTime={this.setCurrentTime}
             selectedPetalID={selectedPetalID}
             sorted={data.sorted}
-            hidePetals={addNodeRoutineRunning}
+            hidePetals={nodeRoutineRunning}
             addNodePos={addNodePos}
           />
           }
@@ -181,7 +184,7 @@ class FlowerView extends React.Component {
         <div
           className={style.metaContainer}
           style={{
-            display: (addNodeRoutineRunning) ? 'none' : 'block',
+            display: (nodeRoutineRunning) ? 'none' : 'block',
             transform: (dimensions.safeToMove && sideBarOpen)
               ? `translateX(${Math.floor(SIDEBAR_WIDTH)}px)`
               : 'translateX(0)'
@@ -208,22 +211,23 @@ class FlowerView extends React.Component {
           />
           }
         </div>
-        {session.authenticated && data && selectedPetalID && selectedPetalID !== data.id &&
+        {session.authenticated && data && selectedPetalID && selectedPetalID !== data.id && !nodeRoutineRunning &&
            (session.role === 'admin' || session.id === selectedPetal.user.id) &&
           [
             <div
               key='edit'
               className={style.editPetal}
-              onClick={this.toggleEditNode}
+              onClick={this.props.startEditNodeRoutine}
             >
-              <MdEdit color='grey' size='25px' />
+              <img src='/icons/Btn_Edit.svg' width={20} />
             </div>,
             <div
               key='delete'
               className={style.deletePetal}
               onClick={this.delete}
             >
-              <MdClear color='grey' size='30px' />
+              <img src='/icons/Btn_Delete.svg' width={15} />
+              {/* <MdClear color='grey' size='25px' /> */}
             </div>,
             <Overlay key='editOverlay' visibility={editNodeVisibility} onOuterClick={this.toggleEditNode}>
               {
@@ -268,7 +272,7 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = {
-  getFlowerData
+  getFlowerData, startEditNodeRoutine
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FlowerView))
