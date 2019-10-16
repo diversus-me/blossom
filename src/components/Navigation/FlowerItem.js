@@ -1,18 +1,17 @@
-import React from 'react'
-import propTypes from 'prop-types'
-import classnames from 'classnames'
-import moment from 'moment'
-import { connect } from 'react-redux'
-import { MdEdit, MdClear } from 'react-icons/md'
-import { toast } from 'react-toastify'
-import Eye from '@material-ui/icons/RemoveRedEyeOutlined'
-import Circle from '@material-ui/icons/PanoramaFishEye'
-import { listFlowers } from '../../state/flowerList/actions'
+import React from "react";
+import propTypes from "prop-types";
+import classnames from "classnames";
+import moment from "moment";
+import { connect } from "react-redux";
+import { MdEdit, MdClear } from "react-icons/md";
+import { toast } from "react-toastify";
+// import Eye from "/icons/views.svg";
+import { listFlowers } from "../../state/flowerList/actions";
 
-import Overlay from '../UI/Overlay'
-import EditFlowerFrom from '../Forms/EditFlowerForm'
+import Overlay from "../UI/Overlay";
+import EditFlowerFrom from "../Forms/EditFlowerForm";
 
-import style from './FlowerItem.module.css'
+import style from "./FlowerItem.module.css";
 
 class FlowerItem extends React.Component {
   state = {
@@ -20,41 +19,41 @@ class FlowerItem extends React.Component {
   };
 
   toggleEdit = e => {
-    e.preventDefault()
+    e.preventDefault();
     this.setState({
       editFlowerVisibility: !this.state.editFlowerVisibility
-    })
+    });
   };
 
   delete = e => {
-    const { title, id } = this.props
-    e.preventDefault()
+    const { title, id } = this.props;
+    e.preventDefault();
     if (window.confirm(`Are you sure you want to delete ${title}?`)) {
       fetch(`${process.env.REACT_APP_SERVER_URL}/api/flower`, {
-        credentials: 'include',
-        method: 'DELETE',
+        credentials: "include",
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({ id })
       })
         .then(response => {
           if (response.ok) {
-            return response
+            return response;
           } else {
-            throw new Error('failed')
+            throw new Error("failed");
           }
         })
-        .then(() => toast.success('Flower successfully deleted'))
+        .then(() => toast.success("Flower successfully deleted"))
         // TODO: Why does reloading the flower instantly after deleting cause wrong responses?
         .then(setTimeout(this.props.listFlowers, 300))
         .catch(() => {
-          toast.error('Flower could not be deleted.')
-        })
+          toast.error("Flower could not be deleted.");
+        });
     }
   };
 
-  render () {
+  render() {
     const {
       title,
       id,
@@ -64,13 +63,13 @@ class FlowerItem extends React.Component {
       user,
       session,
       isSelected
-    } = this.props
-    const { editFlowerVisibility } = this.state
+    } = this.props;
+    const { editFlowerVisibility } = this.state;
 
     return (
       <div
         className={style.container}
-        style={{ background: isSelected ? 'grey' : 'white' }}
+        style={{ background: isSelected ? "#E7E9EF" : "white" }}
       >
         <div className={style.right}>
           <div
@@ -82,24 +81,22 @@ class FlowerItem extends React.Component {
         </div>
         <div className={classnames(style.block, style.left)}>
           <div className={style.title}>{title}</div>
-          {/* <div className={style.petalContainer}></div> */}
           <div className={style.middleContainer}>
-            <div className={classnames(style.middleContainerText)}>
-              <Circle className={classnames(style.icon)} /> 0
-            </div>
+            {user.name}
             <div
               className={classnames(
                 style.middleContainerText,
                 style.itemPadding
               )}
-            >
-              {' '}
-              <Eye className={classnames(style.icon)} /> 0
-            </div>
+            ></div>
           </div>
           <div className={style.bottomContainer}>
             <div className={classnames(style.bottomContainerText)}>
-              {user.name}
+              <img
+                className={style.icon}
+                src={process.env.PUBLIC_URL + "/icons/views.svg"}
+              />{" "}
+              <div className={style.viewsText}>1,234</div>
             </div>
             <div
               className={classnames(
@@ -111,42 +108,42 @@ class FlowerItem extends React.Component {
             </div>
           </div>
           {session.authenticated &&
-            (session.role === 'admin' || session.id === user.id) && [
-            <div
-                key='edit'
+            (session.role === "admin" || session.id === user.id) && [
+              <div
+                key="edit"
                 className={classnames(style.edit)}
                 onClick={this.toggleEdit}
-            >
-                <MdEdit color='grey' />
+              >
+                <MdEdit color="grey" />
               </div>,
               <div
-              key='delete'
-              className={classnames(style.delete)}
-              onClick={this.delete}
-            >
-              <MdClear color='grey' size='1.1em' />
-            </div>,
+                key="delete"
+                className={classnames(style.delete)}
+                onClick={this.delete}
+              >
+                <MdClear color="grey" size="1.1em" />
+              </div>,
               <Overlay
-              key='editOverlay'
-              visibility={editFlowerVisibility}
-              onOuterClick={this.toggleEdit}
-            >
-              <EditFlowerFrom
+                key="editOverlay"
+                visibility={editFlowerVisibility}
+                onOuterClick={this.toggleEdit}
+              >
+                <EditFlowerFrom
                   title={title}
                   description={description}
                   id={id}
-              />
-            </Overlay>
-          ]}
+                />
+              </Overlay>
+            ]}
         </div>
       </div>
-    )
+    );
   }
 }
 
 FlowerItem.defaultProps = {
-  description: 'No description.'
-}
+  description: "No description."
+};
 
 FlowerItem.propTypes = {
   title: propTypes.string.isRequired,
@@ -155,18 +152,18 @@ FlowerItem.propTypes = {
   created: propTypes.instanceOf(Date).isRequired,
   user: propTypes.object.isRequired,
   id: propTypes.number.isRequired
-}
+};
 
-function mapStateToProps (state) {
-  const { session } = state
-  return { session }
+function mapStateToProps(state) {
+  const { session } = state;
+  return { session };
 }
 
 const mapDispatchToProps = {
   listFlowers
-}
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FlowerItem)
+)(FlowerItem);
