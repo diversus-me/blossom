@@ -13,12 +13,12 @@
 }
 
 .accordionTitle {
+  font-family: "Sarabun", sans-serif;
   font-weight: bold;
   font-size: 1.2em;
   cursor: pointer;
   color: #222642;
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
   pointer-events: all;
 }

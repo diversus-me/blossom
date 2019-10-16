@@ -82,13 +82,14 @@ class FlowerItem extends React.Component {
         <div className={classnames(style.block, style.left)}>
           <div className={style.title}>{title}</div>
           <div className={style.middleContainer}>
-            {user.name}
             <div
               className={classnames(
                 style.middleContainerText,
                 style.itemPadding
               )}
-            ></div>
+            >
+              {user.name}
+            </div>
           </div>
           <div className={style.bottomContainer}>
             <div className={classnames(style.bottomContainerText)}>

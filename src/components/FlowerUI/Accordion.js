@@ -58,7 +58,6 @@ function Accordion (
         className={style.accordionTitle}
         onClick={() => setOpen(!isOpen)}
         style={{
-          // fontWeight: (petal) ? 'normal' : 'bold',
           fontSize: (petal) ? '1em' : '1.2em'
         }}
       >
