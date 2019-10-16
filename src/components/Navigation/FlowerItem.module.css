@@ -75,11 +75,11 @@
 }
 
 .middleContainerText {
-  font-size: 0.7em;
+  font-size: 0.79em;
 }
 
 .bottomContainerText {
-  font-size: 0.8em;
+  font-size: 0.78em;
 }
 
 .itemPadding {
@@ -87,7 +87,12 @@
 }
 
 .icon {
-  width: 10px !important;
-  height: 10px !important;
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
   color: red;
+}
+
+.viewsText {
+  display: inline-block;
 }

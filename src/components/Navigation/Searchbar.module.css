@@ -1,21 +1,23 @@
 .container {
-  width: 100%;
+  width: 95%;
   position: relative;
-  margin: 10px 0px;
+  margin: 10px 6px;
   z-index: 1;
   max-width: 500px;
+  text-align: center;
 }
 
 .input {
   position: relative;
-  width: 70%;
+  width: 90%;
   margin: auto;
   height: 35px;
   font-size: 0.9em;
   background: #f5f5f5;
   border: none !important;
   border-radius: 40px;
-  padding-left: 45px;
+  margin-top: 1.5em;
+  padding-left: 15px;
 }
 
 .input:focus {
@@ -24,7 +26,7 @@
 
 .icon {
   position: absolute;
-  color: #bdbdbd;
-  left: 10px;
-  top: 10px;
+  color: #969696;
+  right: 26px;
+  top: 30px;
 }
