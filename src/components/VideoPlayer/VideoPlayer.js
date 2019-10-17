@@ -50,6 +50,7 @@ class VideoPlayer extends React.Component {
   shouldComponentUpdate (nextProps) {
     if (nextProps.shouldReceiveProgress && (nextProps.progress !== this.props.progress)) {
       this.seekTo(nextProps.progress)
+      console.log('yes')
     }
     return true
   }
@@ -127,7 +128,8 @@ class VideoPlayer extends React.Component {
 
   render () {
     const { playing, isFullscreen, played, loaded, playedSeconds, duration } = this.state
-    const { color, r, url, loop, start, end, simple, isPetal, isSelectedPetal, wasSelected, hideControls, showHandles, isIFrame } = this.props
+    const { color, r, url, loop, start, end, simple, isPetal,
+      isSelectedPetal, wasSelected, hideControls, showHandles, autoplay } = this.props
 
     return [
       <div
@@ -151,7 +153,7 @@ class VideoPlayer extends React.Component {
           config={{
             youtube: {
               playerVars: {
-                autoplay: 0,
+                autoplay: (autoplay) ? 1 : 0,
                 controls: (isFullscreen) ? 1 : 0,
                 cc_load_policy: 0,
                 fs: 1,
