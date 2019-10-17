@@ -1,6 +1,5 @@
 .accordionItem {
-  transition: transform 200ms ease-out,
-              opacity 150ms ease-out;
+  transition: transform 200ms ease-out, opacity 150ms ease-out;
   transform: translateY(0);
   opacity: 1;
   pointer-events: none;
@@ -81,9 +80,11 @@
 }
 
 .flavor {
+  font-family: "Sarabun", sans-serif;
+  font-weight: bold;
   pointer-events: all;
   display: flex;
   align-items: center;
-  font-size: 1.1em;
+  font-size: 1.2em;
   cursor: pointer;
 }
