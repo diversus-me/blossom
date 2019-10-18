@@ -9,20 +9,29 @@ import { FLAVORS } from '../../Defaults'
 
 import style from './Accordion.module.css'
 
-function Accordion (
-  { title, description, className, flavor,
-    dimensions, petals, user, created, petal
-  }) {
+function Accordion ({
+  title,
+  description,
+  className,
+  flavor,
+  dimensions,
+  petals,
+  user,
+  created,
+  petal
+}) {
   const [isOpen, setOpen] = React.useState(false)
-  const selectedFlavor = FLAVORS.find((flavorItem) => flavorItem.type === flavor)
+  const selectedFlavor = FLAVORS.find(flavorItem => flavorItem.type === flavor)
   return [
     <div
       key='outerClick'
       className={style.outerClickContainer}
-      onClick={() => { setOpen(false) }}
+      onClick={() => {
+        setOpen(false)
+      }}
       style={{
-        opacity: (isOpen) ? 0.85 : 0,
-        pointerEvents: (isOpen) ? 'all' : 'none',
+        opacity: isOpen ? 0.85 : 0,
+        pointerEvents: isOpen ? 'all' : 'none',
         width: dimensions.width,
         height: dimensions.height
       }}
@@ -33,39 +42,40 @@ function Accordion (
       style={{
         position: 'relative',
         zIndex: 4,
-        transform: `translate(${(isOpen && petal) ? '50px, -150px' : '0, 0'})`,
+        transform: `translate(${isOpen && petal ? '50px, -150px' : '0, 0'})`,
         transition: 'transform 150ms ease-out'
       }}
     >
-      {petal &&
-      <div
-        className={style.flavor}
-        style={{
-          color: selectedFlavor.color
-        }}
-        onClick={() => setOpen(!isOpen)}
-      >
-        {selectedFlavor.name}
-        <selectedFlavor.icon
-          size={15}
+      {petal && (
+        <div
+          className={style.flavor}
           style={{
-            marginLeft: '8px'
+            color: selectedFlavor.color
           }}
-        />
-      </div>
-      }
+          onClick={() => setOpen(!isOpen)}
+        >
+          {selectedFlavor.name}
+          <selectedFlavor.icon
+            size={20}
+            style={{
+              marginLeft: '8px'
+            }}
+          />
+        </div>
+      )}
       <div
         className={style.accordionTitle}
         onClick={() => setOpen(!isOpen)}
         style={{
-          // fontWeight: (petal) ? 'normal' : 'bold',
-          fontSize: (petal) ? '1em' : '1.2em'
+          fontSize: petal ? '1em' : '1.2em'
         }}
       >
         {title}
         <MdKeyboardArrowDown
           style={{
-            transform: `rotate(${((isOpen && !petal) || (petal && !isOpen)) ? -180 : 0}deg)`
+            transform: `rotate(${
+              (isOpen && !petal) || (petal && !isOpen) ? -180 : 0
+            }deg)`
           }}
           className={style.accordionArrow}
           size={25}
@@ -78,7 +88,7 @@ function Accordion (
           !isOpen ? style.collapsed : ''
         )}
         style={{
-          pointerEvents: (isOpen) ? 'all' : 'none'
+          pointerEvents: isOpen ? 'all' : 'none'
         }}
       >
         <div className={style.viewsPetals}>
