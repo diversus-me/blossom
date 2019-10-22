@@ -3,50 +3,37 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { MdChevronRight } from 'react-icons/md'
 
-import { getAngle, getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
-// import { NODE_TYPES } from '../../../state/globals/defaults'
-import { FLAVORS, SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../../Defaults'
+import { getAngle, getCirclePosX, getCirclePosY } from '../Flower/DefaultFunctions'
+import { FLAVORS, SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
 
 import { setNewNodePosition, nodeGetsPositioned, stopAddNodeRoutine,
-  addNode, editNode, resetAddNode, stopEditNodeRoutine, resetEditNode } from '../../../state/globals/actions'
+  addNode, editNode, stopEditNodeRoutine } from '../../state/globals/actions'
 
-import VideoLinker from '../VideoLinker'
+import VideoLinker from './VideoLinker'
 import FlavorSelector from './FlavorSelector'
-import VideoPlayer from '../../VideoPlayer/VideoPlayer'
+import VideoPlayer from '../VideoPlayer/VideoPlayer'
 import TitleInput from './TitleInput'
 
-import FloatingButton from '../../UI/FloatingButton'
+import FloatingButton from '../UI/FloatingButton'
 
-import style from './AddNodeRoutine.module.css'
+import style from './Routines.module.css'
 
-class AddNodeRoutine extends React.Component {
+class FlowerRoutine extends React.Component {
   constructor (props) {
     super(props)
-    const { globals, flowerData, currentTime, currentProgress } = props
+    const { globals, flowerData } = props
 
     this.PHASES = [
       { name: 'LINK_VIDEO', title: 'Provide a video link' },
-      { name: 'SELECT_FLAVOR', title: 'Select a flavor.' },
-      { name: 'ADD_META', title: 'Provide additional information.' },
-      { name: 'POSITION', title: 'Position your answer.' }
+      { name: 'ADD_META', title: 'Provide additional information.' }
     ]
 
-    // if (globals.addNodeType === NODE_TYPES.RECORD_NODE) {
-    //   this.PHASES.unshift({ name: 'RECORD_VIDEO', title: 'Record a video.' })
-    // } else if (globals.addNodeType === NODE_TYPES.LINK_NODE) {
-    //   this.PHASES.unshift({ name: 'LINK_VIDEO', title: 'Provide a video link.' })
-    // } else if (globals.addNodeType === NODE_TYPES.UPLOAD_NODE) {
-    //   this.PHASES.unshift({ name: 'UPLOAD_VIDEO', title: 'Please select a video you want to upload.' })
-    // }
-
-    const rootDuration = flowerData[globals.selectedFlower].video.duration
     const selectedPetal = (globals.editNodeRoutineRunning && globals.selectedPetal)
       ? flowerData[globals.selectedFlower].connections.find(
         (connection) => connection.id === parseInt(globals.selectedPetal))
       : undefined
 
     this.state = {
-      angle: currentProgress * 360,
       seeking: false,
       dragPointX: 0,
       dragPointY: 0,
@@ -57,9 +44,6 @@ class AddNodeRoutine extends React.Component {
       duration: (selectedPetal) ? selectedPetal.targetNode.video.duration : 0,
       title: (selectedPetal) ? selectedPetal.title : '',
       description: '',
-      currentTime: (selectedPetal) ? selectedPetal.sourceIn : currentTime,
-      currentProgress: (selectedPetal) ? selectedPetal.sourceIn / rootDuration : currentProgress,
-      rootDuration,
       sourceIn: (selectedPetal) ? selectedPetal.sourceIn : 0,
       sourceOut: (selectedPetal) ? selectedPetal.sourceOut : 0,
       targetIn: (selectedPetal) ? selectedPetal.targetIn : 0,
@@ -67,12 +51,6 @@ class AddNodeRoutine extends React.Component {
       flavor: (selectedPetal) ? selectedPetal.flavor : 'neutral',
       isValidInput: false,
       selectedPetal
-    }
-
-    if (globals.addNodeRoutineRunning) {
-      props.resetAddNode(globals.selectedFlower)
-    } else if (globals.editNodeRoutineRunning) {
-      props.resetEditNode(globals.selectedFlower)
     }
   }
 
@@ -357,13 +335,13 @@ class AddNodeRoutine extends React.Component {
   }
 }
 
-AddNodeRoutine.defaultProps = {
+FlowerRoutine.defaultProps = {
   rootDuration: 0,
   currentTime: 0,
   currentProgress: 0
 }
 
-AddNodeRoutine.propTypes = {
+FlowerRoutine.propTypes = {
   id: PropTypes.string.isRequired,
   rootDuration: PropTypes.number,
   currentTime: PropTypes.number,
@@ -380,10 +358,8 @@ const mapDispatchToProps = {
   setNewNodePosition,
   addNode,
   editNode,
-  resetAddNode,
-  resetEditNode,
   stopAddNodeRoutine,
   stopEditNodeRoutine
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddNodeRoutine)
+export default connect(mapStateToProps, mapDispatchToProps)(FlowerRoutine)

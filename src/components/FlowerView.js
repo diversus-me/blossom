@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { MdEdit, MdClear } from 'react-icons/md'
-import queryString from 'query-string'
 import { toast } from 'react-toastify'
 import 'react-tiny-fab/dist/styles.min.css'
 
@@ -12,9 +10,7 @@ import { startEditNodeRoutine } from '../state/globals/actions'
 import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../Defaults'
 
 import FlowerRenderer from './Flower/FlowerRenderer'
-import Overlay from './UI/Overlay'
-import EditNodeFrom from './Forms/EditNodeForm'
-import AddNodeRoutine from './Routines/AddNode/AddNodeRoutine'
+import AddNodeRoutine from './Routines/NodeRoutine'
 import SeedInfo from './FlowerUI/SeedInfo'
 import PetalInfo from './FlowerUI/PetalInfo'
 import ActionButtonSimple from './UI/ActionButtonSimple'
@@ -22,38 +18,13 @@ import ActionButtonSimple from './UI/ActionButtonSimple'
 import style from './FlowerView.module.css'
 
 class FlowerView extends React.Component {
-  constructor (props) {
-    super(props)
-    const { history } = this.props
-    const parsedQuery = queryString.parse(history.location.search)
-
-    this.state = {
-      selectedPetalID: parseInt(parsedQuery.s),
-      editNodeVisibility: false,
-      showHandles: false,
-      addNodeType: ''
-    }
-
-    this.currentTime = 0
-    this.currentProgress = 0
+  state = {
+    showHandles: false,
+    addNodeType: ''
   }
 
-  shouldComponentUpdate (nextProps) {
-    const { history, id, flowerData } = nextProps
-    let selectedPetalID = queryString.parse(history.location.search).s
-    if (selectedPetalID) {
-      selectedPetalID = parseInt(selectedPetalID)
-    }
-
-    if (selectedPetalID && flowerData[id] && flowerData[id].connections &&
-      !flowerData[id].connections.find(connection => connection.id === selectedPetalID)) {
-      history.push({ search: '' })
-      this.setState({
-        selectedPetalID: ''
-      })
-    }
-    return true
-  }
+  currentTime = 0
+  currentProgress = 0
 
   componentDidMount () {
     const { id, flowerData } = this.props
@@ -69,14 +40,6 @@ class FlowerView extends React.Component {
     if (!flowerData[id]) {
       this.props.getFlowerData(id)
     }
-  }
-
-  toggleEditNode = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
-    this.setState({
-      editNodeVisibility: !this.state.editNodeVisibility
-    })
   }
 
   delete = () => {
@@ -124,19 +87,14 @@ class FlowerView extends React.Component {
   }
 
   render () {
-    const { history, id, flowerData, session, dimensions, sideBarOpen,
-      globals: { addNodeRoutineRunning, editNodeRoutineRunning } } = this.props
-    const { editNodeVisibility, currentTime, addNodePos } = this.state
+    const { id, flowerData, session, dimensions, sideBarOpen,
+      globals: { addNodeRoutineRunning, editNodeRoutineRunning, selectedPetal } } = this.props
+    const { addNodePos } = this.state
     const data = flowerData[id]
 
-    let selectedPetalID = queryString.parse(history.location.search).s
-    if (selectedPetalID) {
-      selectedPetalID = parseInt(selectedPetalID)
-    }
-
-    let selectedPetal
+    let selectedPetalData
     if (data && data.finished) {
-      selectedPetal = data.connections.find(connection => connection.id === selectedPetalID)
+      selectedPetalData = data.connections.find(connection => connection.id === selectedPetal)
     }
 
     const nodeRoutineRunning = (addNodeRoutineRunning || editNodeRoutineRunning)
@@ -174,7 +132,6 @@ class FlowerView extends React.Component {
             rootNode={data.id}
             rootVideo={data.video}
             setCurrentTime={this.setCurrentTime}
-            selectedPetalID={selectedPetalID}
             sorted={data.sorted}
             hidePetals={nodeRoutineRunning}
             addNodePos={addNodePos}
@@ -199,20 +156,20 @@ class FlowerView extends React.Component {
             created={data.created}
           />
           }
-          {data && data.connections && selectedPetal &&
+          {data && data.connections && selectedPetalData &&
           <PetalInfo
             className={style.petalInfo}
-            title={selectedPetal.title}
-            description={selectedPetal.description}
+            title={selectedPetalData.title}
+            description={selectedPetalData.description}
             petals={0}
-            user={selectedPetal.user.name}
-            created={selectedPetal.created}
-            flavor={selectedPetal.flavor}
+            user={selectedPetalData.user.name}
+            created={selectedPetalData.created}
+            flavor={selectedPetalData.flavor}
           />
           }
         </div>
-        {session.authenticated && data && selectedPetalID && selectedPetalID !== data.id && !nodeRoutineRunning &&
-           (session.role === 'admin' || session.id === selectedPetal.user.id) &&
+        {session.authenticated && data && selectedPetal && selectedPetal !== data.id && !nodeRoutineRunning &&
+           (session.role === 'admin' || session.id === selectedPetalData.user.id) &&
           [
             <div
               key='edit'
@@ -227,26 +184,7 @@ class FlowerView extends React.Component {
               onClick={this.delete}
             >
               <img src='/icons/Btn_Delete.svg' width={15} />
-              {/* <MdClear color='grey' size='25px' /> */}
-            </div>,
-            <Overlay key='editOverlay' visibility={editNodeVisibility} onOuterClick={this.toggleEditNode}>
-              {
-                selectedPetal &&
-                <EditNodeFrom
-                  flowerID={id}
-                  id={selectedPetal.targetNode.id}
-                  rootDuration={data.video.duration}
-                  currentTime={currentTime}
-                  visibility={editNodeVisibility}
-                  sourceIn={selectedPetal.sourceIn}
-                  sourceOut={selectedPetal.sourceOut}
-                  targetIn={selectedPetal.targetIn}
-                  targetOut={selectedPetal.targetOut}
-                  flavor={selectedPetal.flavor}
-                  title={selectedPetal.targetNode.title}
-                />
-              }
-            </Overlay>
+            </div>
           ]
         }
         <div>
