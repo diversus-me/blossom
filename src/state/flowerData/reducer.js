@@ -4,19 +4,19 @@ import { toast } from 'react-toastify'
 function getColor (type) {
   switch (type) {
     case 'neutral':
-      return '#979ca6'
+      return '#7A869A'
     case 'pro':
-      return '#4b8a6e'
+      return '#36B37E'
     case 'science':
-      return '#496f8e'
+      return '#6554C0'
     case 'contra':
-      return '#ff2b4d'
+      return '#E74949'
     case 'factChecker':
-      return '#457ece'
+      return '#2684FF'
     case 'fact check':
-      return '#457ece'
+      return '#2684FF'
     case 'joke':
-      return '#ffe761'
+      return '#ffAB00'
     default:
       return '#979ca6'
   }

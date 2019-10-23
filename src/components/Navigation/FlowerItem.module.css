@@ -49,10 +49,9 @@
 
 .title {
   font-family: "Sarabun", sans-serif;
-  font-size: 0.9em;
-  font-weight: bold;
+  font-size: 1em;
   margin-top: 20px;
-  padding: 0 10px;
+  padding: 0 5px;
   height: 2.7em;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -76,7 +75,8 @@
 }
 
 .middleContainerText {
-  font-size: 0.8em;
+  font-size: 0.9em;
+  color: 00122a;
 }
 
 .bottomContainerText {
@@ -96,4 +96,10 @@
 
 .viewsText {
   display: inline-block;
+  color: #242843;
+}
+
+.date {
+  font-size: 0.79em;
+  color: #242843;
 }

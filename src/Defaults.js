@@ -18,37 +18,37 @@ export const FLAVORS = [
   {
     name: "Neutral",
     type: "neutral",
-    color: "#979ca6",
+    color: "#7A869A",
     icon: FaBalanceScale
   },
   {
     name: "Pro",
     type: "pro",
-    color: "#4b8a6e",
+    color: "#36B37E",
     icon: IoIosCheckmarkCircle
   },
   {
     name: "Contra",
     type: "contra",
-    color: "#ff2b4d",
+    color: "#E74949",
     icon: MdNotInterested
   },
   {
     name: "Science",
     type: "science",
-    color: "#496f8e",
+    color: "#6554C0",
     icon: GoBeaker
   },
   {
     name: "Joke",
     type: "joke",
-    color: "#ffe761",
+    color: "#ffAB00",
     icon: FaLaughBeam
   },
   {
     name: "Fact Check",
     type: "fact check",
-    color: "#457ece",
+    color: "#2684FF",
     icon: IoIosHammer
   }
 ];
