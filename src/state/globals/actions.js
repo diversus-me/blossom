@@ -80,3 +80,43 @@ export function editNode (id, data) {
     data
   }
 }
+
+export function addFlower (data) {
+  return {
+    type: ADD_FLOWER_LOADING,
+    data
+  }
+}
+
+export function editFlower (data) {
+  return {
+    type: EDIT_FLOWER_LOADING,
+    data
+  }
+}
+
+export function startAddFlowerRoutine () {
+  return {
+    type: START_ADD_FLOWER_ROUTINE
+  }
+}
+
+export function stopAddFlowerRoutine () {
+  return {
+    type: STOP_ADD_FLOWER_ROUTINE
+  }
+}
+
+export function startEditFlowerRoutine (id, flower) {
+  return {
+    type: START_EDIT_FLOWER_ROUTINE,
+    id,
+    flower
+  }
+}
+
+export function stopEditFlowerRoutine () {
+  return {
+    type: STOP_EDIT_FLOWER_ROUTINE
+  }
+}

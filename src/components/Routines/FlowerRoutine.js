@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { MdChevronRight } from 'react-icons/md'
+import { MdChevronRight, MdClose, MdChevronLeft } from 'react-icons/md'
 
-import { getAngle, getCirclePosX, getCirclePosY } from '../Flower/DefaultFunctions'
-import { FLAVORS, SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
+import { getCirclePosX, getCirclePosY } from '../Flower/DefaultFunctions'
+import { FLAVORS } from '../../Defaults'
 
-import { setNewNodePosition, nodeGetsPositioned, stopAddNodeRoutine,
-  addNode, editNode, stopEditNodeRoutine } from '../../state/globals/actions'
+import { stopAddFlowerRoutine, addFlower,
+  editFlower, stopEditFlowerRoutine } from '../../state/globals/actions'
 
 import VideoLinker from './VideoLinker'
-import FlavorSelector from './FlavorSelector'
 import VideoPlayer from '../VideoPlayer/VideoPlayer'
 import TitleInput from './TitleInput'
 
@@ -18,60 +17,47 @@ import FloatingButton from '../UI/FloatingButton'
 
 import style from './Routines.module.css'
 
+const PHASES = [
+  { name: 'LINK_VIDEO', title: 'Provide a video link' },
+  { name: 'ADD_META', title: 'Provide additional information.' }
+]
+
 class FlowerRoutine extends React.Component {
   constructor (props) {
     super(props)
-    const { globals, flowerData } = props
+    const { globals } = props
 
-    this.PHASES = [
-      { name: 'LINK_VIDEO', title: 'Provide a video link' },
-      { name: 'ADD_META', title: 'Provide additional information.' }
-    ]
-
-    const selectedPetal = (globals.editNodeRoutineRunning && globals.selectedPetal)
-      ? flowerData[globals.selectedFlower].connections.find(
-        (connection) => connection.id === parseInt(globals.selectedPetal))
+    const selectedFlower = (globals.editFlowerRoutineRunning && globals.editFlowerStatus.flower)
+      ? globals.editFlowerStatus.flower
       : undefined
 
     this.state = {
-      seeking: false,
-      dragPointX: 0,
-      dragPointY: 0,
-      desiredValue: -1,
       phase: 0,
       animationsFinished: false,
-      videoLink: (selectedPetal) ? `https://www.youtube.com/watch?v=${selectedPetal.targetNode.video.url}` : '',
-      duration: (selectedPetal) ? selectedPetal.targetNode.video.duration : 0,
-      title: (selectedPetal) ? selectedPetal.title : '',
-      description: '',
-      sourceIn: (selectedPetal) ? selectedPetal.sourceIn : 0,
-      sourceOut: (selectedPetal) ? selectedPetal.sourceOut : 0,
-      targetIn: (selectedPetal) ? selectedPetal.targetIn : 0,
-      targetOut: (selectedPetal) ? selectedPetal.targetOut : 0,
-      flavor: (selectedPetal) ? selectedPetal.flavor : 'neutral',
+      videoLink: (selectedFlower) ? `https://www.youtube.com/watch?v=${selectedFlower.url}` : '',
+      title: (selectedFlower) ? selectedFlower.title : '',
+      description: (selectedFlower) ? selectedFlower.description : '',
+      // sourceIn: (selectedFlower) ? selectedFlower.sourceIn : 0,
+      // sourceOut: (selectedFlower) ? selectedFlower.sourceOut : 0,
       isValidInput: false,
-      selectedPetal
+      selectedFlower
     }
   }
 
   componentDidUpdate () {
     const { globals } = this.props
     const { phase } = this.state
-    if (phase === 3 && globals.addNodeRoutineRunning && globals.addNodeStatus.finished) {
-      this.props.stopAddNodeRoutine()
-    } else if (phase === 3 && globals.editNodeRoutineRunning && globals.editNodeStatus.finished) {
-      this.props.stopEditNodeRoutine()
+    if (PHASES[phase].name === 'ADD_META' && globals.addFlowerRoutineRunning && globals.addFlowerStatus.finished) {
+      this.props.stopAddFlowerRoutine()
+    } else if (PHASES[phase].name === 'ADD_META' && globals.editFlowerRoutineRunning && globals.editFlowerStatus.finished) {
+      this.props.stopEditFlowerRoutine()
     }
-  }
-
-  componentWillUnmount () {
-    this.props.nodeGetsPositioned(false)
   }
 
   nextPhase = () => {
     const { phase } = this.state
     const nextPhase = phase + 1
-    if (nextPhase === 3) {
+    if (PHASES[nextPhase].name === 'POSITION') {
       this.props.nodeGetsPositioned(true)
       this.setState({
         phase: nextPhase
@@ -95,91 +81,44 @@ class FlowerRoutine extends React.Component {
     }
   }
 
-  onScrubStart = e => {
-    const clientX = (e.touches) ? e.touches[0].clientX : e.clientX
-    const clientY = (e.touches) ? e.touches[0].clientY : e.clientY
-    const boundingBox = e.target.getBoundingClientRect()
-    this.setState({
-      seeking: true,
-      dragPointX: clientX - boundingBox.x - (boundingBox.width * 0.5),
-      dragPointY: clientY - boundingBox.y - (boundingBox.height * 0.5)
-    })
-  }
-
-  onScrub = e => {
-    if (this.state.seeking) {
-      const { dragPointX, dragPointY } = this.state
-      const { dimensions, sideBarOpen } = this.props
-      const clientX = (e.touches) ? e.touches[0].clientX : e.clientX
-      const clientY = (e.touches) ? e.touches[0].clientY : e.clientY
-      const angle = getAngle(
-        clientX - dragPointX,
-        clientY - dragPointY,
-        (sideBarOpen) ? dimensions.centerX + SIDEBAR_WIDTH * 0.5 : dimensions.centerX,
-        dimensions.centerY + NAVBAR_HEIGHT
-      )
-      const progress = angle / 360
-
-      this.setState({
-        desiredValue: progress
-      })
-    }
-  }
-
-  onScrubEnd = e => {
-    if (this.state.seeking) {
-      const { desiredValue, rootDuration } = this.state
-      const sourceLink = Math.floor(desiredValue * rootDuration)
-      this.setState({
-        seeking: false,
-        sourceIn: sourceLink,
-        sourceOut: sourceLink,
-        currentProgress: desiredValue
-      })
-    }
-  }
-
   onSubmit = () => {
     const { globals } = this.props
-    const { selectedPetal } = this.state
     const {
-      title, description, flavor, targetIn,
-      targetOut, sourceIn, sourceOut, videoLink
+      title, description, videoLink
     } = this.state
     const data = {
       title,
       description,
       type: 'youtube',
       link: videoLink,
-      sourceIn,
-      sourceOut,
-      targetIn,
-      targetOut,
-      flavor
+      id: globals.editFlowerStatus.id
     }
-    if (globals.addNodeRoutineRunning) {
-      this.props.addNode(globals.selectedFlower, { ...data, id: globals.selectedFlower })
-    } else if (globals.editNodeRoutineRunning) {
-      this.props.editNode(globals.selectedFlower, { ...data, id: selectedPetal.targetNode.id })
+    if (globals.addFlowerRoutineRunning) {
+      this.props.addFlower(data)
+    } else if (globals.editFlowerRoutineRunning) {
+      this.props.editFlower(data)
     }
   }
 
   render () {
-    const { desiredValue, phase, animationsFinished, flavor, videoLink,
-      isValidInput, title, description, seeking, currentProgress } = this.state
-    const { dimensions, globals, flowerData } = this.props
+    const { desiredValue, phase, animationsFinished, videoLink,
+      isValidInput, title, description, currentProgress } = this.state
+    const { dimensions, globals } = this.props
+
     const angle = ((desiredValue !== -1) ? desiredValue : currentProgress) * 360
+    const currentRoutine = (globals.editFlowerRoutineRunning) ? globals.editFlowerStatus : globals.addFlowerStatus
+    const currentPhase = PHASES[phase]
 
     let translateX
     let translateY
     let scale
-    switch (phase) {
-      case 2:
+    switch (currentPhase.name) {
+      case 'ADD_META':
         translateX = dimensions.centerX
         translateY = dimensions.centerY - 0.3 * dimensions.centerY
         scale = 0.8
         break
-      case 3:
+      case 'POSITION':
         translateX = getCirclePosX(dimensions.rootRadius + (dimensions.rootRadius * 0.4), angle, dimensions.centerX)
         translateY = getCirclePosY(dimensions.rootRadius + (dimensions.rootRadius * 0.4), angle, dimensions.centerY)
         scale = 0.4
@@ -190,14 +129,13 @@ class FlowerRoutine extends React.Component {
         scale = 1
     }
 
-    const currentRoutine = (globals.editNodeRoutineRunning) ? globals.editNodeStatus : globals.addNodeStatus
     return [
       <div
         key='mainContainer'
         className={style.container}
       >
-        <h2 className={style.phaseTitle}>{this.PHASES[phase].title}</h2>
-        {phase === 0 &&
+        <h2 className={style.phaseTitle}>{currentPhase.title}</h2>
+        {currentPhase.name === 'LINK_VIDEO' &&
         <VideoLinker
           finished={this.linkGiven}
           setValidInput={this.setValidInput}
@@ -207,14 +145,7 @@ class FlowerRoutine extends React.Component {
           setDuration={(duration) => { this.setState({ duration, targetOut: duration }) }}
         />
         }
-        {phase === 1 &&
-        <FlavorSelector
-          selectFlavor={(flavor) => { this.setState({ flavor }) }}
-          selectedFlavor={flavor}
-          angle={0}
-        />
-        }
-        {phase === 2 &&
+        {currentPhase.name === 'ADD_META' &&
           <TitleInput
             title={title}
             description={description}
@@ -223,7 +154,7 @@ class FlowerRoutine extends React.Component {
             setDescription={(description) => { this.setState({ description }) }}
           />
         }
-        {phase !== 3 &&
+        {currentPhase.name !== 'ADD_META' &&
           <FloatingButton
             className={style.next}
             style={{
@@ -240,7 +171,7 @@ class FlowerRoutine extends React.Component {
             />
           </FloatingButton>
         }
-        {phase === 3 &&
+        {currentPhase.name === 'ADD_META' &&
         <FloatingButton
           className={style.next}
           style={{
@@ -250,9 +181,26 @@ class FlowerRoutine extends React.Component {
           onClick={this.onSubmit}
           deactivated={currentRoutine.loading}
         >
-          {(globals.addNodeRoutineRunning) ? 'Add Petal' : 'Edit Petal'}
+          {(globals.addFlowerRoutineRunning) ? 'Create Flower' : 'Edit Flower'}
         </FloatingButton>
         }
+        <FloatingButton
+          className={style.abort}
+          style={{
+            border: '2px solid #222642',
+            background: 'white'
+          }}
+          onClick={() => {
+            this.props.stopAddFlowerRoutine()
+            this.props.stopEditFlowerRoutine()
+          }}
+          round
+        >
+          <MdClose
+            size={25}
+            color={'#222642'}
+          />
+        </FloatingButton>
       </div>,
       <div
         key='petalContainer'
@@ -270,67 +218,22 @@ class FlowerRoutine extends React.Component {
             width: `${dimensions.rootSize}px`,
             height: `${dimensions.rootSize}px`
           }}
-          onMouseDown={(phase === 3) ? this.onScrubStart : () => {}}
-          onTouchStart={(phase === 3) ? this.onScrubStart : () => {}}
-          onTouchMove={this.onScrub}
-          onTouchEnd={(phase === 3) ? this.onScrubEnd : () => {}}
           ref={(ref) => { this.container = ref }}
         >
-          {((phase === 0 && isValidInput) || phase > 0) &&
+          {((currentPhase.name === 'LINK_VIDEO' && isValidInput) ||
+          currentPhase.name !== 'LINK_VIDEO') &&
           <VideoPlayer
             url={videoLink}
-            color={FLAVORS.find((elem) => elem.type === flavor).color}
+            color={'grey'}
             r={dimensions.rootRadius}
-            isSelectedPetal={(phase !== 3)}
-            // isPetal
+            isSelectedPetal={(currentPhase.name !== 'ADD_META')}
             wasSelected
-            hideControls={(phase === 3)}
-            shouldUpdate={(phase !== 3)}
+            hideControls={(currentPhase.name === 'ADD_META')}
+            shouldUpdate={(currentPhase.name !== 'ADD_META')}
           />
           }
         </div>
-      </div>,
-      <div
-        key='rootVideo'
-        className={style.petal}
-        style={{
-          transform: `translate(-50%, -50%)`,
-          width: `${dimensions.rootSize - 2}px`,
-          height: `${dimensions.rootSize - 2}px`,
-          zIndex: 5,
-          pointerEvents: (phase !== 3) ? 'none' : 'all'
-        }}
-        ref={(ref) => { this.container = ref }}
-      >
-        {phase === 3 &&
-        <VideoPlayer
-          url={`https://www.youtube.com/watch?v=${flowerData[globals.selectedFlower].video.url}`}
-          r={dimensions.rootRadius}
-          isSelectedPetal
-          color={'blue'}
-          progress={currentProgress}
-          shouldReceiveProgress
-          // isPetal
-          wasSelected
-          // hideControls={(phase === 3)}
-          shouldUpdate
-        />
-        }
-      </div>,
-      <div
-        key='dragContainer'
-        onMouseMove={this.onScrub}
-        onMouseUp={(phase === 3) ? this.onScrubEnd : () => {}}
-        onMouseLeave={(phase === 3) ? this.onScrubEnd : () => {}}
-        style={{
-          position: 'absolute',
-          width: dimensions.width,
-          height: dimensions.height,
-          top: 0,
-          left: 0,
-          zIndex: 10,
-          pointerEvents: (seeking) ? 'all' : 'none'
-        }} />
+      </div>
     ]
   }
 }
@@ -354,12 +257,10 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = {
-  nodeGetsPositioned,
-  setNewNodePosition,
-  addNode,
-  editNode,
-  stopAddNodeRoutine,
-  stopEditNodeRoutine
+  stopAddFlowerRoutine,
+  addFlower,
+  editFlower,
+  stopEditFlowerRoutine
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FlowerRoutine)

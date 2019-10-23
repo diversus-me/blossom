@@ -14,7 +14,7 @@ import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
-// import FlowerRoutine from './components/Routines/FlowerRoutine'
+import FlowerRoutine from './components/Routines/FlowerRoutine'
 
 import Home from './components/Home/Home'
 
@@ -88,7 +88,7 @@ class App extends Component {
   };
 
   render () {
-    const { session, globals } = this.props
+    const { session, globals, dimensions } = this.props
     const { sideBarOpen } = this.state
     return (
       <Route
@@ -125,11 +125,20 @@ class App extends Component {
                 )}
               />
             )}
-            {/* {(globals.addFlowerRoutineRunning || globals.editFlowerRoutineRunning) &&
-            <div>
+            {(globals.addFlowerRoutineRunning || globals.editFlowerRoutineRunning) &&
+            <div
+              style={{
+                height: dimensions.height - 80,
+                width: '100%',
+                position: 'absolute',
+                zIndex: 2000,
+                background: 'white',
+                top: '80px'
+              }}
+            >
               <FlowerRoutine />
             </div>
-            } */}
+            }
           </div>
         )}
       />

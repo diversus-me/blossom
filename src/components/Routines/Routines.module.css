@@ -34,3 +34,8 @@
   text-align: center;
   user-select: none;
 }
+
+.abort {
+  bottom: 25px;
+  right: 25px;
+}

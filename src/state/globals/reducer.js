@@ -60,6 +60,7 @@ export function connectGlobals (history) {
       failed: false
     },
     editFlowerStatus: {
+      id: '',
       loading: false,
       finished: false,
       failed: false
@@ -191,6 +192,7 @@ export function connectGlobals (history) {
           ...state,
           addFlowerRoutineRunning: true,
           addFlowerStatus: {
+            ...state.addFlowerStatus,
             loading: false,
             finished: false,
             failed: false
@@ -202,9 +204,11 @@ export function connectGlobals (history) {
           addFlowerRoutineRunning: false
         }
       case ADD_FLOWER_SUCCESS:
+        toast.success('Flower successfully added.')
         return {
           ...state,
           addFlowerStatus: {
+            ...state.addFlowerStatus,
             loading: false,
             finished: true,
             failed: false
@@ -214,15 +218,18 @@ export function connectGlobals (history) {
         return {
           ...state,
           addFlowerStatus: {
+            ...state.addFlowerStatus,
             loading: true,
             finished: false,
             failed: false
           }
         }
       case ADD_FLOWER_ERROR:
+        toast.success('Flower could not be added.')
         return {
           ...state,
           addFlowerStatus: {
+            ...state.addFlowerStatus,
             loading: false,
             finished: true,
             failed: true
@@ -233,6 +240,9 @@ export function connectGlobals (history) {
           ...state,
           editFlowerRoutineRunning: true,
           editFlowerStatus: {
+            ...state.editFlowerStatus,
+            id: action.id,
+            flower: action.flower,
             loading: false,
             finished: false,
             failed: false
@@ -244,9 +254,11 @@ export function connectGlobals (history) {
           editFlowerRoutineRunning: false
         }
       case EDIT_FLOWER_ERROR:
+        toast.success('Flower could not be edited.')
         return {
           ...state,
           editFlowerStatus: {
+            ...state.editFlowerStatus,
             loading: false,
             finished: true,
             failed: true
@@ -256,15 +268,18 @@ export function connectGlobals (history) {
         return {
           ...state,
           editFlowerStatus: {
+            ...state.editFlowerStatus,
             loading: true,
             finished: false,
             failed: false
           }
         }
       case EDIT_FLOWER_SUCCESS:
+        toast.success('Flower edited successfully.')
         return {
           ...state,
           editFlowerStatus: {
+            ...state.editFlowerStatus,
             loading: false,
             finished: true,
             failed: false

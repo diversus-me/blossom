@@ -7,24 +7,11 @@ import { MdEdit, MdClear } from 'react-icons/md'
 import { toast } from 'react-toastify'
 // import Eye from "/icons/views.svg";
 import { listFlowers } from '../../state/flowerList/actions'
-
-import Overlay from '../UI/Overlay'
-import EditFlowerFrom from '../Forms/EditFlowerForm'
+import { startEditFlowerRoutine } from '../../state/globals/actions'
 
 import style from './FlowerItem.module.css'
 
 class FlowerItem extends React.Component {
-  state = {
-    editFlowerVisibility: false
-  };
-
-  toggleEdit = e => {
-    e.preventDefault()
-    this.setState({
-      editFlowerVisibility: !this.state.editFlowerVisibility
-    })
-  };
-
   delete = e => {
     const { title, id } = this.props
     e.preventDefault()
@@ -51,7 +38,7 @@ class FlowerItem extends React.Component {
           toast.error('Flower could not be deleted.')
         })
     }
-  };
+  }
 
   render () {
     const {
@@ -64,7 +51,6 @@ class FlowerItem extends React.Component {
       session,
       isSelected
     } = this.props
-    const { editFlowerVisibility } = this.state
 
     return (
       <div
@@ -113,7 +99,7 @@ class FlowerItem extends React.Component {
               <div
               key='edit'
               className={classnames(style.edit)}
-              onClick={this.toggleEdit}
+              onClick={() => { this.props.startEditFlowerRoutine(id, { title, description, url: videoId }) }}
             >
               <MdEdit color='grey' />
             </div>,
@@ -123,18 +109,7 @@ class FlowerItem extends React.Component {
               onClick={this.delete}
             >
               <MdClear color='grey' size='1.1em' />
-            </div>,
-              <Overlay
-              key='editOverlay'
-              visibility={editFlowerVisibility}
-              onOuterClick={this.toggleEdit}
-            >
-              <EditFlowerFrom
-                  title={title}
-                  description={description}
-                  id={id}
-              />
-            </Overlay>
+            </div>
           ]}
         </div>
       </div>
@@ -161,7 +136,7 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = {
-  listFlowers
+  listFlowers, startEditFlowerRoutine
 }
 
 export default connect(

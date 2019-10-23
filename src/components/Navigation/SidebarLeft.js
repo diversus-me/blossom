@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { MdKeyboardArrowRight } from 'react-icons/md'
+import { MdKeyboardArrowRight, MdAdd } from 'react-icons/md'
 import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
+import { startAddFlowerRoutine } from '../../state/globals/actions'
+
 import style from './SidebarLeft.module.css'
 
 class SidebarLeft extends React.Component {
@@ -76,7 +78,24 @@ class SidebarLeft extends React.Component {
           opacity: (!dimensions.safeToMove && sideBarOpen) ? 0.9 : 0,
           pointerEvents: (!dimensions.safeToMove && sideBarOpen) ? 'all' : 'none'
         }}
-      />
+      />,
+      <div
+        key='addFlower'
+        className={style.addFlowerButton}
+        style={{
+          bottom: '25px',
+          right: (full) ? '25px' : '',
+          left: (!full && sideBarOpen) ? '150px' : '',
+          visibility: (!full && !sideBarOpen) ? 'hidden' : 'visible'
+        }}
+        onClick={() => { this.props.startAddFlowerRoutine() }}
+      >
+        <MdAdd
+          size={25}
+          color={'white'}
+          className={style.abort}
+        />
+      </div>
     ]
   }
 }
@@ -86,4 +105,8 @@ function mapStateToProps (state) {
   return { dimensions, globals }
 }
 
-export default connect(mapStateToProps)(SidebarLeft)
+const mapDispatchToProps = {
+  startAddFlowerRoutine
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarLeft)

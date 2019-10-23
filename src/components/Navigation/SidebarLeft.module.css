@@ -49,3 +49,16 @@
   left: 5px;
   transition: transform 200ms ease-in-out;
 }
+
+.addFlowerButton {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  background: #222642;
+  z-index: 50;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(1);
+}
