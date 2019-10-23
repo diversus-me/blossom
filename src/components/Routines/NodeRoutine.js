@@ -35,6 +35,7 @@ class NodeRoutine extends React.Component {
       ? flowerData[globals.selectedFlower].connections.find(
         (connection) => connection.id === parseInt(globals.selectedPetal))
       : undefined
+    console.log(currentTime)
 
     this.state = {
       angle: currentProgress * 360,
@@ -51,8 +52,8 @@ class NodeRoutine extends React.Component {
       currentTime: (selectedPetal) ? selectedPetal.sourceIn : currentTime,
       currentProgress: (selectedPetal) ? selectedPetal.sourceIn / rootDuration : currentProgress,
       rootDuration,
-      sourceIn: (selectedPetal) ? selectedPetal.sourceIn : 0,
-      sourceOut: (selectedPetal) ? selectedPetal.sourceOut : 0,
+      sourceIn: (selectedPetal) ? selectedPetal.sourceIn : parseInt(currentTime),
+      sourceOut: (selectedPetal) ? selectedPetal.sourceOut : parseInt(currentTime),
       targetIn: (selectedPetal) ? selectedPetal.targetIn : 0,
       targetOut: (selectedPetal) ? selectedPetal.targetOut : 0,
       flavor: (selectedPetal) ? selectedPetal.flavor : 'neutral',
