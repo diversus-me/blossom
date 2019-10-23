@@ -5,8 +5,6 @@ export default function SVG (props) {
     <object
       type='image/svg+xml'
       className={props.className}
-      width='50px'
-      height='200px'
       data={props.src} />
   )
 }
