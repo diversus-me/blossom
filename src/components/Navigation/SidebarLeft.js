@@ -5,6 +5,8 @@ import { MdKeyboardArrowRight, MdAdd } from 'react-icons/md'
 import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
 import { startAddFlowerRoutine } from '../../state/globals/actions'
 
+import SVG from '../UI/SVG'
+
 import style from './SidebarLeft.module.css'
 
 class SidebarLeft extends React.Component {
@@ -60,7 +62,8 @@ class SidebarLeft extends React.Component {
         }}
         onClick={toggleSideBar}
       >
-        <img className={style.handle} src='/Handle.svg' />
+        {/* <img className={style.handle} src='/Handle.svg' /> */}
+        <SVG className={style.handle} src='/Handle.svg' />
         <MdKeyboardArrowRight
           className={style.handleArrow}
           color='white'
