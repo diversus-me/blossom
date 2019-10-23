@@ -128,12 +128,12 @@ class App extends Component {
             {(globals.addFlowerRoutineRunning || globals.editFlowerRoutineRunning) &&
             <div
               style={{
-                height: dimensions.height - 80,
+                height: dimensions.height - 60,
                 width: '100%',
                 position: 'absolute',
                 zIndex: 2000,
                 background: 'white',
-                top: '80px'
+                top: '60px'
               }}
             >
               <FlowerRoutine />
