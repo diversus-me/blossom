@@ -22,7 +22,7 @@ class SidebarLeft extends React.Component {
 
   render () {
     const { full } = this.state
-    const { dimensions, children, sideBarOpen, toggleSideBar } = this.props
+    const { dimensions, session, children, sideBarOpen, toggleSideBar } = this.props
     let position = full ? 0 : -dimensions.width
     if (sideBarOpen && !full) {
       position += SIDEBAR_WIDTH
@@ -82,30 +82,33 @@ class SidebarLeft extends React.Component {
           pointerEvents: (!dimensions.safeToMove && sideBarOpen) ? 'all' : 'none'
         }}
       />,
-      <div
-        key='addFlower'
-        className={style.addFlowerButton}
-        style={{
-          bottom: '25px',
-          right: (full) ? '25px' : '',
-          left: (!full && sideBarOpen) ? '150px' : '',
-          visibility: (!full && !sideBarOpen) ? 'hidden' : 'visible'
-        }}
-        onClick={() => { this.props.startAddFlowerRoutine() }}
-      >
-        <MdAdd
-          size={25}
-          color={'white'}
-          className={style.abort}
-        />
-      </div>
+      <span key='addFlower'>
+        {session.authenticated &&
+        <div
+          className={style.addFlowerButton}
+          style={{
+            bottom: '25px',
+            right: (full) ? '25px' : '',
+            left: (!full && sideBarOpen) ? '150px' : '',
+            visibility: (!full && !sideBarOpen) ? 'hidden' : 'visible'
+          }}
+          onClick={() => { this.props.startAddFlowerRoutine() }}
+        >
+          <MdAdd
+            size={25}
+            color={'white'}
+            className={style.abort}
+          />
+        </div>
+        }
+      </span>
     ]
   }
 }
 
 function mapStateToProps (state) {
-  const { dimensions, globals } = state
-  return { dimensions, globals }
+  const { dimensions, globals, session } = state
+  return { dimensions, globals, session }
 }
 
 const mapDispatchToProps = {
