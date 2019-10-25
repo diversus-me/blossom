@@ -1,13 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import moment from 'moment';
-import { MdKeyboardArrowDown } from 'react-icons/md';
-import classnames from 'classnames';
-import { FLAVORS } from '../../Defaults';
+import React from 'react'
+import { connect } from 'react-redux'
+import moment from 'moment'
+import { MdKeyboardArrowDown } from 'react-icons/md'
+import classnames from 'classnames'
+import { FLAVORS } from '../../Defaults'
 
-import style from './Accordion.module.css';
+import style from './Accordion.module.css'
 
-function Accordion({
+function Accordion ({
   title,
   description,
   className,
@@ -18,14 +18,14 @@ function Accordion({
   created,
   petal
 }) {
-  const [isOpen, setOpen] = React.useState(false);
-  const selectedFlavor = FLAVORS.find(flavorItem => flavorItem.type === flavor);
+  const [isOpen, setOpen] = React.useState(false)
+  const selectedFlavor = FLAVORS.find(flavorItem => flavorItem.type === flavor)
   return [
     <div
       key='outerClick'
       className={style.outerClickContainer}
       onClick={() => {
-        setOpen(false);
+        setOpen(false)
       }}
       style={{
         opacity: isOpen ? 0.85 : 0,
@@ -73,7 +73,7 @@ function Accordion({
           style={{
             transform: `rotate(${
               (isOpen && !petal) || (petal && !isOpen) ? -180 : 0
-              }deg)`
+            }deg)`
           }}
           className={style.accordionArrow}
           size={25}
@@ -119,12 +119,12 @@ function Accordion({
         </div>
       </div>
     </div>
-  ];
+  ]
 }
 
-function mapStateToProps(state) {
-  const { dimensions } = state;
-  return { dimensions };
+function mapStateToProps (state) {
+  const { dimensions } = state
+  return { dimensions }
 }
 
-export default connect(mapStateToProps)(Accordion);
+export default connect(mapStateToProps)(Accordion)
