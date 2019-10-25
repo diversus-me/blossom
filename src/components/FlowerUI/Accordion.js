@@ -1,11 +1,11 @@
-import React from "react";
-import { connect } from "react-redux";
-import moment from "moment";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import classnames from "classnames";
-import { FLAVORS } from "../../Defaults";
+import React from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import { MdKeyboardArrowDown } from 'react-icons/md';
+import classnames from 'classnames';
+import { FLAVORS } from '../../Defaults';
 
-import style from "./Accordion.module.css";
+import style from './Accordion.module.css';
 
 function Accordion({
   title,
@@ -22,26 +22,26 @@ function Accordion({
   const selectedFlavor = FLAVORS.find(flavorItem => flavorItem.type === flavor);
   return [
     <div
-      key="outerClick"
+      key='outerClick'
       className={style.outerClickContainer}
       onClick={() => {
         setOpen(false);
       }}
       style={{
         opacity: isOpen ? 0.85 : 0,
-        pointerEvents: isOpen ? "all" : "none",
+        pointerEvents: isOpen ? 'all' : 'none',
         width: dimensions.width,
         height: dimensions.height
       }}
     />,
     <div
-      key="content"
+      key='content'
       className={className}
       style={{
-        position: "relative",
+        position: 'relative',
         zIndex: 4,
-        transform: `translate(${isOpen && petal ? "50px, -150px" : "0, 0"})`,
-        transition: "transform 150ms ease-out"
+        transform: `translate(${isOpen && petal ? '50px, -150px' : '0, 0'})`,
+        transition: 'transform 150ms ease-out'
       }}
     >
       {petal && (
@@ -56,7 +56,7 @@ function Accordion({
           <selectedFlavor.icon
             size={20}
             style={{
-              marginLeft: "8px"
+              marginLeft: '8px'
             }}
           />
         </div>
@@ -65,7 +65,7 @@ function Accordion({
         className={style.accordionTitle}
         onClick={() => setOpen(!isOpen)}
         style={{
-          fontSize: petal ? "1em" : "1.2em"
+          fontSize: petal ? '1em' : '1.2em'
         }}
       >
         {title}
@@ -73,41 +73,41 @@ function Accordion({
           style={{
             transform: `rotate(${
               (isOpen && !petal) || (petal && !isOpen) ? -180 : 0
-            }deg)`
+              }deg)`
           }}
           className={style.accordionArrow}
           size={25}
-          color={"black"}
+          color={'black'}
         />
       </div>
       <div
         className={classnames(
           style.accordionItem,
-          !isOpen ? style.collapsed : ""
+          !isOpen ? style.collapsed : ''
         )}
         style={{
-          pointerEvents: isOpen ? "all" : "none"
+          pointerEvents: isOpen ? 'all' : 'none'
         }}
       >
         <div className={style.viewsPetals}>
           <span className={style.views}>
             <img
               className={style.viewsIcon}
-              src={process.env.PUBLIC_URL + "/icons/views.svg"}
-            />{" "}
+              src={process.env.PUBLIC_URL + '/icons/views.svg'}
+            />{' '}
             0
           </span>
           <span className={style.petals}>
             <img
               className={style.petalIcon}
-              src={process.env.PUBLIC_URL + "/icons/petal.svg"}
-            />{" "}
+              src={process.env.PUBLIC_URL + '/icons/petal.svg'}
+            />{' '}
             {petals}
           </span>
           <hr className={style.line} />
         </div>
         <div className={style.accordionContent}>
-          {description || "No description provided."}
+          {description || 'No description provided.'}
         </div>
         <div>
           <div className={style.bottomContainer}>
