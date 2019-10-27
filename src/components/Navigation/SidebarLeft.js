@@ -1,8 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { MdKeyboardArrowRight } from 'react-icons/md'
+import { MdKeyboardArrowRight, MdAdd } from 'react-icons/md'
 import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
+import { startAddFlowerRoutine } from '../../state/globals/actions'
+
+import SVG from '../UI/SVG'
+
 import style from './SidebarLeft.module.css'
 
 class SidebarLeft extends React.Component {
@@ -18,7 +22,7 @@ class SidebarLeft extends React.Component {
 
   render () {
     const { full } = this.state
-    const { dimensions, children, sideBarOpen, toggleSideBar } = this.props
+    const { dimensions, session, children, sideBarOpen, toggleSideBar } = this.props
     let position = full ? 0 : -dimensions.width
     if (sideBarOpen && !full) {
       position += SIDEBAR_WIDTH
@@ -58,7 +62,8 @@ class SidebarLeft extends React.Component {
         }}
         onClick={toggleSideBar}
       >
-        <img className={style.handle} src='/Handle.svg' />
+        {/* <img className={style.handle} src='/Handle.svg' /> */}
+        <SVG className={style.handle} src='/Handle.svg' />
         <MdKeyboardArrowRight
           className={style.handleArrow}
           color='white'
@@ -76,14 +81,38 @@ class SidebarLeft extends React.Component {
           opacity: (!dimensions.safeToMove && sideBarOpen) ? 0.9 : 0,
           pointerEvents: (!dimensions.safeToMove && sideBarOpen) ? 'all' : 'none'
         }}
-      />
+      />,
+      <span key='addFlower'>
+        {session.authenticated &&
+        <div
+          className={style.addFlowerButton}
+          style={{
+            bottom: '25px',
+            right: (full) ? '25px' : '',
+            left: (!full && sideBarOpen) ? '150px' : '',
+            visibility: (!full && !sideBarOpen) ? 'hidden' : 'visible'
+          }}
+          onClick={() => { this.props.startAddFlowerRoutine() }}
+        >
+          <MdAdd
+            size={25}
+            color={'white'}
+            className={style.abort}
+          />
+        </div>
+        }
+      </span>
     ]
   }
 }
 
 function mapStateToProps (state) {
-  const { dimensions, globals } = state
-  return { dimensions, globals }
+  const { dimensions, globals, session } = state
+  return { dimensions, globals, session }
 }
 
-export default connect(mapStateToProps)(SidebarLeft)
+const mapDispatchToProps = {
+  startAddFlowerRoutine
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarLeft)

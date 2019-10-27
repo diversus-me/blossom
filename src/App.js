@@ -10,15 +10,13 @@ import { login } from './state/session/actions'
 import { resize } from './state/dimensions/actions'
 
 import FloatingButton from './components/UI/FloatingButton'
-import Overlay from './components/UI/Overlay'
-// import AddFlowerForm from './components/Forms/AddFlowerForm'
 import Navigation from './components/Navigation/Navigation'
 import Login from './components/Login/Login'
 import AdminArea from './components/Admin/AdminArea'
 import FlowerView from './components/FlowerView'
-import Home from './components/Home/Home'
+import FlowerRoutine from './components/Routines/FlowerRoutine'
 
-// import style from './App.module.css'
+import Home from './components/Home/Home'
 
 const MOBILE_BREAKPOINT = 1200
 
@@ -90,8 +88,8 @@ class App extends Component {
   }
 
   render () {
-    const { session, globals } = this.props
-    const { flowerOverlayVisible, sideBarOpen } = this.state
+    const { session, globals, dimensions } = this.props
+    const { sideBarOpen } = this.state
     return (
       <Route
         render={({ location }) => (
@@ -127,12 +125,20 @@ class App extends Component {
                 )}
               />
             )}
-            <Overlay
-              visibility={flowerOverlayVisible}
-              onOuterClick={this.toggleAddFlowerOverlay}
+            {(globals.addFlowerRoutineRunning || globals.editFlowerRoutineRunning) &&
+            <div
+              style={{
+                height: dimensions.height - 60,
+                width: '100%',
+                position: 'absolute',
+                zIndex: 2000,
+                background: 'white',
+                top: '60px'
+              }}
             >
-              {/* <AddFlowerForm /> */}
-            </Overlay>
+              <FlowerRoutine />
+            </div>
+            }
           </div>
         )}
       />

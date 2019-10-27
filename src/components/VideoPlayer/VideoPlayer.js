@@ -32,9 +32,9 @@ class VideoPlayer extends React.Component {
   }
 
   componentDidUpdate () {
-    const { isSelectedPetal } = this.props
+    const { isSelectedPetal, shouldUpdate } = this.props
     const { playing } = this.state
-    if (!isSelectedPetal && playing) {
+    if ((!isSelectedPetal || !shouldUpdate) && playing) {
       this.setState({
         playing: false
       })
@@ -50,7 +50,6 @@ class VideoPlayer extends React.Component {
   shouldComponentUpdate (nextProps) {
     if (nextProps.shouldReceiveProgress && (nextProps.progress !== this.props.progress)) {
       this.seekTo(nextProps.progress)
-      console.log('yes')
     }
     return true
   }

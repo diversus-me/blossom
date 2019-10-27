@@ -2,21 +2,27 @@ import queryString from 'query-string'
 import { toast } from 'react-toastify'
 import {
   SET_NODE_POSITION,
+  GETS_POSITIONED,
   START_ADD_NODE_ROUTINE,
   STOP_ADD_NODE_ROUTINE,
-  START_EDIT_NODE_ROUTINE,
-  STOP_EDIT_NODE_ROUTINE,
-  GETS_POSITIONED,
-  SET_ROOT_DURATION,
-  SET_PETAL_DURATION,
-  RESET_ADD_NODE,
   ADD_NODE_LOADING,
   ADD_NODE_SUCCESS,
   ADD_NODE_ERROR,
-  RESET_EDIT_NODE,
+  START_EDIT_NODE_ROUTINE,
+  STOP_EDIT_NODE_ROUTINE,
   EDIT_NODE_LOADING,
   EDIT_NODE_SUCCESS,
-  EDIT_NODE_ERROR
+  EDIT_NODE_ERROR,
+  START_ADD_FLOWER_ROUTINE,
+  STOP_ADD_FLOWER_ROUTINE,
+  ADD_FLOWER_SUCCESS,
+  ADD_FLOWER_LOADING,
+  ADD_FLOWER_ERROR,
+  START_EDIT_FLOWER_ROUTINE,
+  STOP_EDIT_FLOWER_ROUTINE,
+  EDIT_FLOWER_ERROR,
+  EDIT_FLOWER_LOADING,
+  EDIT_FLOWER_SUCCESS
 } from './actions'
 import { LOCATION_CHANGE } from 'connected-react-router/esm/actions'
 
@@ -25,7 +31,7 @@ function getFlowerAndPetalFromLocation (location) {
   let selectedPetal = ''
   if (location.pathname.startsWith('/flower/')) {
     selectedFlower = location.pathname.slice(8) || ''
-    selectedPetal = queryString.parse(location.search).s || ''
+    selectedPetal = parseInt(queryString.parse(location.search).s) || ''
   }
 
   return { selectedFlower, selectedPetal }
@@ -36,12 +42,25 @@ export function connectGlobals (history) {
   const initialState = {
     addNodeRoutineRunning: false,
     editNodeRoutineRunning: false,
+    addFlowerRoutineRunning: false,
+    editFlowerRoutineRunning: false,
     addNodeStatus: {
       loading: false,
       finished: false,
       failed: false
     },
     editNodeStatus: {
+      loading: false,
+      finished: false,
+      failed: false
+    },
+    addFlowerStatus: {
+      loading: false,
+      finished: false,
+      failed: false
+    },
+    editFlowerStatus: {
+      id: '',
       loading: false,
       finished: false,
       failed: false
@@ -73,7 +92,12 @@ export function connectGlobals (history) {
         return {
           ...state,
           addNodeType: action.addNodeType,
-          addNodeRoutineRunning: true
+          addNodeRoutineRunning: true,
+          addNodeStatus: {
+            loading: false,
+            finished: false,
+            failed: false
+          }
         }
       case STOP_ADD_NODE_ROUTINE:
         return {
@@ -83,7 +107,12 @@ export function connectGlobals (history) {
       case START_EDIT_NODE_ROUTINE:
         return {
           ...state,
-          editNodeRoutineRunning: true
+          editNodeRoutineRunning: true,
+          editNodeStatus: {
+            loading: false,
+            finished: false,
+            failed: false
+          }
         }
       case STOP_EDIT_NODE_ROUTINE:
         return {
@@ -95,26 +124,6 @@ export function connectGlobals (history) {
           ...state,
           nodeGetsPositioned: action.nodeGetsPositioned
         }
-      case SET_ROOT_DURATION:
-        return {
-          ...state,
-          rootDuration: action.duration
-        }
-      case SET_PETAL_DURATION:
-        return {
-          ...state,
-          petalDuration: action.duration
-        }
-      case RESET_ADD_NODE: {
-        return Object.assign({}, state, {
-          addNodeStatus: {
-            ...state.addNodeStatus,
-            loading: false,
-            finished: false,
-            failed: false
-          }
-        })
-      }
       case ADD_NODE_LOADING: {
         return Object.assign({}, state, {
           addNodeStatus: {
@@ -147,17 +156,7 @@ export function connectGlobals (history) {
           }
         })
       }
-      case RESET_EDIT_NODE: {
-        return Object.assign({}, state, {
-          editNodeStatus: {
-            ...state.editNodeStatus,
-            loading: false,
-            finished: false,
-            failed: false
-          }
-        })
-      }
-      case EDIT_NODE_LOADING: {
+      case EDIT_NODE_LOADING:
         return Object.assign({}, state, {
           editNodeStatus: {
             ...state.editNodeStatus,
@@ -166,7 +165,6 @@ export function connectGlobals (history) {
             failed: false
           }
         })
-      }
       case EDIT_NODE_SUCCESS: {
         toast.success('Node successfully edited.')
         return Object.assign({}, state, {
@@ -189,6 +187,104 @@ export function connectGlobals (history) {
           }
         })
       }
+      case START_ADD_FLOWER_ROUTINE:
+        return {
+          ...state,
+          addFlowerRoutineRunning: true,
+          addFlowerStatus: {
+            ...state.addFlowerStatus,
+            loading: false,
+            finished: false,
+            failed: false
+          }
+        }
+      case STOP_ADD_FLOWER_ROUTINE:
+        return {
+          ...state,
+          addFlowerRoutineRunning: false
+        }
+      case ADD_FLOWER_SUCCESS:
+        toast.success('Flower successfully added.')
+        return {
+          ...state,
+          addFlowerStatus: {
+            ...state.addFlowerStatus,
+            loading: false,
+            finished: true,
+            failed: false
+          }
+        }
+      case ADD_FLOWER_LOADING:
+        return {
+          ...state,
+          addFlowerStatus: {
+            ...state.addFlowerStatus,
+            loading: true,
+            finished: false,
+            failed: false
+          }
+        }
+      case ADD_FLOWER_ERROR:
+        toast.success('Flower could not be added.')
+        return {
+          ...state,
+          addFlowerStatus: {
+            ...state.addFlowerStatus,
+            loading: false,
+            finished: true,
+            failed: true
+          }
+        }
+      case START_EDIT_FLOWER_ROUTINE:
+        return {
+          ...state,
+          editFlowerRoutineRunning: true,
+          editFlowerStatus: {
+            ...state.editFlowerStatus,
+            id: action.id,
+            flower: action.flower,
+            loading: false,
+            finished: false,
+            failed: false
+          }
+        }
+      case STOP_EDIT_FLOWER_ROUTINE:
+        return {
+          ...state,
+          editFlowerRoutineRunning: false
+        }
+      case EDIT_FLOWER_ERROR:
+        toast.success('Flower could not be edited.')
+        return {
+          ...state,
+          editFlowerStatus: {
+            ...state.editFlowerStatus,
+            loading: false,
+            finished: true,
+            failed: true
+          }
+        }
+      case EDIT_FLOWER_LOADING:
+        return {
+          ...state,
+          editFlowerStatus: {
+            ...state.editFlowerStatus,
+            loading: true,
+            finished: false,
+            failed: false
+          }
+        }
+      case EDIT_FLOWER_SUCCESS:
+        toast.success('Flower edited successfully.')
+        return {
+          ...state,
+          editFlowerStatus: {
+            ...state.editFlowerStatus,
+            loading: false,
+            finished: true,
+            failed: false
+          }
+        }
       default:
         return state
     }

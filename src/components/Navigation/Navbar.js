@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircleSharp'
 import NotificationsIcon from '@material-ui/icons/Notifications'
@@ -10,22 +12,24 @@ import { NAVBAR_HEIGHT } from '../../Defaults'
 
 import style from './Navbar.module.css'
 
-class Navbar extends React.Component {
-  render () {
-    return (
-      <div className={style.bar} style={{ height: NAVBAR_HEIGHT }}>
-        <div className={style.logoContainer}>
-          <Logo
-            height={20}
-            shortenAtWidthOf={600}
-          />
-        </div>
-        <div className={style.iconContainer}>
+function Navbar (props) {
+  const { session } = props
+  return (
+    <div className={style.bar} style={{ height: NAVBAR_HEIGHT }}>
+      <div className={style.logoContainer}>
+        <Logo
+          height={20}
+          shortenAtWidthOf={600}
+        />
+      </div>
+      <div className={style.iconContainer}>
+        {session.authenticated &&
+        [
           <IconButton disabled aria-label='show 17 new notifications'>
             <Badge badgeContent={0} color='error'>
               <NotificationsIcon />
             </Badge>
-          </IconButton>
+          </IconButton>,
           <IconButton
             disabled
             edge='end'
@@ -34,10 +38,24 @@ class Navbar extends React.Component {
           >
             <AccountCircle />
           </IconButton>
-        </div>
+        ]
+        }
+        {!session.authenticated &&
+        <Link
+          to={`/login`}
+          className={style.login}
+        >
+          Login
+        </Link>
+        }
       </div>
-    )
-  }
+    </div>
+  )
 }
 
-export default Navbar
+function mapStateToProps (state) {
+  const { session } = state
+  return { session }
+}
+
+export default connect(mapStateToProps)(Navbar)

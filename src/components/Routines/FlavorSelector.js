@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { FLAVORS } from '../../../Defaults'
-import { getCirclePosX, getCirclePosY } from '../../Flower/DefaultFunctions'
+import { FLAVORS } from '../../Defaults'
+import { getCirclePosX, getCirclePosY } from '../Flower/DefaultFunctions'
 
 import style from './FlavorSelector.module.css'
 

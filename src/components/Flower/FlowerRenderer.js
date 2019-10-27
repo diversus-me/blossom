@@ -38,7 +38,7 @@ class FlowerRenderer extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const { selectedPetalID, data, receivedAt, dimensions } = this.props
+    const { data, receivedAt, dimensions, globals: { selectedPetal } } = this.props
 
     const isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || document.fullScreen
     if (!this.preventRebuild && !isFullscreen &&
@@ -48,12 +48,12 @@ class FlowerRenderer extends React.Component {
         receivedAt !== prevProps.receivedAt)) {
       this.rebuild()
     } else {
-      if (selectedPetalID !== prevProps.selectedPetalID) {
-        if (selectedPetalID && !this.magnified) {
+      if (selectedPetal !== prevProps.globals.selectedPetal) {
+        if (selectedPetal && !this.magnified) {
           this.magnify()
-        } else if (!selectedPetalID && this.magnified) {
+        } else if (!selectedPetal && this.magnified) {
           this.unmagnify()
-        } else if (selectedPetalID && this.magnified) {
+        } else if (selectedPetal && this.magnified) {
           this.remagnify()
         }
       }
@@ -112,14 +112,14 @@ class FlowerRenderer extends React.Component {
   }
 
   startSimulation = () => {
-    const { dimensions: { rootRadius, centerX, centerY } } = this.props
+    const { dimensions: { rootRadius, centerX, centerY }, globals: { selectedPetal } } = this.props
     this.nodes.forEach((node, i) => {
       if (this.ref[i]) {
         this.ref[i].style.transform = `translate(${node.x - rootRadius}px, ${node.y - rootRadius}px) scale(${node.radius / rootRadius})`
       }
     })
 
-    if (this.props.selectedPetalID) {
+    if (selectedPetal) {
       this.worker.postMessage({ positioning: 1, nodes: this.nodes, rootRadius, centerX, centerY, links: this.links, hidden: true })
     } else {
       this.worker.postMessage({ positioning: 1, nodes: this.nodes, rootRadius, centerX, centerY, links: this.links, hidden: false })
@@ -127,11 +127,12 @@ class FlowerRenderer extends React.Component {
   }
 
   magnify = () => {
-    const { selectedPetalID,
+    const {
+      globals: { selectedPetal },
       dimensions: {
         rootRadius, centerX, centerY
       } } = this.props
-    const selectedPetal = this.nodes.find(node => node.id === selectedPetalID)
+    const selectedPetalData = this.nodes.find(node => node.id === selectedPetal)
     const neighboursID = []
     const neighbours = []
     const onSideID = []
@@ -141,19 +142,19 @@ class FlowerRenderer extends React.Component {
 
     this.originalNodes = this.nodes
 
-    const p = new Victor(selectedPetal.x, selectedPetal.y)
+    const p = new Victor(selectedPetalData.x, selectedPetalData.y)
     const u = new Victor(this.rootNode[0].x, this.rootNode[0].y).subtract(p).norm()
-    const p1 = new Victor(u.x * selectedPetal.radius, u.y * selectedPetal.radius).add(p)
+    const p1 = new Victor(u.x * selectedPetalData.radius, u.y * selectedPetalData.radius).add(p)
     const rad = deg2rad(90)
     const u1 = new Victor(Math.cos(rad) * u.x + -Math.sin(rad) * u.y, Math.sin(rad) * u.x + Math.cos(rad) * u.y)
     const x = p1.clone().add(new Victor(u1.x * 10, u1.y * 10))
 
     this.nodes.forEach((node) => {
-      if (node.id === selectedPetalID) {
+      if (node.id === selectedPetal) {
         return
       }
-      const distance = Math.sqrt(Math.pow(node.x - selectedPetal.x, 2) + Math.pow(node.y - selectedPetal.y, 2))
-      const radia = node.radius + selectedPetal.radius
+      const distance = Math.sqrt(Math.pow(node.x - selectedPetalData.x, 2) + Math.pow(node.y - selectedPetalData.y, 2))
+      const radia = node.radius + selectedPetalData.radius
 
       const d = (node.x - p1.x) * (x.y - p1.y) - (node.y - p1.y) * (x.x - p1.x)
       if (d > 0) {
@@ -168,7 +169,7 @@ class FlowerRenderer extends React.Component {
       }
     })
 
-    const p2 = new Victor(selectedPetal.x, selectedPetal.y)
+    const p2 = new Victor(selectedPetalData.x, selectedPetalData.y)
     const zoomFactor = 2
     const newNeighbours = neighbours.map((node) => {
       const u2 = new Victor(node.x, node.y).subtract(p).norm()
@@ -206,11 +207,11 @@ class FlowerRenderer extends React.Component {
       }))
     })
 
-    this.newSimulationData.push(Object.assign({}, selectedPetal, {
-      fx: selectedPetal.x,
-      fy: selectedPetal.y,
+    this.newSimulationData.push(Object.assign({}, selectedPetalData, {
+      fx: selectedPetalData.x,
+      fy: selectedPetalData.y,
       radius: this.rootNode[0].radius,
-      zoom: this.rootNode[0].radius / selectedPetal.radius
+      zoom: this.rootNode[0].radius / selectedPetalData.radius
     }))
 
     const t = new Victor(u.x * this.rootNode[0].radius, u.y * this.rootNode[0].radius).add(p)
@@ -246,8 +247,8 @@ class FlowerRenderer extends React.Component {
       }
     })
 
-    this.xTrans = selectedPetal.x - centerX
-    this.yTrans = selectedPetal.y - centerY
+    this.xTrans = selectedPetalData.x - centerX
+    this.yTrans = selectedPetalData.y - centerY
     this.refs.petals.style.transform = `translate(${-this.xTrans}px, ${-this.yTrans}px)`
 
     setTimeout(() => {
@@ -307,7 +308,7 @@ class FlowerRenderer extends React.Component {
   }
 
   render () {
-    const { selectedPetalID, rootVideo, rootNode, globals, dimensions } = this.props
+    const { rootVideo, rootNode, globals, dimensions } = this.props
     const { divNodes } = this.state
 
     return [
@@ -344,7 +345,7 @@ class FlowerRenderer extends React.Component {
               r={dimensions.rootRadius}
               node={node}
               id={node.id}
-              isSelectedPetal={(node.id === selectedPetalID) || (!selectedPetalID && node.id === rootNode)}
+              isSelectedPetal={(node.id === globals.selectedPetal) || (!globals.selectedPetal && node.id === rootNode)}
               isRootNode={node.id === rootNode}
               zoom={node.zoom}
               flavor={(node.targetNode) ? node.flavor : 'neutral'}
