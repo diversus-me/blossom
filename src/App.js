@@ -44,7 +44,7 @@ class App extends Component {
     flowerOverlayVisible: false,
     sideBarOpen: this.props.dimensions.width > MOBILE_BREAKPOINT,
     selectedFlower: this.props.globals.selectedFlower
-  };
+  }
 
   componentDidMount () {
     window.addEventListener('resize', this.props.resize)
@@ -79,13 +79,13 @@ class App extends Component {
     this.setState({
       sideBarOpen: !this.state.sideBarOpen
     })
-  };
+  }
 
   toggleAddFlowerOverlay = () => {
     this.setState({
       flowerOverlayVisible: !this.state.flowerOverlayVisible
     })
-  };
+  }
 
   render () {
     const { session, globals, dimensions } = this.props

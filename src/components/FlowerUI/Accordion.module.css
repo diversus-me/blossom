@@ -13,8 +13,8 @@
 
 .accordionTitle {
   font-family: "Sarabun", sans-serif;
-  font-weight: bold;
-  font-size: 1.2em;
+  /* font-weight: bold; */
+  font-size: 1em;
   cursor: pointer;
   color: #222642;
   display: flex;
@@ -42,16 +42,25 @@
 }
 
 .views {
-  color: grey;
+  color: #242843;
+  font-size: 0.9em;
 }
 
 .petals {
   padding-left: 10px;
+  color: #242843;
+  font-size: 0.9em;
 }
 
-.icon {
-  width: 12px !important;
-  height: 12px !important;
+.viewsIcon {
+  width: 13px !important;
+  height: 13px !important;
+  color: red;
+}
+
+.petalIcon {
+  width: 11px !important;
+  height: 11px !important;
   color: red;
 }
 
@@ -85,6 +94,6 @@
   pointer-events: all;
   display: flex;
   align-items: center;
-  font-size: 1.2em;
+  font-size: 1.3em;
   cursor: pointer;
 }

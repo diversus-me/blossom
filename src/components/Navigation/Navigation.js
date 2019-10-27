@@ -33,7 +33,7 @@ function a11yProps (index) {
 class Navigation extends React.Component {
   state = {
     value: 0
-  };
+  }
 
   componentDidMount () {
     const { loading, finished } = this.props.flowerList

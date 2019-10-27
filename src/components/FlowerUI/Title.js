@@ -1,7 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
-import { MdKeyboardArrowDown } from 'react-icons'
 
 import { getFlavor } from '../Defaults'
 

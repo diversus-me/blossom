@@ -85,32 +85,29 @@ class FlowerItem extends React.Component {
               />{' '}
               <div className={style.viewsText}>1,234</div>
             </div>
-            <div
-              className={classnames(
-                style.bottomContainerText,
-                style.itemPadding
-              )}
-            >
+            <div className={classnames(style.date, style.itemPadding)}>
               {moment(created).fromNow()}
             </div>
           </div>
-          {session.authenticated &&
-            (session.role === 'admin' || session.id === user.id) && [
+          {
+            session.authenticated &&
+            (session.role === 'admin' || session.id === user.id) &&
+            [
               <div
-              key='edit'
-              className={classnames(style.edit)}
-              onClick={() => { this.props.startEditFlowerRoutine(id, { title, description, url: videoId }) }}
-            >
-              <MdEdit color='grey' />
-            </div>,
+                key='edit'
+                className={classnames(style.edit)}
+                onClick={() => { this.props.startEditFlowerRoutine(id, { title, description, url: videoId }) }}
+              >
+                <MdEdit color='grey' />
+              </div>,
               <div
-              key='delete'
-              className={classnames(style.delete)}
-              onClick={this.delete}
-            >
-              <MdClear color='grey' size='1.1em' />
-            </div>
-          ]}
+                key='delete'
+                className={classnames(style.delete)}
+                onClick={this.delete}
+              >
+                <MdClear color='grey' size='1.1em' />
+              </div>
+            ]}
         </div>
       </div>
     )

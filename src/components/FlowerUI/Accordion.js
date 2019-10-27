@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Eye from '@material-ui/icons/RemoveRedEyeOutlined'
-import Circle from '@material-ui/icons/PanoramaFishEye'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import classnames from 'classnames'
 import { FLAVORS } from '../../Defaults'
@@ -93,10 +91,18 @@ function Accordion ({
       >
         <div className={style.viewsPetals}>
           <span className={style.views}>
-            <Eye className={style.icon} /> 0
+            <img
+              className={style.viewsIcon}
+              src={process.env.PUBLIC_URL + '/icons/views.svg'}
+            />{' '}
+            0
           </span>
           <span className={style.petals}>
-            <Circle className={style.icon} /> {petals}
+            <img
+              className={style.petalIcon}
+              src={process.env.PUBLIC_URL + '/icons/petal.svg'}
+            />{' '}
+            {petals}
           </span>
           <hr className={style.line} />
         </div>
