@@ -30,7 +30,7 @@ class UserList extends React.Component {
   render () {
     const { users } = this.state
     return (
-      <div style={{ margin: 'auto', width: '90%', maxWidth: '500px' }}>
+      <div style={{ margin: 'auto', width: '90%', maxWidth: '500px', overflow: 'scroll' }}>
         <h1 style={{ textAlign: 'center' }}>Users</h1>
         <table width='100%'>
           <tbody>
