@@ -1,36 +1,36 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import { connect } from 'react-redux'
-import { IoIosGlasses } from 'react-icons/io'
-import { withRouter } from 'react-router'
+import React from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import { connect } from "react-redux";
+import { IoIosGlasses } from "react-icons/io";
+import { withRouter } from "react-router";
 
-import { selectPetal } from '../Functions'
+import { selectPetal } from "../Functions";
 
-import { getFlavor } from '../../Defaults'
-import VideoPlayer from '../VideoPlayer/VideoPlayer'
+import { getFlavor } from "../../Defaults";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
-import style from './Petal.module.css'
+import style from "./Petal.module.css";
 
-function getFullVideoURL (url, type) {
+function getFullVideoURL(url, type) {
   switch (type) {
-    case 'youtube':
-      return 'https:\\youtube.com/watch?v=' + url
-    case 'native':
-      return 'https://video.diversus.me/hls/' + url + '/.m3u8'
+    case "youtube":
+      return "https:\\youtube.com/watch?v=" + url;
+    case "native":
+      return "https://video.diversus.me/hls/" + url + "/.m3u8";
     default:
-      return url
+      return url;
   }
 }
 
 class Petal extends React.Component {
-  static getDerivedStateFromProps (props, state) {
+  static getDerivedStateFromProps(props, state) {
     if (props.isSelectedPetal && !state.wasSelected) {
       return {
         wasSelected: true
-      }
+      };
     }
-    return null
+    return null;
   }
 
   state = {
@@ -67,26 +67,26 @@ class Petal extends React.Component {
   // }
 
   handleClick = event => {
-    const { id, isRootNode, node } = this.props
+    const { id, isRootNode, node } = this.props;
     if (event.altKey && !isRootNode) {
-      this.props.history.push(`/flower/${id}`)
+      this.props.history.push(`/flower/${id}`);
     } else {
-      selectPetal(isRootNode ? undefined : node)
+      selectPetal(isRootNode ? undefined : node);
     }
-  }
+  };
 
   handleDeepDive = e => {
-    const { id } = this.props
-    e.stopPropagation()
-    e.preventDefault()
-    this.props.history.push(`/flower/${id}`)
-  }
+    const { id } = this.props;
+    e.stopPropagation();
+    e.preventDefault();
+    this.props.history.push(`/flower/${id}`);
+  };
 
   clickHandler = () => {
-    console.log('clicked')
-  }
+    console.log("clicked");
+  };
 
-  render () {
+  render() {
     const {
       r,
       isSelectedPetal,
@@ -98,10 +98,10 @@ class Petal extends React.Component {
       petalHidden,
       globals,
       flavor
-    } = this.props
-    const { wasSelected } = this.state
+    } = this.props;
+    const { wasSelected } = this.state;
 
-    const Flavor = getFlavor(flavor)
+    const Flavor = getFlavor(flavor);
 
     return (
       <div
@@ -112,7 +112,7 @@ class Petal extends React.Component {
         }}
         className={classNames(
           style.petalContent,
-          isSelectedPetal ? style.petalContentNoClick : ''
+          isSelectedPetal ? style.petalContentNoClick : ""
         )}
         onClick={!petalHidden ? this.handleClick : () => {}}
       >
@@ -121,9 +121,13 @@ class Petal extends React.Component {
           color={color}
           url={getFullVideoURL(video.url, video.type)}
           setCurrentTime={setCurrentTime}
-          shouldUpdate={(isSelectedPetal || isRootNode) &&
-            !globals.addNodeRoutineRunning && !globals.editNodeRoutineRunning &&
-          !globals.addFlowerRoutineRunning && !globals.editFlowerRoutineRunning}
+          shouldUpdate={
+            (isSelectedPetal || isRootNode) &&
+            !globals.addNodeRoutineRunning &&
+            !globals.editNodeRoutineRunning &&
+            !globals.addFlowerRoutineRunning &&
+            !globals.editFlowerRoutineRunning
+          }
           isPetal={!isRootNode}
           isSelectedPetal={isSelectedPetal}
           wasSelected={wasSelected}
@@ -148,7 +152,7 @@ class Petal extends React.Component {
           style={{
             background: color,
             opacity: isSelectedPetal || isRootNode ? 0 : 1,
-            pointerEvents: !isSelectedPetal ? 'visible' : 'none',
+            pointerEvents: !isSelectedPetal ? "visible" : "none",
             border: `solid 1px ${color}`
           }}
         >
@@ -164,23 +168,29 @@ class Petal extends React.Component {
                 isSelectedPetal || isRootNode ? 0 : r * zoom < 20 ? 1 : 0.35
             }}
           />
-          <Flavor.icon
-            size={r * 0.8}
-            color={color}
+          <img
+            src={Flavor.icon}
+            style={{ width: r * 0.8 }}
+            alt=""
             className={style.flavorIcon}
           />
+
+          {/* <Flavor.icon
+            // size={r * 0.8}
+            // color={color}
+          /> */}
         </div>
       </div>
-    )
+    );
   }
 }
 
 Petal.defaultProps = {
   isSelectedPetal: false,
-  color: '#222642',
+  color: "#222642",
   zoom: 1,
   isRootNode: false
-}
+};
 
 Petal.propTypes = {
   r: PropTypes.number.isRequired,
@@ -192,11 +202,11 @@ Petal.propTypes = {
   color: PropTypes.string,
   setCurrentTime: PropTypes.func.isRequired,
   video: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state) {
+  const { globals, flower } = state;
+  return { globals, flower };
 }
 
-function mapStateToProps (state) {
-  const { globals, flower } = state
-  return { globals, flower }
-}
-
-export default connect(mapStateToProps)(withRouter(Petal))
+export default connect(mapStateToProps)(withRouter(Petal));

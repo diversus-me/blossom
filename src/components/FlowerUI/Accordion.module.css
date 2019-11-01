@@ -14,13 +14,18 @@
 .accordionTitle {
   font-family: "Sarabun", sans-serif;
   /* font-weight: bold; */
-  font-size: 1em;
+  font-size: 25px !important;
   cursor: pointer;
   color: #222642;
   display: flex;
   align-items: center;
   pointer-events: all;
+  font-weight: 600;
 }
+
+/* .acoordionLink{
+  font-family: "Nunito", sans-serif;
+} */
 
 .accordionArrow {
   transition: transform 150ms ease-out;
@@ -89,11 +94,33 @@
 }
 
 .flavor {
-  font-family: "Sarabun", sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: bold;
+  font-size: 25px !important;
   pointer-events: all;
   display: flex;
   align-items: center;
   font-size: 1.3em;
   cursor: pointer;
+}
+
+
+@media (max-width:768px) {
+  .accordionTitle {
+    font-size: 23px !important;
+  }
+
+  .flavor {
+    font-size: 23px !important;
+  }
+}
+
+@media (max-width:600px) {
+  .accordionTitle {
+    font-size: 18px !important;
+  }
+
+  .flavor {
+    font-size: 18px !important;
+  }
 }
