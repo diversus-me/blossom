@@ -16,7 +16,8 @@ class Timeline extends React.Component {
     leftHandlePosition: 0,
     rightHandlePosition: 1,
     seekingLeft: false,
-    seekingRight: false
+    seekingRight: false,
+    showTimer: false
   }
 
   currentScrub = 0
@@ -138,6 +139,20 @@ class Timeline extends React.Component {
     }
   }
 
+  mouseEnter = () => {
+    console.log('Enter')
+    this.setState({
+      showTimer: true
+    })
+  }
+
+  mouseLeave = () => {
+    console.log('Leave')
+    this.setState({
+      showTimer: false
+    })
+  }
+
   render () {
     const { round, color, played, r, playedSeconds, simple, showHandles, togglePlay } = this.props
     const { desiredValue, seeking, seekingLeft, seekingRight, leftHandlePosition, rightHandlePosition } = this.state
@@ -217,14 +232,41 @@ class Timeline extends React.Component {
           onTouchMove={this.onScrub}
           onTouchEnd={this.onScrubEnd}
         >
-          <div style={{
-            transform: 'translate(-50%, -50%)',
-            background: color,
-            borderRadius: '20px',
-            padding: '5px'
-          }}>
-            {moment.utc(playedSeconds * 1000).format('mm:ss')}
+          <div>
+            <img
+              onMouseEnter={this.mouseEnter}
+              onMouseLeave={this.mouseLeave}
+              onTouchStart={this.mouseEnter}
+              onTouchMove={this.mouseEnter}
+              onTouchEnd={this.mouseLeave}
+              style={{
+              // width: '26px',
+                transform: 'translate(-50%, -50%)',
+                // background: color,
+                // borderRadius: '50%',
+                // padding: '5px',
+                cursor: 'pointer'
+              }}
+              className={style.icon}
+              src={process.env.PUBLIC_URL + '/icons/Btn_Add.png'}
+            />
+            {/* {moment.utc(playedSeconds * 1000).format('mm:ss')}  */}
           </div>
+          {
+            (this.state.showTimer)
+              ? (<div
+                style={{
+                  transform: 'translate(-50%, -50%)',
+                  background: color,
+                  marginTop: '5px',
+                  borderRadius: '20px',
+                  padding: '5px'
+                }}>
+                {moment.utc(playedSeconds * 1000).format('mm:ss')}
+              </div>)
+              : null
+          }
+
         </div>
         }
         {showHandles &&
