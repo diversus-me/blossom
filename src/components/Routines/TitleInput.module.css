@@ -7,24 +7,27 @@
 .title {
   display: block;
   background: rgba(0, 0, 0, 0);
-  color: black;
-  font-size: 3em;
-  font-weight: bold;
+  color: gray;
+  font-size: 1em;
+  font-weight: normal;
   border: none;
   width: 50%;
   margin: auto;
   text-align: center;
   outline: none;
+  font-family: "Nunito", sans-serif;
 }
 
 .description {
+  font-family: "Nunito", sans-serif;
+  font-weight: normal;
   display: block;
   width: 50%;
   margin: auto;
   text-align: center;
-  font-size: 1.2em;
+  font-size: 1em;
   background: rgba(0, 0, 0, 0);
-  color: black;
+  color: gray;
   border: none;
   outline: none;
   resize: none;

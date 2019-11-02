@@ -1,9 +1,9 @@
 .container {
-  width: 70%;
+  width: 75%;
   position: relative;
   margin: 0 auto;
   z-index: 1;
-  max-width: 500px;
+  max-width: 610px
 }
 
 .input {
@@ -27,12 +27,23 @@
   position: absolute;
   color: red;
   left: -10px;
-  top: 10px;
+  top: 8px;
+  z-index: 9;
 }
+
 .error {
   height: 1em;
   margin: 5px 0;
   color: red;
   font-size: 0.8em;
   text-align: center;
+}
+
+.para {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.inputContainer {
+  position: relative;
 }

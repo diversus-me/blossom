@@ -1,6 +1,6 @@
 .container {
   position: absolute;
-  bottom: 25px;
+  top: 25px;
   right: 25px;
   display: inline-flex;
   justify-content: center;
@@ -14,7 +14,7 @@
   position: absolute;
   pointer-events: none;
   transition: transform 150ms ease-out,
-              opacity 150ms ease-out;
+    opacity 150ms ease-out;
 }
 
 .container:hover {
@@ -43,15 +43,15 @@
 .icon {
   position: absolute;
   transition: transform 150ms ease-out,
-              opacity 150ms ease-out;
+    opacity 150ms ease-out;
 }
 
-.icon > :first-child {
+.icon> :first-child {
   transform-origin: 50% 50%;
   transition: scale 150ms ease-out;
 }
 
-.icon:hover > :first-child {
+.icon:hover> :first-child {
   transform: scale(1.1);
 }
 
