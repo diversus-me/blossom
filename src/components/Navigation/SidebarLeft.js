@@ -44,7 +44,7 @@ class SidebarLeft extends React.Component {
           transform: `translateX(${position}px)`,
           height: `calc(100% - ${NAVBAR_HEIGHT}px)`,
           marginTop: `${NAVBAR_HEIGHT}px`,
-          display: `${nodeRoutineRunning ? "none" : "block"}`
+          display: `${nodeRoutineRunning ? "none" : ""}`
         }}
       >
         <div
