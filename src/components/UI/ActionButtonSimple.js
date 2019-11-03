@@ -1,23 +1,36 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { MdAdd } from 'react-icons/md'
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { MdAdd } from "react-icons/md";
 
-import { startAddNodeRoutine, stopAddNodeRoutine, stopEditNodeRoutine } from '../../state/globals/actions'
-import { NODE_TYPES } from '../../state/globals/defaults'
+import {
+  startAddNodeRoutine,
+  stopAddNodeRoutine,
+  stopEditNodeRoutine
+} from "../../state/globals/actions";
+import { NODE_TYPES } from "../../state/globals/defaults";
 
-import style from './ActionButton.module.css'
+import style from "./ActionButton.module.css";
 
-const SPACING = 20
+const SPACING = 20;
 
-function ActionButton (props) {
-  const { size, startAddNodeRoutine, stopAddNodeRoutine, stopEditNodeRoutine, globals } = props
+function ActionButton(props) {
+  const {
+    size,
+    startAddNodeRoutine,
+    stopAddNodeRoutine,
+    stopEditNodeRoutine,
+    globals
+  } = props;
 
-  const nodeRoutineRunning = (globals.addNodeRoutineRunning || globals.editNodeRoutineRunning)
+  const nodeRoutineRunning =
+    globals.addNodeRoutineRunning || globals.editNodeRoutineRunning;
+
+  const [routine, setRoutine] = useState(false);
 
   return [
     <div
-      key='button'
-      className={style.container}
+      key="button"
+      className={`${style.container} ${routine ? style.editContainer : ""}`}
       style={{
         width: `${size}px`,
         height: `${size}px`
@@ -30,54 +43,61 @@ function ActionButton (props) {
         }}
         className={style.bigBG}
         onClick={() => {
-          startAddNodeRoutine(NODE_TYPES.LINK_NODE)
+          setRoutine(true);
+          startAddNodeRoutine(NODE_TYPES.LINK_NODE);
         }}
       />
       <div
         style={{
           width: `${size}px`,
           height: `${size}px`,
-          transform: `scale(${(nodeRoutineRunning) ? 1 : 0})`
+          transform: `scale(${nodeRoutineRunning ? 1 : 0})`
         }}
         className={style.smallBG}
         onClick={() => {
           if (globals.editNodeRoutineRunning) {
-            stopEditNodeRoutine()
+            setRoutine(false);
+            stopEditNodeRoutine();
           } else if (globals.addNodeRoutineRunning) {
-            stopAddNodeRoutine()
+            setRoutine(false);
+            stopAddNodeRoutine();
           }
-        }
-        }
+        }}
       />
       <MdAdd
         style={{
-          transform: `rotate(${(nodeRoutineRunning) ? 45 : 0}deg)`
+          transform: `rotate(${nodeRoutineRunning ? 45 : 0}deg)`
         }}
         size={size - SPACING}
-        color={'white'}
+        color={"white"}
         className={style.abort}
       />
       <MdAdd
         style={{
-          transform: `rotate(${(nodeRoutineRunning) ? 45 : 0}deg)`,
-          opacity: (nodeRoutineRunning) ? 1 : 0
+          transform: `rotate(${nodeRoutineRunning ? 45 : 0}deg)`,
+          opacity: nodeRoutineRunning ? 1 : 0
         }}
         size={size - SPACING}
-        color={'#222642'}
+        color={"#222642"}
         className={style.abort}
       />
     </div>
-  ]
+  ];
 }
 
-function mapStateToProps (state) {
-  const { globals } = state
+function mapStateToProps(state) {
+  const { globals } = state;
   return {
     globals
-  }
+  };
 }
 const mapDispatchToProps = {
-  startAddNodeRoutine, stopAddNodeRoutine, stopEditNodeRoutine
-}
+  startAddNodeRoutine,
+  stopAddNodeRoutine,
+  stopEditNodeRoutine
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionButton)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ActionButton);

@@ -1,6 +1,6 @@
 .container {
   position: absolute;
-  top: 25px;
+  bottom: 25px;
   right: 25px;
   display: inline-flex;
   justify-content: center;
@@ -8,6 +8,11 @@
   transform: scale(1);
   transition: transform 150ms ease-out;
   z-index: 1;
+}
+
+.editContainer {
+  bottom: unset;
+  top: 25px;
 }
 
 .abort {
