@@ -27,13 +27,15 @@ class SidebarLeft extends React.Component {
       session,
       children,
       sideBarOpen,
-      toggleSideBar
+      toggleSideBar,
+      globals
     } = this.props;
+    const nodeRoutineRunning =
+      globals.addNodeRoutineRunning || globals.editNodeRoutineRunning;
     let position = full ? 0 : -dimensions.width;
     if (sideBarOpen && !full) {
       position += SIDEBAR_WIDTH;
     }
-
     return [
       <div
         key="sideBarContainer"
@@ -41,7 +43,8 @@ class SidebarLeft extends React.Component {
         style={{
           transform: `translateX(${position}px)`,
           height: `calc(100% - ${NAVBAR_HEIGHT}px)`,
-          marginTop: `${NAVBAR_HEIGHT}px`
+          marginTop: `${NAVBAR_HEIGHT}px`,
+          display: `${nodeRoutineRunning ? "none" : "block"}`
         }}
       >
         <div
@@ -62,7 +65,8 @@ class SidebarLeft extends React.Component {
         className={style.handleContainer}
         style={{
           left: dimensions.width,
-          transform: `translateX(${position}px)`
+          transform: `translateX(${position}px)`,
+          display: `${nodeRoutineRunning ? "none" : "block"}`
         }}
         onClick={toggleSideBar}
       >
@@ -94,7 +98,8 @@ class SidebarLeft extends React.Component {
               bottom: "25px",
               right: full ? "25px" : "",
               left: !full && sideBarOpen ? "150px" : "",
-              visibility: !full && !sideBarOpen ? "hidden" : "visible"
+              visibility: !full && !sideBarOpen ? "hidden" : "visible",
+              display: `${nodeRoutineRunning ? "none" : "block"}`
             }}
             onClick={() => {
               this.props.startAddFlowerRoutine();

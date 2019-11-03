@@ -22,10 +22,10 @@ export const SIDEBAR_WIDTH = 320;
 
 export const FLAVORS = [
   {
-    name: "Neutral",
-    type: "neutral",
-    color: "#7A869A",
-    icon: Balance
+    name: "Contradiction",
+    type: "contra",
+    color: "#E74949",
+    icon: Stop
   },
   {
     name: "Support",
@@ -34,11 +34,12 @@ export const FLAVORS = [
     icon: Check
   },
   {
-    name: "Contradiction",
-    type: "contra",
-    color: "#E74949",
-    icon: Stop
+    name: "Neutral",
+    type: "neutral",
+    color: "#7A869A",
+    icon: Balance
   },
+
   {
     name: "Science",
     type: "science",

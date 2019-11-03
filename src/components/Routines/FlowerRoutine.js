@@ -241,12 +241,12 @@ class FlowerRoutine extends React.Component {
                 ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
                 : "translateX(0)"
             }}
-            className={`${style.next} ${style.prev}`}
+            className={`${style.next} ${style.prev} ${style.hoverPrev}`}
             onClick={this.prevPhase}
             // deactivated={!isValidInput}
             round
           >
-            <img src={backArrow} alt="" style={{ width: "auto" }} />
+            <img src={backArrow} alt="" style={{ width: "35px" }} />
             {/* <MdChevronRight size={30} color={"white"} /> */}
           </FloatingButton>
         )}

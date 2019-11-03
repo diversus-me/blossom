@@ -23,6 +23,7 @@
 .prev {
   right: unset;
   left: 41px;
+  transition: background 0.5s;
 }
 
 .petal {
@@ -57,6 +58,10 @@
 .helpText {
   width: 280px;
   position: absolute;
-  bottom: 60px;
-  left: 50px;
+  bottom: 110px;
+  left: 10px;
+}
+
+.hoverPrev:hover {
+  background: #EFEFEF
 }

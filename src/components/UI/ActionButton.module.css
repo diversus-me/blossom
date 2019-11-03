@@ -40,7 +40,7 @@
 .smallBG {
   position: absolute;
   background: #FFF;
-  border: 2px solid #222642;
+  border: 2px solid white;
   border-radius: 50%;
   transition: transform 150ms ease-out;
 }

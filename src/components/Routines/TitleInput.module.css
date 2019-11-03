@@ -8,27 +8,48 @@
   display: block;
   background: rgba(0, 0, 0, 0);
   color: gray;
-  font-size: 1em;
-  font-weight: normal;
+  font-size: 23px;
+  font-weight: 600;
   border: none;
   width: 50%;
   margin: auto;
   text-align: center;
   outline: none;
-  font-family: "Nunito", sans-serif;
+  font-family: "Sarabun", sans-serif;
 }
 
 .description {
   font-family: "Nunito", sans-serif;
-  font-weight: normal;
+  font-weight: 600;
   display: block;
   width: 50%;
   margin: auto;
   text-align: center;
-  font-size: 1em;
+  font-size: 20px;
   background: rgba(0, 0, 0, 0);
   color: gray;
   border: none;
   outline: none;
   resize: none;
+}
+
+
+@media (max-width:860px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .description {
+    font-size: 18px;
+  }
+}
+
+@media (max-width:560px) {
+  .title {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
 }

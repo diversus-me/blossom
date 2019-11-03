@@ -118,7 +118,7 @@ class FlowerView extends React.Component {
           className={style.renderContainer}
           style={{
             transform:
-              dimensions.safeToMove && sideBarOpen
+              dimensions.safeToMove && sideBarOpen && !nodeRoutineRunning
                 ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
                 : "translateX(0)"
           }}

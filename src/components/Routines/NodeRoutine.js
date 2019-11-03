@@ -294,28 +294,14 @@ class NodeRoutine extends React.Component {
       <div key="mainContainer" className={style.container}>
         {currentPhase.name == "SELECT_FLAVOR" ||
         currentPhase.name == "POSITION" ? (
-          <h2
-            className={`${style.phaseTitle} ${style.titleLeft}`}
-            style={{
-              transform: this.props.sideBarOpen
-                ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
-                : "translateX(0)"
-            }}
-          >
+          <h2 className={`${style.phaseTitle} ${style.titleLeft}`}>
             {currentPhase.title}
           </h2>
         ) : (
           <h2 className={style.phaseTitle}>{currentPhase.title}</h2>
         )}
         {currentPhase.name == "SELECT_FLAVOR" ? (
-          <p
-            className={`${style.titleLeft} ${style.helpText}`}
-            style={{
-              transform: this.props.sideBarOpen
-                ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
-                : "translateX(0)"
-            }}
-          >
+          <p className={`${style.titleLeft} ${style.helpText}`}>
             Link type defines the relation between the statement in the central
             video and your answer.
           </p>
@@ -323,14 +309,7 @@ class NodeRoutine extends React.Component {
           ""
         )}
         {currentPhase.name == "POSITION" ? (
-          <p
-            className={`${style.titleLeft} ${style.helpText}`}
-            style={{
-              transform: this.props.sideBarOpen
-                ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
-                : "translateX(0)"
-            }}
-          >
+          <p className={`${style.titleLeft} ${style.helpText}`}>
             Now you can adjust the precise connection point.
           </p>
         ) : (
@@ -377,10 +356,10 @@ class NodeRoutine extends React.Component {
         )}
         {currentPhase.name !== "POSITION" && (
           <FloatingButton
-            style={{
-              right: this.props.sideBarOpen ? `168px` : "10px"
-            }}
-            className={style.next}
+            // style={{
+            //   right: this.props.sideBarOpen ? `168px` : "10px"
+            // }}
+            className={`${style.next} ${style.hoverPrev}`}
             onClick={this.nextPhase}
             deactivated={!isValidInput}
             round
@@ -391,17 +370,17 @@ class NodeRoutine extends React.Component {
         )}
         {currentPhase.name !== "POSITION" && (
           <FloatingButton
-            style={{
-              transform: this.props.sideBarOpen
-                ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
-                : "translateX(0)"
-            }}
-            className={`${style.next} ${style.prev}`}
+            // style={{
+            //   transform: this.props.sideBarOpen
+            //     ? `translateX(${Math.floor(SIDEBAR_WIDTH * 0.5)}px)`
+            //     : "translateX(0)"
+            // }}
+            className={`${style.next} ${style.prev} ${style.hoverPrev}`}
             onClick={this.prevPhase}
             // deactivated={!isValidInput}
             round
           >
-            <img src={backArrow} alt="" style={{ width: "auto" }} />
+            <img src={backArrow} alt="" style={{ width: "35px" }} />
             {/* <MdChevronRight size={30} color={"white"} /> */}
           </FloatingButton>
         )}
