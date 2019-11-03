@@ -66,7 +66,7 @@ class SidebarLeft extends React.Component {
         style={{
           left: dimensions.width,
           transform: `translateX(${position}px)`,
-          display: `${nodeRoutineRunning ? "none" : "block"}`
+          display: `${nodeRoutineRunning ? "none" : ""}`
         }}
         onClick={toggleSideBar}
       >
@@ -99,7 +99,7 @@ class SidebarLeft extends React.Component {
               right: full ? "25px" : "",
               left: !full && sideBarOpen ? "150px" : "",
               visibility: !full && !sideBarOpen ? "hidden" : "visible",
-              display: `${nodeRoutineRunning ? "none" : "block"}`
+              display: `${nodeRoutineRunning ? "none" : ""}`
             }}
             onClick={() => {
               this.props.startAddFlowerRoutine();

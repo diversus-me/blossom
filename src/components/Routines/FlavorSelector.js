@@ -51,7 +51,9 @@ class FlavorSelector extends React.Component {
                   {/* <flavor.icon size={`${iconSize}px`} fill={flavor.color} /> */}
                   <img
                     src={flavor.icon}
-                    style={{ width: `${iconSize}px` }}
+                    style={{
+                      width: `${flavor.size ? flavor.size : iconSize}px`
+                    }}
                     alt=""
                   />
                   <div
@@ -70,7 +72,6 @@ class FlavorSelector extends React.Component {
             </div>
           );
         })}
-   
       </div>
     );
   }

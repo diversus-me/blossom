@@ -56,7 +56,8 @@ export const FLAVORS = [
     name: "Fact Checker",
     type: "fact check",
     color: "#2684FF",
-    icon: Fact2
+    icon: Fact2,
+    size: 41
   }
 ];
 
