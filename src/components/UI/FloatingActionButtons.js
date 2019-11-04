@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function FloatingActionButtons() {
+export default function FloatingActionButtons () {
   const classes = useStyles()
 
   return (
