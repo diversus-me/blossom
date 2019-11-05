@@ -1,46 +1,46 @@
-import React from "react";
-import propTypes from "prop-types";
-import classnames from "classnames";
-import moment from "moment";
-import { connect } from "react-redux";
-import { MdEdit, MdClear } from "react-icons/md";
-import { toast } from "react-toastify";
+import React from 'react'
+import propTypes from 'prop-types'
+import classnames from 'classnames'
+import moment from 'moment'
+import { connect } from 'react-redux'
+import { MdEdit, MdClear } from 'react-icons/md'
+import { toast } from 'react-toastify'
 // import Eye from "/icons/views.svg";
-import { listFlowers } from "../../state/flowerList/actions";
-import { startEditFlowerRoutine } from "../../state/globals/actions";
+import { listFlowers } from '../../state/flowerList/actions'
+import { startEditFlowerRoutine } from '../../state/globals/actions'
 
-import style from "./FlowerItem.module.css";
+import style from './FlowerItem.module.css'
 
 class FlowerItem extends React.Component {
   delete = e => {
-    const { title, id } = this.props;
-    e.preventDefault();
+    const { title, id } = this.props
+    e.preventDefault()
     if (window.confirm(`Are you sure you want to delete ${title}?`)) {
       fetch(`${process.env.REACT_APP_SERVER_URL}/api/flower`, {
-        credentials: "include",
-        method: "DELETE",
+        credentials: 'include',
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ id })
       })
         .then(response => {
           if (response.ok) {
-            return response;
+            return response
           } else {
-            throw new Error("failed");
+            throw new Error('failed')
           }
         })
-        .then(() => toast.success("Flower successfully deleted"))
+        .then(() => toast.success('Flower successfully deleted'))
         // TODO: Why does reloading the flower instantly after deleting cause wrong responses?
         .then(setTimeout(this.props.listFlowers, 300))
         .catch(() => {
-          toast.error("Flower could not be deleted.");
-        });
+          toast.error('Flower could not be deleted.')
+        })
     }
   };
 
-  render() {
+  render () {
     const {
       title,
       id,
@@ -51,14 +51,14 @@ class FlowerItem extends React.Component {
       session,
       isSelected,
       sideBarOpen
-    } = this.props;
+    } = this.props
 
     return (
       <div
         className={`${style.container} ${
-          this.props.globals.selectedFlower ? style.barStyle : ""
+          this.props.globals.selectedFlower ? style.barStyle : ''
         }`}
-        style={{ background: isSelected ? "#E7E9EF" : "white" }}
+        style={{ background: isSelected ? '#E7E9EF' : 'white' }}
       >
         <div className={style.right}>
           <div
@@ -84,8 +84,8 @@ class FlowerItem extends React.Component {
             <div className={classnames(style.bottomContainerText)}>
               <img
                 className={style.icon}
-                src={process.env.PUBLIC_URL + "/icons/views.svg"}
-              />{" "}
+                src={process.env.PUBLIC_URL + '/icons/views.svg'}
+              />{' '}
               <div className={style.viewsText}>1,234</div>
             </div>
             <div className={classnames(style.date, style.itemPadding)}>
@@ -93,37 +93,37 @@ class FlowerItem extends React.Component {
             </div>
           </div>
           {session.authenticated &&
-            (session.role === "admin" || session.id === user.id) && [
+            (session.role === 'admin' || session.id === user.id) && [
               <div
-                key="edit"
-                className={classnames(style.edit)}
-                onClick={() => {
-                  this.props.startEditFlowerRoutine(id, {
-                    title,
-                    description,
-                    url: videoId
-                  });
-                }}
-              >
-                <MdEdit color="grey" />
-              </div>,
+              key='edit'
+              className={classnames(style.edit)}
+              onClick={() => {
+                this.props.startEditFlowerRoutine(id, {
+                  title,
+                  description,
+                  url: videoId
+                })
+              }}
+            >
+              <MdEdit color='grey' />
+            </div>,
               <div
-                key="delete"
-                className={classnames(style.delete)}
-                onClick={this.delete}
-              >
-                <MdClear color="grey" size="1.1em" />
-              </div>
-            ]}
+              key='delete'
+              className={classnames(style.delete)}
+              onClick={this.delete}
+            >
+              <MdClear color='grey' size='1.1em' />
+            </div>
+          ]}
         </div>
       </div>
-    );
+    )
   }
 }
 
 FlowerItem.defaultProps = {
-  description: "No description."
-};
+  description: 'No description.'
+}
 
 // FlowerItem.propTypes = {
 //   title: propTypes.string.isRequired,
@@ -134,17 +134,17 @@ FlowerItem.defaultProps = {
 //   id: propTypes.number.isRequired
 // };
 
-function mapStateToProps(state) {
-  const { session, globals } = state;
-  return { session, globals };
+function mapStateToProps (state) {
+  const { session, globals } = state
+  return { session, globals }
 }
 
 const mapDispatchToProps = {
   listFlowers,
   startEditFlowerRoutine
-};
+}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FlowerItem);
+)(FlowerItem)
