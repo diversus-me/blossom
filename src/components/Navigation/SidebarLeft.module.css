@@ -58,6 +58,8 @@
   width: 875px;
 }
 
+
+
 @media (max-width:900px) {
   .content {
     width: 90%;

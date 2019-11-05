@@ -127,3 +127,9 @@
     width: 200px
   }
 }
+
+.barStyle {
+  width: 290px;
+  align-items: center !important;
+  margin-left: 3px;
+}
