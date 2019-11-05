@@ -1,6 +1,5 @@
-import { put, takeEvery, takeLatest, all } from 'redux-saga/effects'
-import { ADD_FLOWER_ERROR, ADD_FLOWER_LOADING, ADD_FLOWER_SUCCESS,
-  LIST_FLOWER_ERROR, LIST_FLOWER_LOADING, LIST_FLOWER_SUCCESS, listFlowers } from './actions'
+import { put, takeLatest } from 'redux-saga/effects'
+import { LIST_FLOWER_ERROR, LIST_FLOWER_LOADING, LIST_FLOWER_SUCCESS } from './actions'
 
 import { fetchAsync } from '../helpers'
 

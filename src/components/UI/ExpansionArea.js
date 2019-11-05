@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function ExpansionArea() {
+export default function ExpansionArea () {
   const classes = useStyles()
 
   return (
@@ -65,7 +65,7 @@ export default function ExpansionArea() {
             <Typography className={classes.heading}> Lorem ipsum, or lipsum as it is sometimes known as diversus. </Typography>
           </div>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}> 
+        <ExpansionPanelDetails className={classes.details}>
           Hello World
         </ExpansionPanelDetails>
       </ExpansionPanel>
