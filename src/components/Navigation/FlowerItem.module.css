@@ -8,8 +8,8 @@
   /* max-width: 250px; */
   flex-direction: column;
   margin-bottom: 2em;
+  will-change: width;
 }
-
 
 .block {
   display: inline-block;
@@ -109,7 +109,7 @@
 }
 
 /* Changes */
-@media (max-width:440px) {
+@media (max-width: 440px) {
   .container {
     flex-direction: row;
     height: 120px;
@@ -121,9 +121,9 @@
   }
 }
 
-@media (max-width:896px) {
+@media (max-width: 896px) {
   .container {
-    width: 200px
+    width: 200px;
   }
 }
 
