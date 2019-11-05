@@ -109,7 +109,7 @@
   color: #242843;
 }
 
-
+/* Changes */
 @media (max-width:440px) {
   .container {
     flex-direction: row;
