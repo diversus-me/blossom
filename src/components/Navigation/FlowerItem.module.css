@@ -8,7 +8,6 @@
   /* max-width: 250px; */
   flex-direction: column;
   margin-bottom: 2em;
-
 }
 
 
@@ -132,4 +131,14 @@
   width: 290px;
   align-items: center !important;
   margin-left: 3px;
+}
+
+.Barcontainer {
+  flex-direction: row;
+  height: 120px;
+  width: 288px;
+}
+
+.Barcontainer .image {
+  transform: translateY(10%);
 }

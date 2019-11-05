@@ -57,7 +57,7 @@ class FlowerItem extends React.Component {
       <div
         className={`${style.container} ${
           this.props.globals.selectedFlower ? style.barStyle : ''
-        }`}
+        } ${this.props.globals.selectedFlower ? style.Barcontainer : ''}`}
         style={{ background: isSelected ? '#E7E9EF' : 'white' }}
       >
         <div className={style.right}>
