@@ -40,31 +40,31 @@ class Petal extends React.Component {
   circumference = 1;
   currentScrub = 0;
 
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   if (
-  //     this.props.isSelectedPetal !== nextProps.isSelectedPetal ||
-  //     this.props.petalHidden !== nextProps.petalHidden
-  //   ) {
-  //     return true
-  //   }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (
+      this.props.isSelectedPetal !== nextProps.isSelectedPetal ||
+      this.props.petalHidden !== nextProps.petalHidden
+    ) {
+      return true
+    }
 
-  //   const { r, color, globals } = this.props
-  //   if (
-  //     r !== nextProps.r ||
-  //     color !== nextProps.color ||
-  //     globals.addedNodePosition !== nextProps.globals.addedNodePosition
-  //   ) {
-  //     return true
-  //   }
+    const { r, color, globals } = this.props
+    if (
+      r !== nextProps.r ||
+      color !== nextProps.color ||
+      globals.addedNodePosition !== nextProps.globals.addedNodePosition
+    ) {
+      return true
+    }
 
-  //   const { initialPlay } = this.state
+    const { initialPlay } = this.state
 
-  //   if (initialPlay !== nextState.initialPlay) {
-  //     return true
-  //   }
+    if (initialPlay !== nextState.initialPlay) {
+      return true
+    }
 
-  //   return false
-  // }
+    return false
+  }
 
   handleClick = event => {
     const { id, isRootNode, node } = this.props
@@ -73,18 +73,18 @@ class Petal extends React.Component {
     } else {
       selectPetal(isRootNode ? undefined : node)
     }
-  }
+  };
 
   handleDeepDive = e => {
     const { id } = this.props
     e.stopPropagation()
     e.preventDefault()
     this.props.history.push(`/flower/${id}`)
-  }
+  };
 
   clickHandler = () => {
     console.log('clicked')
-  }
+  };
 
   render () {
     const {
@@ -122,8 +122,7 @@ class Petal extends React.Component {
           url={getFullVideoURL(video.url, video.type)}
           setCurrentTime={setCurrentTime}
           shouldUpdate={(isSelectedPetal || isRootNode) &&
-            !globals.addNodeRoutineRunning && !globals.editNodeRoutineRunning &&
-          !globals.addFlowerRoutineRunning && !globals.editFlowerRoutineRunning}
+            (!globals.addNodeRoutineRunning || globals.editNodeRoutineRunning)}
           isPetal={!isRootNode}
           isSelectedPetal={isSelectedPetal}
           wasSelected={wasSelected}

@@ -16,7 +16,8 @@ class Timeline extends React.Component {
     leftHandlePosition: 0,
     rightHandlePosition: 1,
     seekingLeft: false,
-    seekingRight: false
+    seekingRight: false,
+    showTimer: false
   }
 
   currentScrub = 0
@@ -99,6 +100,9 @@ class Timeline extends React.Component {
           rightHandlePosition: newRightHandlePosition
         })
       }
+      this.setState({
+        showTimer: true
+      })
     }
   }
 
@@ -109,7 +113,8 @@ class Timeline extends React.Component {
     this.setState({
       seeking: false,
       seekingLeft: false,
-      seekingRight: false
+      seekingRight: false,
+      showTimer: false
     })
   }
 
@@ -136,6 +141,18 @@ class Timeline extends React.Component {
         togglePlay()
       }
     }
+  }
+
+  mouseEnter = () => {
+    this.setState({
+      showTimer: true
+    })
+  }
+
+  mouseLeave = () => {
+    this.setState({
+      showTimer: false
+    })
   }
 
   render () {
@@ -210,6 +227,7 @@ class Timeline extends React.Component {
           style={{
             transform: `translate(${getCirclePosX(r, angle, r) - 1}px, ${getCirclePosY(r, angle, r) - 1}px)`
           }}
+          onMouseOut={this.mouseLeave}
           onMouseDown={() => { this.onScrubStart('center') }}
           onMouseMove={this.onScrub}
           onMouseUp={this.onScrubEnd}
@@ -217,14 +235,37 @@ class Timeline extends React.Component {
           onTouchMove={this.onScrub}
           onTouchEnd={this.onScrubEnd}
         >
-          <div style={{
-            transform: 'translate(-50%, -50%)',
-            background: color,
-            borderRadius: '20px',
-            padding: '5px'
-          }}>
-            {moment.utc(playedSeconds * 1000).format('mm:ss')}
+          <div
+            onMouseEnter={this.mouseEnter}
+            onMouseLeave={this.mouseLeave}
+            onTouchStart={this.mouseEnter}
+            onTouchMove={this.mouseEnter}
+            onTouchEnd={this.mouseLeave}
+            style={{
+              transform: 'translate(-50%, -50%)',
+              cursor: 'pointer'
+            }}
+          >
+            <img
+
+              className={style.icon}
+              src={process.env.PUBLIC_URL + '/icons/Btn_Add.png'}
+            />
           </div>
+          {
+            (this.state.showTimer)
+              ? (<div
+                style={{
+                  transform: 'translate(-50%, -340%)',
+                  background: color,
+                  marginTop: '5px',
+                  borderRadius: '20px',
+                  padding: '5px'
+                }}>
+                {moment.utc(playedSeconds * 1000).format('mm:ss')}
+              </div>)
+              : null
+          }
         </div>
         }
         {showHandles &&
