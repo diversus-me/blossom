@@ -44,7 +44,7 @@ class App extends Component {
     flowerOverlayVisible: false,
     sideBarOpen: this.props.dimensions.width > MOBILE_BREAKPOINT,
     selectedFlower: this.props.globals.selectedFlower
-  }
+  };
 
   componentDidMount () {
     window.addEventListener('resize', this.props.resize)
@@ -79,13 +79,13 @@ class App extends Component {
     this.setState({
       sideBarOpen: !this.state.sideBarOpen
     })
-  }
+  };
 
   toggleAddFlowerOverlay = () => {
     this.setState({
       flowerOverlayVisible: !this.state.flowerOverlayVisible
     })
-  }
+  };
 
   render () {
     const { session, globals, dimensions } = this.props
@@ -125,20 +125,21 @@ class App extends Component {
                 )}
               />
             )}
-            {(globals.addFlowerRoutineRunning || globals.editFlowerRoutineRunning) &&
-            <div
-              style={{
-                height: dimensions.height - 60,
-                width: '100%',
-                position: 'absolute',
-                zIndex: 2000,
-                background: 'white',
-                top: '60px'
-              }}
-            >
-              <FlowerRoutine />
-            </div>
-            }
+            {(globals.addFlowerRoutineRunning ||
+              globals.editFlowerRoutineRunning) && (
+              <div
+                style={{
+                  height: dimensions.height - 60,
+                  width: '100%',
+                  position: 'absolute',
+                  zIndex: 2000,
+                  background: 'white',
+                  top: '60px'
+                }}
+              >
+                <FlowerRoutine />
+              </div>
+            )}
           </div>
         )}
       />

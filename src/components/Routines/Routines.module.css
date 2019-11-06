@@ -6,15 +6,24 @@
   display: flex;
   flex-direction: column;
   align-content: flex-start;
+  padding: 0em 0.3em;
+  box-sizing: border-box;
 }
 
 .next {
-  left: 50%;
+  right: 10px;
   bottom: 25px;
   margin-left: -35px;
   color: white;
   font-weight: bold;
   user-select: none;
+  cursor: pointer;
+}
+
+.prev {
+  right: unset;
+  left: 41px;
+  transition: background 0.5s;
 }
 
 .petal {
@@ -29,13 +38,30 @@
 }
 
 .phaseTitle {
-  margin: 50px 0 25px;
+  margin: 50px 0 15px;
   position: relative;
   text-align: center;
   user-select: none;
+  font-weight: normal;
 }
 
 .abort {
   bottom: 25px;
   right: 25px;
+}
+
+.titleLeft {
+  text-align: left;
+  margin-left: 0.4em;
+}
+
+.helpText {
+  width: 280px;
+  position: absolute;
+  bottom: 110px;
+  left: 10px;
+}
+
+.hoverPrev:hover {
+  background: #EFEFEF
 }

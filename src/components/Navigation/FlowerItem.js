@@ -38,7 +38,7 @@ class FlowerItem extends React.Component {
           toast.error('Flower could not be deleted.')
         })
     }
-  }
+  };
 
   render () {
     const {
@@ -49,12 +49,15 @@ class FlowerItem extends React.Component {
       created,
       user,
       session,
-      isSelected
+      isSelected,
+      sideBarOpen
     } = this.props
 
     return (
       <div
-        className={style.container}
+        className={`${style.container} ${
+          this.props.globals.selectedFlower ? style.barStyle : ''
+        } ${this.props.globals.selectedFlower ? style.Barcontainer : ''}`}
         style={{ background: isSelected ? '#E7E9EF' : 'white' }}
       >
         <div className={style.right}>
@@ -89,25 +92,29 @@ class FlowerItem extends React.Component {
               {moment(created).fromNow()}
             </div>
           </div>
-          {
-            session.authenticated &&
-            (session.role === 'admin' || session.id === user.id) &&
-            [
+          {session.authenticated &&
+            (session.role === 'admin' || session.id === user.id) && [
               <div
-                key='edit'
-                className={classnames(style.edit)}
-                onClick={() => { this.props.startEditFlowerRoutine(id, { title, description, url: videoId }) }}
-              >
-                <MdEdit color='grey' />
-              </div>,
+              key='edit'
+              className={classnames(style.edit)}
+              onClick={() => {
+                this.props.startEditFlowerRoutine(id, {
+                  title,
+                  description,
+                  url: videoId
+                })
+              }}
+            >
+              <MdEdit color='grey' />
+            </div>,
               <div
-                key='delete'
-                className={classnames(style.delete)}
-                onClick={this.delete}
-              >
-                <MdClear color='grey' size='1.1em' />
-              </div>
-            ]}
+              key='delete'
+              className={classnames(style.delete)}
+              onClick={this.delete}
+            >
+              <MdClear color='grey' size='1.1em' />
+            </div>
+          ]}
         </div>
       </div>
     )
@@ -118,22 +125,23 @@ FlowerItem.defaultProps = {
   description: 'No description.'
 }
 
-FlowerItem.propTypes = {
-  title: propTypes.string.isRequired,
-  videoId: propTypes.string.isRequired,
-  description: propTypes.string,
-  created: propTypes.instanceOf(Date).isRequired,
-  user: propTypes.object.isRequired,
-  id: propTypes.number.isRequired
-}
+// FlowerItem.propTypes = {
+//   title: propTypes.string.isRequired,
+//   videoId: propTypes.string.isRequired,
+//   description: propTypes.string,
+//   created: propTypes.instanceOf(Date).isRequired,
+//   user: propTypes.object.isRequired,
+//   id: propTypes.number.isRequired
+// };
 
 function mapStateToProps (state) {
-  const { session } = state
-  return { session }
+  const { session, globals } = state
+  return { session, globals }
 }
 
 const mapDispatchToProps = {
-  listFlowers, startEditFlowerRoutine
+  listFlowers,
+  startEditFlowerRoutine
 }
 
 export default connect(

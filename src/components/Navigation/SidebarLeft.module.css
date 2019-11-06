@@ -4,10 +4,34 @@
   overflow-x: hidden;
   position: absolute;
   z-index: 11;
-  box-shadow: 0 10px 15px rgba(36,40,67,0.1);
+  box-shadow: 0 10px 15px rgba(36, 40, 67, 0.1);
   transition: transform 200ms ease-out;
   background: white;
   top: 0;
+  display: flex;
+  justify-content: center;
+
+}
+
+.sidebarGradient {
+  width: 100%;
+  z-index: 100;
+  position: absolute;
+  transform: translateX(-1216px);
+  bottom: 0;
+  height: 200px;
+  display: none;
+}
+
+@media(max-width:800px) {
+  .sidebarGradient {
+    display: block;
+    width: 90%;
+    bottom: 0;
+    height: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 .outerClickContainer {
@@ -31,6 +55,16 @@
 .content {
   position: absolute;
   transition: transform 200ms ease-out;
+  width: 875px;
+  will-change: width;
+}
+
+
+
+@media (max-width:900px) {
+  .content {
+    width: 90%;
+  }
 }
 
 .handleContainer {
@@ -55,10 +89,12 @@
   height: 50px;
   position: absolute;
   background: #222642;
-  z-index: 50;
+  z-index: 101;
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   transform: scale(1);
+  bottom: 15px !important;
+  right: 3% !important;
 }

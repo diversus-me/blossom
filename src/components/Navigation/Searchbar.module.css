@@ -3,21 +3,22 @@
   position: relative;
   margin: 10px 6px;
   z-index: 1;
-  max-width: 500px;
-  text-align: center;
+  /* max-width: 500px; */
+  /* text-align: center; */
 }
 
 .input {
   position: relative;
-  width: 90%;
+  width: 100%;
   margin: auto;
-  height: 35px;
+  height: 40px;
   font-size: 0.9em;
   background: #f5f5f5;
   border: none !important;
   border-radius: 40px;
   margin-top: 1.5em;
-  padding-left: 15px;
+  padding-left: 50px;
+  box-sizing: border-box;
 }
 
 .input:focus {
@@ -27,6 +28,7 @@
 .icon {
   position: absolute;
   color: #969696;
-  right: 26px;
-  top: 30px;
+  left: 15px;
+  top: 33px;
+  z-index: 99;
 }

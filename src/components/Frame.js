@@ -15,16 +15,20 @@ class Frame extends React.Component {
       //   className={classNames(style.colorContainer, style.mainColor)}
       // />,
       <span key='flavors'>
-        {FLAVORS.map((flavor) =>
+        {FLAVORS.map(flavor => (
           <div
             key={flavor.type}
             className={style.colorContainer}
             style={{
               background: flavor.color,
-              opacity: (flower.selectedPetal && flower.selectedPetal.flavor === flavor.type) ? 1 : 0
+              opacity:
+                flower.selectedPetal &&
+                flower.selectedPetal.flavor === flavor.type
+                  ? 1
+                  : 0
             }}
           />
-        )}
+        ))}
       </span>,
       <div
         key='inner'
@@ -35,7 +39,8 @@ class Frame extends React.Component {
           left: '6px',
           width: `${dimensions.width - 12}px`,
           borderRadius: '25px'
-        }}>
+        }}
+      >
         {children}
       </div>
     ]

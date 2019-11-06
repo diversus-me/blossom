@@ -6,13 +6,13 @@ import { SIDEBAR_WIDTH, NAVBAR_HEIGHT } from '../../Defaults'
 import { startAddFlowerRoutine } from '../../state/globals/actions'
 
 import SVG from '../UI/SVG'
+import GradientImage from '../../assets/gradient.png'
 
 import style from './SidebarLeft.module.css'
-
 class SidebarLeft extends React.Component {
   state = {
     full: false
-  }
+  };
 
   static getDerivedStateFromProps (props) {
     return {
@@ -22,12 +22,21 @@ class SidebarLeft extends React.Component {
 
   render () {
     const { full } = this.state
-    const { dimensions, session, children, sideBarOpen, toggleSideBar } = this.props
+    const {
+      dimensions,
+      session,
+      children,
+      sideBarOpen,
+      toggleSideBar,
+      globals
+    } = this.props
+    const nodeRoutineRunning =
+      globals.addNodeRoutineRunning || globals.editNodeRoutineRunning
     let position = full ? 0 : -dimensions.width
     if (sideBarOpen && !full) {
       position += SIDEBAR_WIDTH
     }
-
+    console.log(dimensions)
     return [
       <div
         key='sideBarContainer'
@@ -35,30 +44,35 @@ class SidebarLeft extends React.Component {
         style={{
           transform: `translateX(${position}px)`,
           height: `calc(100% - ${NAVBAR_HEIGHT}px)`,
-          marginTop: `${NAVBAR_HEIGHT}px`
+          marginTop: `${NAVBAR_HEIGHT}px`,
+          display: `${nodeRoutineRunning ? 'none' : ''}`
         }}
       >
         <div
-          className={style.content}
+          className={`${style.content}`}
           style={{
+            width: `${!full ? '300px' : '875px'}`,
+            paddingBottom: '200px',
             transform: `translateX(${
               sideBarOpen
                 ? !full
-                  ? dimensions.width - SIDEBAR_WIDTH
-                  : 440
-                : dimensions.width - SIDEBAR_WIDTH
+                  ? dimensions.width - (dimensions.width / 2 + 157)
+                  : 0
+                : 0
             }px)`
           }}
         >
           {children}
         </div>
       </div>,
+      <img src={GradientImage} className={style.sidebarGradient} alt='' />,
       <div
         key='sideBarHandle'
         className={style.handleContainer}
         style={{
           left: dimensions.width,
-          transform: `translateX(${position}px)`
+          transform: `translateX(${position}px)`,
+          display: `${nodeRoutineRunning ? 'none' : ''}`
         }}
         onClick={toggleSideBar}
       >
@@ -78,29 +92,28 @@ class SidebarLeft extends React.Component {
         className={style.outerClickContainer}
         onClick={toggleSideBar}
         style={{
-          opacity: (!dimensions.safeToMove && sideBarOpen) ? 0.9 : 0,
-          pointerEvents: (!dimensions.safeToMove && sideBarOpen) ? 'all' : 'none'
+          opacity: !dimensions.safeToMove && sideBarOpen ? 0.9 : 0,
+          pointerEvents: !dimensions.safeToMove && sideBarOpen ? 'all' : 'none'
         }}
       />,
       <span key='addFlower'>
-        {session.authenticated &&
-        <div
-          className={style.addFlowerButton}
-          style={{
-            bottom: '25px',
-            right: (full) ? '25px' : '',
-            left: (!full && sideBarOpen) ? '150px' : '',
-            visibility: (!full && !sideBarOpen) ? 'hidden' : 'visible'
-          }}
-          onClick={() => { this.props.startAddFlowerRoutine() }}
-        >
-          <MdAdd
-            size={25}
-            color={'white'}
-            className={style.abort}
-          />
-        </div>
-        }
+        {session.authenticated && (
+          <div
+            className={style.addFlowerButton}
+            style={{
+              bottom: '25px',
+              right: full ? '25px' : '',
+              left: !full && sideBarOpen ? '150px' : '',
+              visibility: !full && !sideBarOpen ? 'hidden' : 'visible',
+              display: `${nodeRoutineRunning ? 'none' : ''}`
+            }}
+            onClick={() => {
+              this.props.startAddFlowerRoutine()
+            }}
+          >
+            <MdAdd size={25} color={'white'} className={style.abort} />
+          </div>
+        )}
       </span>
     ]
   }
@@ -115,4 +128,7 @@ const mapDispatchToProps = {
   startAddFlowerRoutine
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarLeft)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SidebarLeft)

@@ -10,13 +10,13 @@ const MARGIN = 0.5
 class FlavorSelector extends React.Component {
   render () {
     const { angle, dimensions, selectedFlavor, selectFlavor } = this.props
-    const angleStep = (270 / FLAVORS.length)
+    const angleStep = 270 / FLAVORS.length
     const rotationCorrection = 110 - angle
     const iconSize = dimensions.rootRadius * 0.4
     return (
       <div className={style.container}>
         {FLAVORS.map((flavor, i) => {
-          const isSelectedFlavor = (selectedFlavor === flavor.type)
+          const isSelectedFlavor = selectedFlavor === flavor.type
           return (
             <div
               key={flavor.name}
@@ -24,9 +24,18 @@ class FlavorSelector extends React.Component {
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                transform:
-                `translate(${getCirclePosX(dimensions.rootRadius + MARGIN * dimensions.rootRadius, (angleStep * i) - rotationCorrection, 0) - (iconSize * 0.5)}px,
-                ${getCirclePosY(dimensions.rootRadius + MARGIN * dimensions.rootRadius, (angleStep * i) - rotationCorrection, 0) - (iconSize * 0.5)}px)`
+                transform: `translate(${getCirclePosX(
+                  dimensions.rootRadius + MARGIN * dimensions.rootRadius,
+                  angleStep * i - rotationCorrection,
+                  0
+                ) -
+                  iconSize * 0.5}px,
+                ${getCirclePosY(
+              dimensions.rootRadius + MARGIN * dimensions.rootRadius,
+              angleStep * i - rotationCorrection,
+              0
+            ) -
+                  iconSize * 0.5}px)`
               }}
             >
               <div className={style.iconContainer}>
@@ -35,17 +44,25 @@ class FlavorSelector extends React.Component {
                   style={{
                     animationDelay: `${i * 100}ms`
                   }}
-                  onClick={() => { selectFlavor(flavor.type) }}
+                  onClick={() => {
+                    selectFlavor(flavor.type)
+                  }}
                 >
-                  <flavor.icon
-                    size={`${iconSize}px`}
-                    fill={flavor.color}
+                  {/* <flavor.icon size={`${iconSize}px`} fill={flavor.color} /> */}
+                  <img
+                    src={flavor.icon}
+                    style={{
+                      width: `${flavor.size ? flavor.size : iconSize}px`
+                    }}
+                    alt=''
                   />
                   <div
                     className={style.title}
                     style={{
                       color: flavor.color,
-                      boxShadow: (isSelectedFlavor) ? `inset 0 -4px 0 -1px ${flavor.color}` : ''
+                      boxShadow: isSelectedFlavor
+                        ? `inset 0 -4px 0 -1px ${flavor.color}`
+                        : ''
                     }}
                   >
                     {flavor.name}
@@ -54,9 +71,7 @@ class FlavorSelector extends React.Component {
               </div>
             </div>
           )
-        })
-
-        }
+        })}
       </div>
     )
   }

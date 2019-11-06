@@ -12,6 +12,7 @@ import FlowerItem from './FlowerItem'
 import Navbar from '../Navigation/Navbar'
 import SidebarLeft from '../Navigation/SidebarLeft'
 import Searchbar from './Searchbar'
+import { Grid } from '@material-ui/core'
 
 function TabPanel (props) {
   const { children, value, index } = props
@@ -33,7 +34,7 @@ function a11yProps (index) {
 class Navigation extends React.Component {
   state = {
     value: 0
-  }
+  };
 
   componentDidMount () {
     const { loading, finished } = this.props.flowerList
@@ -51,6 +52,7 @@ class Navigation extends React.Component {
       globals
     } = this.props
     const { value } = this.state
+
     return [
       <SidebarLeft
         key='sidebarLeft'
@@ -61,7 +63,7 @@ class Navigation extends React.Component {
         <AppBar
           position='static'
           color='primary'
-          style={{ width: '320px', boxShadow: 'none' }}
+          style={{ width: '100%', boxShadow: 'none' }}
         >
           <Tabs
             value={value}
@@ -93,29 +95,42 @@ class Navigation extends React.Component {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          {flowerList.finished &&
-            !flowerList.error &&
-            flowerList.list.map(flower => {
-              return (
-                <Link
-                  className={style.linkContainer}
-                  to={`/flower/${flower.node.id}`}
-                  key={flower.node.id}
-                >
-                  <FlowerItem
-                    title={flower.title}
-                    videoId={flower.node.video.url}
-                    description={flower.description || undefined}
-                    created={new Date(flower.created)}
-                    user={flower.user}
-                    id={flower.id}
-                    isSelected={
-                      flower.node.id.toString() === globals.selectedFlower
-                    }
-                  />
-                </Link>
-              )
-            })}
+          <Grid
+            container
+            // spacing={2}
+            style={{
+              flexGrow: 1
+            }}
+            // justify={"start"}
+            className={style.gridRoot}
+          >
+            {flowerList.finished &&
+              !flowerList.error &&
+              flowerList.list.map(flower => {
+                return (
+                  <Grid item className={style.gridItem}>
+                    <Link
+                      className={style.linkContainer}
+                      to={`/flower/${flower.node.id}`}
+                      key={flower.node.id}
+                    >
+                      <FlowerItem
+                        sideBarOpen={sideBarOpen}
+                        title={flower.title}
+                        videoId={flower.node.video.url}
+                        description={flower.description || undefined}
+                        created={new Date(flower.created)}
+                        user={flower.user}
+                        id={flower.id}
+                        isSelected={
+                          flower.node.id.toString() === globals.selectedFlower
+                        }
+                      />
+                    </Link>
+                  </Grid>
+                )
+              })}
+          </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
           Item Two

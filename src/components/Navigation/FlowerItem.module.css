@@ -1,11 +1,14 @@
 .container {
   display: flex;
-  min-width: 300px;
-  height: 130px;
+  width: 291px;
+  height: 280px;
   position: relative;
   background: white;
   border-radius: 0px;
-  max-width: 320px;
+  /* max-width: 250px; */
+  flex-direction: column;
+  margin-bottom: 2em;
+  will-change: width;
 }
 
 .block {
@@ -29,8 +32,9 @@
 }
 
 .right {
-  width: 30%;
-  margin-left: 20px;
+  width: 62%;
+  /* margin: 0 auto; */
+  margin-bottom: 1em;
 }
 
 .image {
@@ -102,4 +106,39 @@
 .date {
   font-size: 0.79em;
   color: #242843;
+}
+
+/* Changes */
+@media (max-width: 440px) {
+  .container {
+    flex-direction: row;
+    height: 120px;
+    width: 240px;
+  }
+
+  .image {
+    transform: translateY(10%);
+  }
+}
+
+@media (max-width: 896px) {
+  .container {
+    width: 200px;
+  }
+}
+
+.barStyle {
+  width: 290px;
+  align-items: center !important;
+  margin-left: 3px;
+}
+
+.Barcontainer {
+  flex-direction: row;
+  height: 120px;
+  width: 288px;
+}
+
+.Barcontainer .image {
+  transform: translateY(10%);
 }

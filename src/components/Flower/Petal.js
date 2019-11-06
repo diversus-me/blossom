@@ -73,18 +73,18 @@ class Petal extends React.Component {
     } else {
       selectPetal(isRootNode ? undefined : node)
     }
-  }
+  };
 
   handleDeepDive = e => {
     const { id } = this.props
     e.stopPropagation()
     e.preventDefault()
     this.props.history.push(`/flower/${id}`)
-  }
+  };
 
   clickHandler = () => {
     console.log('clicked')
-  }
+  };
 
   render () {
     const {
@@ -121,9 +121,13 @@ class Petal extends React.Component {
           color={color}
           url={getFullVideoURL(video.url, video.type)}
           setCurrentTime={setCurrentTime}
-          shouldUpdate={(isSelectedPetal || isRootNode) &&
-            !globals.addNodeRoutineRunning && !globals.editNodeRoutineRunning &&
-          !globals.addFlowerRoutineRunning && !globals.editFlowerRoutineRunning}
+          shouldUpdate={
+            (isSelectedPetal || isRootNode) &&
+            !globals.addNodeRoutineRunning &&
+            !globals.editNodeRoutineRunning &&
+            !globals.addFlowerRoutineRunning &&
+            !globals.editFlowerRoutineRunning
+          }
           isPetal={!isRootNode}
           isSelectedPetal={isSelectedPetal}
           wasSelected={wasSelected}
@@ -154,6 +158,7 @@ class Petal extends React.Component {
         >
           <img
             className={style.image}
+            alt='Video Preview'
             src={`https://img.youtube.com/vi/${video.url}/sddefault.jpg`}
           />
           <div
@@ -164,11 +169,17 @@ class Petal extends React.Component {
                 isSelectedPetal || isRootNode ? 0 : r * zoom < 20 ? 1 : 0.35
             }}
           />
-          <Flavor.icon
-            size={r * 0.8}
-            color={color}
+          <img
+            src={Flavor.icon}
+            style={{ width: r * 0.8 }}
+            alt='Icon of flavor'
             className={style.flavorIcon}
           />
+
+          {/* <Flavor.icon
+            // size={r * 0.8}
+            // color={color}
+          /> */}
         </div>
       </div>
     )
