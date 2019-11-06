@@ -100,6 +100,9 @@ class Timeline extends React.Component {
           rightHandlePosition: newRightHandlePosition
         })
       }
+      this.setState({
+        showTimer: true
+      })
     }
   }
 
@@ -110,7 +113,8 @@ class Timeline extends React.Component {
     this.setState({
       seeking: false,
       seekingLeft: false,
-      seekingRight: false
+      seekingRight: false,
+      showTimer: false
     })
   }
 
@@ -140,14 +144,12 @@ class Timeline extends React.Component {
   }
 
   mouseEnter = () => {
-    console.log('Enter')
     this.setState({
       showTimer: true
     })
   }
 
   mouseLeave = () => {
-    console.log('Leave')
     this.setState({
       showTimer: false
     })
@@ -225,6 +227,7 @@ class Timeline extends React.Component {
           style={{
             transform: `translate(${getCirclePosX(r, angle, r) - 1}px, ${getCirclePosY(r, angle, r) - 1}px)`
           }}
+          onMouseOut={this.mouseLeave}
           onMouseDown={() => { this.onScrubStart('center') }}
           onMouseMove={this.onScrub}
           onMouseUp={this.onScrubEnd}
@@ -232,31 +235,28 @@ class Timeline extends React.Component {
           onTouchMove={this.onScrub}
           onTouchEnd={this.onScrubEnd}
         >
-          <div>
+          <div
+            onMouseEnter={this.mouseEnter}
+            onMouseLeave={this.mouseLeave}
+            onTouchStart={this.mouseEnter}
+            onTouchMove={this.mouseEnter}
+            onTouchEnd={this.mouseLeave}
+            style={{
+              transform: 'translate(-50%, -50%)',
+              cursor: 'pointer'
+            }}
+          >
             <img
-              onMouseEnter={this.mouseEnter}
-              onMouseLeave={this.mouseLeave}
-              onTouchStart={this.mouseEnter}
-              onTouchMove={this.mouseEnter}
-              onTouchEnd={this.mouseLeave}
-              style={{
-              // width: '26px',
-                transform: 'translate(-50%, -50%)',
-                // background: color,
-                // borderRadius: '50%',
-                // padding: '5px',
-                cursor: 'pointer'
-              }}
+
               className={style.icon}
               src={process.env.PUBLIC_URL + '/icons/Btn_Add.png'}
             />
-            {/* {moment.utc(playedSeconds * 1000).format('mm:ss')}  */}
           </div>
           {
             (this.state.showTimer)
               ? (<div
                 style={{
-                  transform: 'translate(-50%, -50%)',
+                  transform: 'translate(-50%, -340%)',
                   background: color,
                   marginTop: '5px',
                   borderRadius: '20px',
@@ -266,7 +266,6 @@ class Timeline extends React.Component {
               </div>)
               : null
           }
-
         </div>
         }
         {showHandles &&
